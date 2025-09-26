@@ -1,4 +1,4 @@
-package game;
+package controller;
 
 public class Main {
     // main function that starts the UNO game

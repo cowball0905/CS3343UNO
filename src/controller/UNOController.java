@@ -1,9 +1,10 @@
-package game;
+package controller;
+
 
 import java.awt.BorderLayout;
 import javax.swing.JFrame;
-import gui.UNOGamePanel;
-import gui.UNOMenuPanel;
+import view.UNOGamePanel;
+import view.UNOMenuPanel;
 
 public class UNOController extends JFrame {
     
@@ -54,9 +55,5 @@ public class UNOController extends JFrame {
         revalidate();
         repaint();
         gamePanel.startGame();
-    }
-    
-    public static void main(String[] args) {
-        getInstance();
     }
 }

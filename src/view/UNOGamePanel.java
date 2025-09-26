@@ -1,4 +1,4 @@
-package gui;
+package view;
 
 import java.awt.Color;
 import java.awt.Dimension;
@@ -12,8 +12,8 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JButton;
 import javax.swing.JPanel;
-import game.UNOController;
-import game.Card;
+import controller.UNOController;
+import model.Card;
 
 public class UNOGamePanel extends JPanel {
     
@@ -64,22 +64,17 @@ public class UNOGamePanel extends JPanel {
         computerHand.clear();
         
         // Create and position the deck card (back of card)
-        deckCard = new Card("/asset/uno-card-images-master/Back.jpg", -1, "back");
+        deckCard = model.CardFactory.createDeckCard();
         deckCard.setPosition(50, 200);
         
         // Create a sample top card (in a real game, this would come from the deck)
-        topCard = new Card("/asset/uno-card-images-master/Red_0.png", 0, "Red");
+        topCard = model.CardFactory.createNumberCard();
         topCard.setPosition(200, 200);
         
         // Add some sample cards to player's hand (in a real game, deal from deck)
-        String[] colors = {"Red", "Blue", "Green", "Yellow"};
-        String[] values = {"1", "2", "3", "4", "5", "6", "7", "8", "9", "Skip", "Reverse", "Draw_2"};
-        
         // Add 5 sample cards to player's hand (bottom of screen)
         for (int i = 0; i < 5; i++) {
-            String color = colors[i % colors.length];
-            String value = values[i % values.length];
-            Card card = new Card("/asset/uno-card-images-master/" + color + "_" + value + ".png", i, color);
+            Card card = model.CardFactory.createRandomCard();
             int cardX = (WIDTH / 2) - (5 * CARD_OFFSET_X / 2) + (i * CARD_OFFSET_X);
             int cardY = HEIGHT - 150; // Position near bottom of screen
             card.setPosition(cardX, cardY);
@@ -88,7 +83,7 @@ public class UNOGamePanel extends JPanel {
         
         // Add 5 face-down cards to computer's hand (top of screen)
         for (int i = 0; i < 5; i++) {
-            Card card = new Card("/asset/uno-card-images-master/Back.jpg", -1, "back");
+            Card card = model.CardFactory.createDeckCard();
             int cardX = (WIDTH / 2) - (5 * CARD_OFFSET_X / 2) + (i * CARD_OFFSET_X);
             int cardY = 50; // Position near top of screen
             card.setPosition(cardX, cardY);
@@ -132,17 +127,7 @@ public class UNOGamePanel extends JPanel {
         if (deckCard != null && deckCard.contains(x, y)) {
             // Draw a card from the deck (for now, just add a random card)
             if (playerHand.size() < 10) { // Limit hand size for display
-                String[] colors = {"Red", "Blue", "Green", "Yellow"};
-                String[] values = {"1", "2", "3", "4", "5", "6", "7", "8", "9", "Skip", "Reverse", "Draw_2"};
-                
-                String color = colors[playerHand.size() % colors.length];
-                String value = values[playerHand.size() % values.length];
-                
-                Card newCard = new Card(
-                    "/asset/uno-card-images-master/" + color + "_" + value + ".png",
-                    playerHand.size(),
-                    color
-                );
+                Card newCard = model.CardFactory.createRandomCard();
                 playerHand.add(newCard);
                 updateCardPositions();
                 repaint();

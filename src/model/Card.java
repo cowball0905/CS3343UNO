@@ -1,26 +1,35 @@
-package game;
+package model;
 
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.Random;
 import java.awt.RenderingHints;
 import java.awt.Graphics2D;
 import javax.imageio.ImageIO;
 
-public class Card {
+enum Color{
+    Red, Green, Blue, Yellow;
+}
+
+enum Type{
+    Number, Skip, Reverse, DrawTwo, Wild, WildDrawFour, Deck;
+}
+
+public abstract class Card {
     private BufferedImage image;
-    private int value;
-    private String color;
     private int x, y;
     private static final int CARD_WIDTH = 80;  // Standard width for all cards
     private static final int CARD_HEIGHT = 120; // Standard height for all cards
     private int width = CARD_WIDTH;
     private int height = CARD_HEIGHT;
-    
-    public Card(String imagePath, int value, String color) {
-        this.value = value;
+    private Color color;
+    private Type type;
+
+    public Card(Type type, Color color) {
+        this.type = type;
         this.color = color;
-        loadImage(imagePath);
+        loadImage("/asset/uno-card-images-master/" + color + "_" + type + ".png");
     }
     
     private void loadImage(String path) {
@@ -55,12 +64,8 @@ public class Card {
         return image;
     }
     
-    public int getValue() {
-        return value;
-    }
-    
     public String getColor() {
-        return color;
+        return color.toString();
     }
     
     public int getX() {
@@ -69,14 +74,6 @@ public class Card {
     
     public int getY() {
         return y;
-    }
-    
-    public int getWidth() {
-        return width;
-    }
-    
-    public int getHeight() {
-        return height;
     }
     
     public void setPosition(int x, int y) {
@@ -88,4 +85,14 @@ public class Card {
         return pointX >= x && pointX <= x + width &&
                pointY >= y && pointY <= y + height;
     }
+    
+    public int getWidth() {
+        return width;
+    }
+    
+    public int getHeight() {
+        return height;
+    }
+
+    abstract public void cardFunction();
 }

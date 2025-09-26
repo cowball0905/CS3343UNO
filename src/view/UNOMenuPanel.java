@@ -1,4 +1,4 @@
-package gui;
+package view;
 
 import java.awt.Color;
 import java.awt.Dimension;
@@ -13,7 +13,18 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 import javax.swing.JButton;
 import javax.swing.JPanel;
-import game.UNOController;
+// import controller.UNOController;
+
+// If UNOController is in another package, update the import accordingly, e.g.:
+// import src.controller.UNOController; // Adjust this path to match your actual project structure
+
+// If UNOController is in the default package, use:
+// import UNOController; // Uncomment and update the path below if UNOController is in a package
+
+import controller.UNOController;
+// import src.controller.UNOController; // Adjust as needed
+
+// If UNOController is in the default package, do not import it; just use it directly.
 
 public class UNOMenuPanel extends JPanel {
     
