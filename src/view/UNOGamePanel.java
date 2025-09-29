@@ -8,7 +8,6 @@ import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JButton;
 import javax.swing.JPanel;
@@ -23,12 +22,6 @@ public class UNOGamePanel extends JPanel {
     
     private UNOController controller;
     private JButton menuButton;
-    
-    // Game components
-    private List<Card> playerHand = new ArrayList<>();
-    private List<Card> computerHand = new ArrayList<>();
-    private Card topCard;
-    private Card deckCard;
     // Card dimensions can be accessed from the Card class if needed
     
     public UNOGamePanel(UNOController controller) {
@@ -43,8 +36,7 @@ public class UNOGamePanel extends JPanel {
         menuButton.addActionListener(e -> controller.showMenu());
         add(menuButton);
         
-        // Initialize game components
-        initializeGame();
+        // UI initialization only
         
         // Add mouse listener for card selection
         addMouseListener(new MouseAdapter() {
@@ -58,40 +50,21 @@ public class UNOGamePanel extends JPanel {
     private static final int CARD_OFFSET_X = 25; // Horizontal overlap between cards in hand
     private static final int CARD_OVERLAP = 15;   // How much cards overlap in hand
     
-    private void initializeGame() {
-        // Clear hands
-        playerHand.clear();
-        computerHand.clear();
-        
-        // Create and position the deck card (back of card)
-        deckCard = model.CardFactory.createDeckCard();
-        deckCard.setPosition(50, 200);
-        
-        // Create a sample top card (in a real game, this would come from the deck)
-        topCard = model.CardFactory.createNumberCard();
-        topCard.setPosition(200, 200);
-        
-        // Add some sample cards to player's hand (in a real game, deal from deck)
-        // Add 5 sample cards to player's hand (bottom of screen)
-        for (int i = 0; i < 5; i++) {
-            Card card = model.CardFactory.createRandomCard();
-            int cardX = (WIDTH / 2) - (5 * CARD_OFFSET_X / 2) + (i * CARD_OFFSET_X);
-            int cardY = HEIGHT - 150; // Position near bottom of screen
-            card.setPosition(cardX, cardY);
-            playerHand.add(card);
-        }
-        
-        // Add 5 face-down cards to computer's hand (top of screen)
-        for (int i = 0; i < 5; i++) {
-            Card card = model.CardFactory.createDeckCard();
-            int cardX = (WIDTH / 2) - (5 * CARD_OFFSET_X / 2) + (i * CARD_OFFSET_X);
-            int cardY = 50; // Position near top of screen
-            card.setPosition(cardX, cardY);
-            computerHand.add(card);
-        }
-    }
-    
     private void updateCardPositions() {
+        // Get current game state from controller
+        List<Card> playerHand = controller.getPlayerHand();
+        List<Card> computerHand = controller.getComputerHand();
+        Card topCard = controller.getTopCard();
+        Card deckCard = controller.getDeckCard();
+        
+        // Set positions for deck and top card
+        if (deckCard != null) {
+            deckCard.setPosition(50, 200);
+        }
+        if (topCard != null) {
+            topCard.setPosition(200, 200);
+        }
+        
         // Update positions of all cards in player's hand
         for (int i = 0; i < playerHand.size(); i++) {
             Card card = playerHand.get(i);
@@ -111,27 +84,15 @@ public class UNOGamePanel extends JPanel {
     
     private void handleCardClick(int x, int y) {
         // Check if player clicked on a card in their hand
-        for (Card card : new ArrayList<>(playerHand)) {
-            if (card.contains(x, y)) {
-                // Move the card to the discard pile
-                topCard = card;
-                topCard.setPosition(200, 200);
-                playerHand.remove(card);
-                updateCardPositions();
-                repaint();
-                return;
-            }
+        Card clickedCard = controller.getCardAt(x, y);
+        if (clickedCard != null) {
+            controller.playCard(clickedCard);
+            return;
         }
         
         // Check if player clicked on the deck
-        if (deckCard != null && deckCard.contains(x, y)) {
-            // Draw a card from the deck (for now, just add a random card)
-            if (playerHand.size() < 10) { // Limit hand size for display
-                Card newCard = model.CardFactory.createRandomCard();
-                playerHand.add(newCard);
-                updateCardPositions();
-                repaint();
-            }
+        if (controller.isDeckClicked(x, y)) {
+            controller.drawCard();
         }
     }
     
@@ -144,8 +105,12 @@ public class UNOGamePanel extends JPanel {
     }
     
     public void startGame() {
-        // Initialize or reset the game state
-        initializeGame();
+        // Just update the display
+        updateDisplay();
+    }
+    
+    public void updateDisplay() {
+        updateCardPositions();
         repaint();
     }
     
@@ -153,6 +118,12 @@ public class UNOGamePanel extends JPanel {
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
         Graphics2D g2d = (Graphics2D) g;
+        
+        // Get current game state from controller
+        List<Card> playerHand = controller.getPlayerHand();
+        List<Card> computerHand = controller.getComputerHand();
+        Card topCard = controller.getTopCard();
+        Card deckCard = controller.getDeckCard();
         
         // Enable anti-aliasing for smoother graphics
         g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);

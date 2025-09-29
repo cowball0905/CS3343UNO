@@ -37,24 +37,23 @@ public class CardFactory {
     public static Card createRandomCard() {
         Type[] types = Type.values();
         int typeCount = types.length - 1; // 排除Deck类型
-        Type randomType = types[random.nextInt(typeCount)];
+        int randomValue = random.nextInt(typeCount);
 
-        switch (randomType) {
-            case Number:
-                int randomValue = random.nextInt(10);
+        switch (randomValue) {
+            case 1:
                 return createNumberCard();
-            case Skip:
+            case 2:
                 return createSkipCard();
-            case Reverse:
+            case 3:
                 return createReverseCard();
-            case DrawTwo:
+            case 4:
                 return createDrawTwoCard();
-            case Wild:
+            case 5:
                 return createWildCard();
-            case WildDrawFour:
+            case 6:
                 return createWildDrawFourCard();
             default:
-                throw new IllegalArgumentException("Unknown card type: " + randomType);
+                throw new IllegalArgumentException("Unknown card type");
         }
     }
 }

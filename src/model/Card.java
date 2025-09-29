@@ -29,7 +29,6 @@ public abstract class Card {
     public Card(Type type, Color color) {
         this.type = type;
         this.color = color;
-        loadImage("/asset/uno-card-images-master/" + color + "_" + type + ".png");
     }
     
     private void loadImage(String path) {
