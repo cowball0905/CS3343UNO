@@ -7,20 +7,10 @@ import java.util.stream.Collectors;
 public class CPUPlayer extends Player {
     
     private Random random;
-    private DifficultyLevel difficulty;
-    
-    public enum DifficultyLevel {
-        EASY, MEDIUM, HARD
-    }
     
     public CPUPlayer(String name) {
-        this(name, DifficultyLevel.MEDIUM);
-    }
-    
-    public CPUPlayer(String name, DifficultyLevel difficulty) {
         super(name);
         this.random = new Random();
-        this.difficulty = difficulty;
     }
     
     @Override
@@ -51,34 +41,22 @@ public class CPUPlayer extends Player {
     
     @Override
     public void catchForgotShout(Player targetPlayer) {
-        // CPU has a chance to catch human player forgetting UNO based on difficulty
-        double catchChance = switch (difficulty) {
-            case EASY -> 0.3;    // 30% chance
-            case MEDIUM -> 0.6;  // 60% chance
-            case HARD -> 0.9;    // 90% chance
-        };
-        
+        // CPU always catches human player forgetting UNO with high probability (90%)
         if (targetPlayer.getHand().size() == 1 && !targetPlayer.getIsShout() && 
-            random.nextDouble() < catchChance) {
+            random.nextDouble() < 0.9) {
             System.out.println(name + " (CPU) catches " + targetPlayer.getName() + " for forgetting to shout UNO!");
         }
     }
     
     @Override
     public void challengeDrawFour(Player targetPlayer) {
-        // CPU decides whether to challenge based on difficulty and probability
-        double challengeChance = switch (difficulty) {
-            case EASY -> 0.1;    // 10% chance
-            case MEDIUM -> 0.3;  // 30% chance
-            case HARD -> 0.5;    // 50% chance
-        };
-        
-        if (random.nextDouble() < challengeChance) {
+        // CPU challenges with optimal probability (50%)
+        if (random.nextDouble() < 0.5) {
             System.out.println(name + " (CPU) challenges " + targetPlayer.getName() + "'s Wild Draw Four card!");
         }
     }
     
-    // AI logic to choose which card to play
+    // AI logic to choose which card to play using optimal strategy
     public Card chooseCardToPlay(Card topCard) {
         List<Card> validCards = getValidCards(topCard);
         
@@ -86,34 +64,13 @@ public class CPUPlayer extends Player {
             return null; // Must draw a card
         }
         
-        return switch (difficulty) {
-            case EASY -> chooseRandomCard(validCards);
-            case MEDIUM -> chooseMediumStrategy(validCards, topCard);
-            case HARD -> chooseHardStrategy(validCards, topCard);
-        };
+        return chooseBestStrategy(validCards, topCard);
     }
     
-    private Card chooseRandomCard(List<Card> validCards) {
-        return validCards.get(random.nextInt(validCards.size()));
-    }
-    
-    private Card chooseMediumStrategy(List<Card> validCards, Card topCard) {
-        // Prefer action cards over number cards
-        List<Card> actionCards = validCards.stream()
-            .filter(card -> !(card instanceof NumberCard))
-            .collect(Collectors.toList());
-            
-        if (!actionCards.isEmpty() && random.nextDouble() < 0.7) {
-            return actionCards.get(random.nextInt(actionCards.size()));
-        }
+    private Card chooseBestStrategy(List<Card> validCards, Card topCard) {
+        // Optimal strategy: prioritize cards that benefit CPU most
         
-        return chooseRandomCard(validCards);
-    }
-    
-    private Card chooseHardStrategy(List<Card> validCards, Card topCard) {
-        // Advanced strategy: prioritize cards that benefit CPU most
-        
-        // 1. Save Wild cards for last resort unless hand is small
+        // 1. If hand is large (>3 cards), save Wild cards for later unless no other option
         if (hand.size() > 3) {
             List<Card> nonWildCards = validCards.stream()
                 .filter(card -> !(card instanceof WildCard) && !(card instanceof WildDrawFourCard))
@@ -124,17 +81,39 @@ public class CPUPlayer extends Player {
             }
         }
         
-        // 2. Prefer action cards that hinder opponent
-        List<Card> actionCards = validCards.stream()
-            .filter(card -> card instanceof SkipCard || card instanceof ReverseCard || 
-                          card instanceof DrawTwoCard || card instanceof WildDrawFourCard)
-            .collect(Collectors.toList());
+        // 2. Prioritize Draw Four cards when hand is small (aggressive finish)
+        if (hand.size() <= 2) {
+            List<Card> drawFourCards = validCards.stream()
+                .filter(card -> card instanceof WildDrawFourCard)
+                .collect(Collectors.toList());
             
-        if (!actionCards.isEmpty() && random.nextDouble() < 0.8) {
-            return actionCards.get(random.nextInt(actionCards.size()));
+            if (!drawFourCards.isEmpty()) {
+                return drawFourCards.get(0);
+            }
         }
         
-        return chooseMediumStrategy(validCards, topCard);
+        // 3. Prefer action cards that hinder opponent (Skip, Reverse, Draw Two)
+        List<Card> hinderCards = validCards.stream()
+            .filter(card -> card instanceof SkipCard || card instanceof ReverseCard || 
+                          card instanceof DrawTwoCard)
+            .collect(Collectors.toList());
+            
+        if (!hinderCards.isEmpty()) {
+            return hinderCards.get(random.nextInt(hinderCards.size()));
+        }
+        
+        // 4. Play number cards that match color (preserve color control)
+        List<Card> sameColorCards = validCards.stream()
+            .filter(card -> card instanceof NumberCard && 
+                          card.getColor().equals(topCard.getColor()))
+            .collect(Collectors.toList());
+            
+        if (!sameColorCards.isEmpty()) {
+            return sameColorCards.get(random.nextInt(sameColorCards.size()));
+        }
+        
+        // 5. Finally, play any remaining valid card
+        return validCards.get(random.nextInt(validCards.size()));
     }
     
     // Get valid cards that can be played
@@ -185,11 +164,5 @@ public class CPUPlayer extends Player {
         return bestColor;
     }
     
-    public DifficultyLevel getDifficulty() {
-        return difficulty;
-    }
-    
-    public void setDifficulty(DifficultyLevel difficulty) {
-        this.difficulty = difficulty;
-    }
+
 }
