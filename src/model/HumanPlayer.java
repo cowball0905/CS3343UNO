@@ -1,5 +1,6 @@
 package model;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class HumanPlayer extends Player {
@@ -61,8 +62,7 @@ public class HumanPlayer extends Player {
     
     // Get valid cards that can be played
     public List<Card> getValidCards(Card topCard) {
-        return hand.stream()
-                  .filter(card -> canPlayCard(card, topCard))
-                  .toList();
+        List<Card> test = new ArrayList<>();
+        return test;
     }
 }

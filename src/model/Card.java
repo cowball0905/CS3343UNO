@@ -31,7 +31,7 @@ public abstract class Card {
         this.color = color;
     }
     
-    private void loadImage(String path) {
+    protected void loadImage(String path) {
         try {
             // Try to load from classpath (works in JAR)
             java.net.URL imageUrl = getClass().getResource(path);
