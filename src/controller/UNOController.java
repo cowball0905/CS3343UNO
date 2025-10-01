@@ -16,12 +16,15 @@ public class UNOController {
     private UNOGamePanel gamePanel;
     private UNOMenuPanel menuPanel;
     private JFrame mainFrame;
-    private String[] Deck;
+    private ArrayList<String> Deck;
     private Player player;
     private ArrayList<Player> CPU;
     private CardFactory cardFactory = new ConcreteCardFactory();
-    private Card topCard;
+    private ArrayList<Card> PlayedCard = new ArrayList<>();
     private Color currentColor;
+    private Player currentPlayer;
+    private ArrayList<Player> players;
+    private Direction playDirection;
 
     private UNOController() {
         this.player = new HumanPlayer("Player");
@@ -48,42 +51,48 @@ public class UNOController {
 
     private void initializeGame() {
         // Deal initial cards
-        Deck = new String[]{"r0","r1","r2","r3","r4","r5","r6","r7","r8","r9",
-                            "r1","r2","r3","r4","r5","r6","r7","r8","r9",
-                            "g0","g1","g2","g3","g4","g5","g6","g7","g8","g9",
-                            "g1","g2","g3","g4","g5","g6","g7","g8","g9",
-                            "b0","b1","b2","b3","b4","b5","b6","b7","b8","b9",
-                            "b1","b2","b3","b4","b5","b6","b7","b8","b9",
-                            "y0","y1","y2","y3","y4","y5","y6","y7","y8","y9",
-                            "y1","y2","y3","y4","y5","y6","y7","y8","y9",
-                            "rSkip","rReverse","rDrawTwo",
-                            "rSkip","rReverse","rDrawTwo",
-                            "gSkip","gReverse","gDrawTwo",
-                            "gSkip","gReverse","gDrawTwo",
-                            "bSkip","bReverse","bDrawTwo",
-                            "bSkip","bReverse","bDrawTwo",
-                            "ySkip","yReverse","yDrawTwo",
-                            "ySkip","yReverse","yDrawTwo",
-                            "WildCard", "WildCard", "WildCard", "WildCard",
-                            "WildDrawFour", "WildDrawFour", "WildDrawFour", "WildDrawFour"};
+        Deck = new ArrayList<String>(Arrays.asList(
+            "r0","r1","r2","r3","r4","r5","r6","r7","r8","r9",
+            "r1","r2","r3","r4","r5","r6","r7","r8","r9",
+            "rSkip","rReverse","rDrawTwo",
+            "rSkip","rReverse","rDrawTwo",
+            "g0","g1","g2","g3","g4","g5","g6","g7","g8","g9",
+            "g1","g2","g3","g4","g5","g6","g7","g8","g9",
+            "gSkip","gReverse","gDrawTwo",
+            "gSkip","gReverse","gDrawTwo",
+            "b0","b1","b2","b3","b4","b5","b6","b7","b8","b9",
+            "b1","b2","b3","b4","b5","b6","b7","b8","b9",
+            "bSkip","bReverse","bDrawTwo",
+            "bSkip","bReverse","bDrawTwo",
+            "y0","y1","y2","y3","y4","y5","y6","y7","y8","y9",
+            "y1","y2","y3","y4","y5","y6","y7","y8","y9",
+            "ySkip","yReverse","yDrawTwo",
+            "ySkip","yReverse","yDrawTwo",
+            "WildCard", "WildCard", "WildCard", "WildCard",
+            "WildDrawFour", "WildDrawFour", "WildDrawFour", "WildDrawFour"
+        ));
 
-        topCard = cardFactory.giveCard(new ArrayList<>(Arrays.asList(Deck)),true);
+        PlayedCard.add(cardFactory.giveCard(Deck,true));
         
         for (int i = 0; i < 7; i++) {
-            player.getCard(cardFactory.giveCard(new ArrayList<>(Arrays.asList(Deck)),false));
+            player.drawCard(cardFactory.giveCard(Deck,false));
             for(Player cpu:CPU){
-                cpu.getCard(cardFactory.giveCard(new ArrayList<>(Arrays.asList(Deck)),false));
+                cpu.drawCard(cardFactory.giveCard(Deck,false));
             }
         }
+        currentColor = PlayedCard.get(0).getColor();
+        players = new ArrayList<>();
+        players.add(player);
+        players.addAll(CPU);
+        currentPlayer = players.get(0);
+        playDirection = Direction.Clockwise;
+    }
+
+    public void eachRound(){
+        Scanner scanner = new Scanner(System.in);
         
-        // First card on discard pile
-        Card firstCard;
-        do {
-            firstCard = gameState.drawCard();
-        } while (firstCard.getType() != Type.Number);
         
-        gameState.getDiscardPile().push(firstCard);
-        gameState.setCurrentColor(firstCard.getColor());
+        
     }
 
     public void setGamePanel(UNOGamePanel panel) {
@@ -134,11 +143,11 @@ public class UNOController {
     }
 
     public List<Card> getPlayerHand() {
-        return new ArrayList<>(playerHand);
+        return new ArrayList<>(player.getHand());
     }
 
     public List<Card> getComputerHand() {
-        return new ArrayList<>(computerHand);
+        return new ArrayList<>(CPU.getHand());
     }
 
     // In UNOController.java

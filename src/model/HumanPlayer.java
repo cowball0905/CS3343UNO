@@ -10,8 +10,8 @@ public class HumanPlayer extends Player {
     }
     
     @Override
-    public void drawCard() {
-        System.out.println(name + " draws a card from the deck");
+    public void drawCard(Card card) {
+        this.hand.add(card);
     }
     
     @Override

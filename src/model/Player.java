@@ -21,7 +21,7 @@ public abstract class Player implements Drawable, Playable, Shoutable, Catchable
     public boolean getIsShout() { return isShout; }
     public void setIsShout(boolean saidUno) { this.isShout = saidUno; }
     
-    public abstract void drawCard();
+    public abstract void drawCard(Card card);
     public abstract void playCard(Card card);
     public abstract void shoutUno();
     public abstract void catchForgotShout(Player targetPlayer);

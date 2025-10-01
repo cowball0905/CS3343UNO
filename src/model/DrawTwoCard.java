@@ -3,7 +3,6 @@ package model;
 public class DrawTwoCard extends Card {
     public DrawTwoCard(Color color) {
         super(Type.DrawTwo, color);
-        this.loadImage("../asset/uno-card-images-master/" + this.getColor().toString() + "_Draw_2.png");
     }
 
     @Override
