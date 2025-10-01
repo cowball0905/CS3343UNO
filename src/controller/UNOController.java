@@ -12,7 +12,6 @@ import javax.swing.SwingUtilities;
 
 public class UNOController {
     private static UNOController instance;
-    private GameState gameState;
     private UNOGamePanel gamePanel;
     private UNOMenuPanel menuPanel;
     private JFrame mainFrame;
@@ -42,7 +41,7 @@ public class UNOController {
         return instance;
     }
 
-        public void setMenuPanel(UNOMenuPanel menuPanel) {
+    public void setMenuPanel(UNOMenuPanel menuPanel) {
         this.menuPanel = menuPanel;
         if (menuPanel != null && menuPanel.getParent() instanceof JFrame) {
             this.mainFrame = (JFrame) menuPanel.getParent();
@@ -88,67 +87,79 @@ public class UNOController {
         playDirection = Direction.Clockwise;
     }
 
+    public ArrayList<Card> getPlayedCard() {
+        return players.get(0).getHand();
+    }
+
+    public ArrayList<Card> getCPUCard(int index) {
+        return players.get(index+1).getHand();
+    }
+
+    public Card getTopCard() {
+        return PlayedCard.get(PlayedCard.size() - 1);
+    }
+
     public void eachRound(){
         Scanner scanner = new Scanner(System.in);
         
+
         
-        
     }
 
-    public void setGamePanel(UNOGamePanel panel) {
-        this.gamePanel = panel;
-        if (gamePanel != null) {
-            gamePanel.initialize(this);
-        }
-    }
+    // public void setGamePanel(UNOGamePanel panel) {
+    //     this.gamePanel = panel;
+    //     if (gamePanel != null) {
+    //         gamePanel.initialize(this);
+    //     }
+    // }
 
-    public boolean playCard(Card card) {
-        if (gameState.isPlayerTurn() && playerHand.contains(card) && gameState.isValidMove(card)) {
-            playerHand.remove(card);
-            gameState.playCard(card);
-            if (gamePanel != null) {
-                gamePanel.updateGameState();
-            }
-            return true;
-        }
-        return false;
-    }
+    // public boolean playCard(Card card) {
+    //     if (gameState.isPlayerTurn() && playerHand.contains(card) && gameState.isValidMove(card)) {
+    //         playerHand.remove(card);
+    //         gameState.playCard(card);
+    //         if (gamePanel != null) {
+    //             gamePanel.updateGameState();
+    //         }
+    //         return true;
+    //     }
+    //     return false;
+    // }
 
-    public Card drawCard() {
-        if (gameState.isPlayerTurn()) {
-            Card card = gameState.drawCard();
-            if (card != null) {
-                playerHand.add(card);
-                if (gamePanel != null) {
-                    gamePanel.updateGameState();
-                }
-                return card;
-            }
-        }
-        return null;
-    }
+    // public Card drawCard() {
+    //     if (gameState.isPlayerTurn()) {
+    //         Card card = gameState.drawCard();
+    //         if (card != null) {
+    //             playerHand.add(card);
+    //             if (gamePanel != null) {
+    //                 gamePanel.updateGameState();
+    //             }
+    //             return card;
+    //         }
+    //     }
+    //     return null;
+    // }
 
-    // Getters for view
-    public Card getTopCard() {
-        return gameState.getTopCard();
-    }
+    // // Getters for view
+    // public Card getTopCard() {
+    //     return gameState.getTopCard();
+    // }
 
 
-    public boolean isPlayerTurn() {
-        return gameState.isPlayerTurn();
-    }
+    // public boolean isPlayerTurn() {
+    //     return gameState.isPlayerTurn();
+    // }
 
-    public Color getCurrentColor() {
-        return gameState.getCurrentColor();
-    }
+    // public Color getCurrentColor() {
+    //     return gameState.getCurrentColor();
+    // }
 
-    public List<Card> getPlayerHand() {
-        return new ArrayList<>(player.getHand());
-    }
+    // public List<Card> getPlayerHand() {
+    //     return new ArrayList<>(player.getHand());
+    // }
 
-    public List<Card> getComputerHand() {
-        return new ArrayList<>(CPU.getHand());
-    }
+    // public List<Card> getComputerHand() {
+    //     return new ArrayList<>(CPU.getHand());
+    // }
 
     // In UNOController.java
     public void startGame() {
@@ -168,6 +179,7 @@ public class UNOController {
             mainFrame.add(gamePanel);
             mainFrame.revalidate();
             gamePanel.requestFocusInWindow();
+            gamePanel.startGame(); 
         }
     }
 
@@ -181,7 +193,4 @@ public class UNOController {
             mainFrame.repaint();
         }
     }
-
-        return deckCard;
-    }
 }
