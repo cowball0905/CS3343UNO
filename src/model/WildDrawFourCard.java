@@ -3,6 +3,7 @@ package model;
 public class WildDrawFourCard extends Card {
     public WildDrawFourCard() {
         super(Type.WildDrawFour, null);
+        loadImage("/asset/uno-card-images-master/Wild_Card_Draw_4.png");
     }
 
     @Override
