@@ -1,8 +1,8 @@
 package model;
 
 public class SkipCard extends Card {
-    public SkipCard() {
-        super(Type.Skip, Color.values()[new java.util.Random().nextInt(4)]);
+    public SkipCard(Color color) {
+        super(Type.Skip, color);
     }
 
     @Override

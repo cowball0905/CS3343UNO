@@ -11,16 +11,17 @@ public class GameState {
     private boolean isPlayerTurn = true;
 
     public GameState() {
-        initializeGame();
+        initializeDeck();
+        currentColor = null; // Will be set when first card is played
     }
 
-    private void initializeGame() {
+    private void initializeDeck() {
         drawPile = new ArrayList<>();
         discardPile = new Stack<>();
-        ConcreteCardFactory factory = new ConcreteCardFactory();
+        
         // Create a full deck
         for (int i = 0; i < 108; i++) {  // Adjust the number based on your deck size
-            drawPile.add(factory.createCard());
+            drawPile.add(CardFactory.createRandomCard());
         }
         Collections.shuffle(drawPile);
         
@@ -34,9 +35,6 @@ public class GameState {
         currentColor = firstCard.getColor();
     }
     public Card drawCard() {
-        if (drawPile.isEmpty()) {
-            reshuffleDiscardPile();
-        }
         return drawPile.isEmpty() ? null : drawPile.remove(0);
     }
 

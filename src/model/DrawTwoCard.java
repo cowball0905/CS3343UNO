@@ -1,8 +1,8 @@
 package model;
 
 public class DrawTwoCard extends Card {
-    public DrawTwoCard() {
-        super(Type.DrawTwo, Color.values()[new java.util.Random().nextInt(4)]);
+    public DrawTwoCard(Color color) {
+        super(Type.DrawTwo, color);
         this.loadImage("../asset/uno-card-images-master/" + this.getColor().toString() + "_Draw_2.png");
     }
 

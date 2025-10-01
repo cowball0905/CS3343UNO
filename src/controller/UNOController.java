@@ -16,13 +16,19 @@ public class UNOController {
     private UNOGamePanel gamePanel;
     private UNOMenuPanel menuPanel;
     private JFrame mainFrame;
-    private List<Card> playerHand;
-    private List<Card> computerHand;
+    private String[] Deck;
+    private Player player;
+    private ArrayList<Player> CPU;
+    private CardFactory cardFactory = new ConcreteCardFactory();
+    private Card topCard;
+    private Color currentColor;
 
     private UNOController() {
-        this.gameState = new GameState();
-        this.playerHand = new ArrayList<>();
-        this.computerHand = new ArrayList<>();
+        this.player = new HumanPlayer("Player");
+        this.CPU = new ArrayList<>();
+        for(int i=0;i<3;i++){
+            CPU.add(new CPUPlayer("CPU"+(i+1)));
+        }
         initializeGame();
     }
 
@@ -42,9 +48,32 @@ public class UNOController {
 
     private void initializeGame() {
         // Deal initial cards
+        Deck = new String[]{"r0","r1","r2","r3","r4","r5","r6","r7","r8","r9",
+                            "r1","r2","r3","r4","r5","r6","r7","r8","r9",
+                            "g0","g1","g2","g3","g4","g5","g6","g7","g8","g9",
+                            "g1","g2","g3","g4","g5","g6","g7","g8","g9",
+                            "b0","b1","b2","b3","b4","b5","b6","b7","b8","b9",
+                            "b1","b2","b3","b4","b5","b6","b7","b8","b9",
+                            "y0","y1","y2","y3","y4","y5","y6","y7","y8","y9",
+                            "y1","y2","y3","y4","y5","y6","y7","y8","y9",
+                            "rSkip","rReverse","rDrawTwo",
+                            "rSkip","rReverse","rDrawTwo",
+                            "gSkip","gReverse","gDrawTwo",
+                            "gSkip","gReverse","gDrawTwo",
+                            "bSkip","bReverse","bDrawTwo",
+                            "bSkip","bReverse","bDrawTwo",
+                            "ySkip","yReverse","yDrawTwo",
+                            "ySkip","yReverse","yDrawTwo",
+                            "WildCard", "WildCard", "WildCard", "WildCard",
+                            "WildDrawFour", "WildDrawFour", "WildDrawFour", "WildDrawFour"};
+
+        topCard = cardFactory.giveCard(new ArrayList<>(Arrays.asList(Deck)),true);
+        
         for (int i = 0; i < 7; i++) {
-            playerHand.add(gameState.drawCard());
-            computerHand.add(gameState.drawCard());
+            player.getCard(cardFactory.giveCard(new ArrayList<>(Arrays.asList(Deck)),false));
+            for(Player cpu:CPU){
+                cpu.getCard(cardFactory.giveCard(new ArrayList<>(Arrays.asList(Deck)),false));
+            }
         }
         
         // First card on discard pile
@@ -144,4 +173,6 @@ public class UNOController {
         }
     }
 
+        return deckCard;
+    }
 }

@@ -1,8 +1,8 @@
 package model;
 
 public class ReverseCard extends Card {
-    public ReverseCard() {
-        super(Type.Number, Color.values()[new java.util.Random().nextInt(4)]);
+    public ReverseCard(Color color) {
+        super(Type.Number, color);
     }
 
     @Override

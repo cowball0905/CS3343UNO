@@ -12,6 +12,9 @@ public abstract class Player implements Drawable, Playable, Shoutable, Catchable
         this.hand = new ArrayList<>();
         this.isShout = false;
     }
+    public void addCard(Card card) {
+        hand.add(card);
+    }
     
     public String getName() { return name; }
     public ArrayList<Card> getHand() { return hand; }
