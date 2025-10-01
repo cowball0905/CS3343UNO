@@ -26,12 +26,31 @@ public class UNOController {
     private Direction playDirection;
 
     private UNOController() {
+        // Create the main frame
+        mainFrame = new JFrame("UNO Game");
+        mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        mainFrame.setSize(1000, 700);
+        mainFrame.setLocationRelativeTo(null);
+        mainFrame.setResizable(false);
+        
+        // Initialize game components
         this.player = new HumanPlayer("Player");
         this.CPU = new ArrayList<>();
         for(int i=0;i<3;i++){
             CPU.add(new CPUPlayer("CPU"+(i+1)));
         }
+        
+        // Create panels
+        menuPanel = new UNOMenuPanel(this);
+        gamePanel = new UNOGamePanel(this);
+        
         initializeGame();
+        
+        // Show the window
+        showMenu();
+        mainFrame.setVisible(true);
+        
+        System.out.println("UNO Game window created and should be visible!");
     }
 
     public static synchronized UNOController getInstance() {
