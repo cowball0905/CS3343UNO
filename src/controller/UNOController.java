@@ -1,140 +1,147 @@
+// controller/UNOController.java
 package controller;
 
-
-import java.awt.BorderLayout;
-import java.util.ArrayList;
-import java.util.List;
-import javax.swing.JFrame;
+import model.*;
 import view.UNOGamePanel;
 import view.UNOMenuPanel;
-import model.Card;
-import model.CardFactory;
 
-public class UNOController extends JFrame {
-    
-    private static final long serialVersionUID = 1L;
+import java.util.*;
+
+import javax.swing.JFrame;
+import javax.swing.SwingUtilities;
+
+public class UNOController {
     private static UNOController instance;
+    private GameState gameState;
     private UNOGamePanel gamePanel;
     private UNOMenuPanel menuPanel;
-    
-    // Game state
+    private JFrame mainFrame;
     private List<Card> playerHand;
     private List<Card> computerHand;
-    private Card topCard;
-    private Card deckCard;
-    
-    public static UNOController getInstance() {
+
+    private UNOController() {
+        this.gameState = new GameState();
+        this.playerHand = new ArrayList<>();
+        this.computerHand = new ArrayList<>();
+        initializeGame();
+    }
+
+    public static synchronized UNOController getInstance() {
         if (instance == null) {
             instance = new UNOController();
         }
         return instance;
     }
-    
-    private UNOController() {
-        super("UNO Game");
-        setLayout(new BorderLayout());
-        setDefaultCloseOperation(EXIT_ON_CLOSE);
-        setResizable(false);
-        
-        // Initialize and show menu panel first
-        showMenu();
-        
-        pack();
-        setLocationRelativeTo(null);
-        setVisible(true);
-    }
-    
-    public void showMenu() {
-        if (menuPanel == null) {
-            menuPanel = new UNOMenuPanel(this);
+
+        public void setMenuPanel(UNOMenuPanel menuPanel) {
+        this.menuPanel = menuPanel;
+        if (menuPanel != null && menuPanel.getParent() instanceof JFrame) {
+            this.mainFrame = (JFrame) menuPanel.getParent();
         }
+    }
+
+    private void initializeGame() {
+        // Deal initial cards
+        for (int i = 0; i < 7; i++) {
+            playerHand.add(gameState.drawCard());
+            computerHand.add(gameState.drawCard());
+        }
+        
+        // First card on discard pile
+        Card firstCard;
+        do {
+            firstCard = gameState.drawCard();
+        } while (firstCard.getType() != Type.Number);
+        
+        gameState.getDiscardPile().push(firstCard);
+        gameState.setCurrentColor(firstCard.getColor());
+    }
+
+    public void setGamePanel(UNOGamePanel panel) {
+        this.gamePanel = panel;
         if (gamePanel != null) {
-            remove(gamePanel);
-        }
-        add(menuPanel, BorderLayout.CENTER);
-        revalidate();
-        repaint();
-    }
-    
-    public void startGame() {
-        if (gamePanel == null) {
-            gamePanel = new UNOGamePanel(this);
-        }
-        remove(menuPanel);
-        add(gamePanel, BorderLayout.CENTER);
-        revalidate();
-        repaint();
-        
-        // Initialize game logic
-        initializeGameLogic();
-        gamePanel.startGame();
-    }
-    
-    private void initializeGameLogic() {
-        // Initialize game state
-        playerHand = new ArrayList<>();
-        computerHand = new ArrayList<>();
-        
-        // Create deck and top card
-        deckCard = CardFactory.createDeckCard();
-        topCard = CardFactory.createNumberCard();
-        
-        // Deal cards to players
-        for (int i = 0; i < 5; i++) {
-            playerHand.add(CardFactory.createRandomCard());
-            computerHand.add(CardFactory.createDeckCard()); // Face-down cards for computer
+            gamePanel.initialize(this);
         }
     }
-    
+
     public boolean playCard(Card card) {
-        if (playerHand.contains(card)) {
-            // Move card from player hand to discard pile
+        if (gameState.isPlayerTurn() && playerHand.contains(card) && gameState.isValidMove(card)) {
             playerHand.remove(card);
-            topCard = card;
-            gamePanel.updateDisplay();
+            gameState.playCard(card);
+            if (gamePanel != null) {
+                gamePanel.updateGameState();
+            }
             return true;
         }
         return false;
     }
-    
-    public boolean drawCard() {
-        if (playerHand.size() < 10) { // Limit hand size
-            Card newCard = CardFactory.createRandomCard();
-            playerHand.add(newCard);
-            gamePanel.updateDisplay();
-            return true;
-        }
-        return false;
-    }
-    
-    public Card getCardAt(int x, int y) {
-        // Check player hand
-        for (Card card : playerHand) {
-            if (card.contains(x, y)) {
+
+    public Card drawCard() {
+        if (gameState.isPlayerTurn()) {
+            Card card = gameState.drawCard();
+            if (card != null) {
+                playerHand.add(card);
+                if (gamePanel != null) {
+                    gamePanel.updateGameState();
+                }
                 return card;
             }
         }
         return null;
     }
-    
-    public boolean isDeckClicked(int x, int y) {
-        return deckCard != null && deckCard.contains(x, y);
-    }
-    
+
     // Getters for view
+    public Card getTopCard() {
+        return gameState.getTopCard();
+    }
+
+
+    public boolean isPlayerTurn() {
+        return gameState.isPlayerTurn();
+    }
+
+    public Color getCurrentColor() {
+        return gameState.getCurrentColor();
+    }
+
     public List<Card> getPlayerHand() {
         return new ArrayList<>(playerHand);
     }
-    
+
     public List<Card> getComputerHand() {
         return new ArrayList<>(computerHand);
     }
-    
-    public Card getTopCard() {
-        return topCard;
+
+    // In UNOController.java
+    public void startGame() {
+        if (mainFrame == null && menuPanel != null) {
+            mainFrame = (JFrame) SwingUtilities.getWindowAncestor(menuPanel);
+        }
+        
+        if (mainFrame != null) {
+            // Remove current panel
+            mainFrame.getContentPane().removeAll();
+            
+            // Create and add game panel if not exists
+            if (gamePanel == null) {
+                gamePanel = new UNOGamePanel(this);
+            }
+            
+            mainFrame.add(gamePanel);
+            mainFrame.revalidate();
+            gamePanel.requestFocusInWindow();
+        }
     }
-    
-    public Card getDeckCard() {
-        return deckCard;
+
+    public void showMenu() {
+        if (mainFrame != null) {
+            mainFrame.getContentPane().removeAll();
+            if (menuPanel != null) {
+                mainFrame.add(menuPanel);
+            }
+            mainFrame.revalidate();
+            mainFrame.repaint();
+        }
     }
+
 }

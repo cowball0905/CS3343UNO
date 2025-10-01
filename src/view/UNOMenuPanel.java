@@ -52,7 +52,6 @@ public class UNOMenuPanel extends JPanel {
         String[] possiblePaths = {
             "/asset/title.png",                      // For JAR packaging
             "src/asset/title.png",                   // For development
-            "Tetris-Fighter-master/src/asset/title.png" // For some IDE run configurations
         };
         
         for (String path : possiblePaths) {
