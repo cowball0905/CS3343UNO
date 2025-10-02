@@ -6,8 +6,6 @@ import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 import java.awt.geom.AffineTransform;
 import java.util.List;
 import javax.swing.JButton;
@@ -140,6 +138,7 @@ public class UNOGamePanel extends JPanel {
         
         if (card.isRotated()) {
             // 保存當前變換狀態
+            //保存當前的圖形變換狀態，以便後續恢復
             AffineTransform oldTransform = g2d.getTransform();
             
             // 獲取圖像的原始尺寸（旋轉前）
@@ -147,10 +146,25 @@ public class UNOGamePanel extends JPanel {
             int imageHeight = card.getImage().getHeight();
             
             // 計算旋轉中心 - 使用卡牌在螢幕上應該占據的空間
+            /*計算公式分解：
+
+            WIDTH / 2: 螢幕寬度的中心點 (400)
+            playerHand.size() * CARD_OFFSET_X: 所有卡牌總寬度
+            (playerHand.size() * CARD_OFFSET_X / 2): 所有卡牌總寬度的一半
+            i * CARD_OFFSET_X: 第 i 張卡牌的偏移量
+            實際計算範例： 假設玩家有 5 張牌，CARD_OFFSET_X = 25：
+
+            第1張(i=0): cardX = 400 - (5×25/2) + (0×25) = 400 - 62.5 + 0 = 337.5
+            第2張(i=1): cardX = 400 - 62.5 + 25 = 362.5
+            第3張(i=2): cardX = 400 - 62.5 + 50 = 387.5 (中心)
+            第4張(i=3): cardX = 400 - 62.5 + 75 = 412.5
+            第5張(i=4): cardX = 400 - 62.5 + 100 = 437.5 
+            */
             double centerX = card.getX() + card.getWidth() / 2.0;
             double centerY = card.getY() + card.getHeight() / 2.0;
             
             // 移動到旋轉中心
+            // 平移
             g2d.translate(centerX, centerY);
             // 執行旋轉
             g2d.rotate(Math.toRadians(card.getRotationAngle()));
@@ -161,6 +175,7 @@ public class UNOGamePanel extends JPanel {
             g2d.drawImage(card.getImage(), 0, 0, imageWidth, imageHeight, this);
             
             // 恢復變換狀態
+            // 如果不恢復變換，第二張卡牌也會被旋轉90度！
             g2d.setTransform(oldTransform);
         } else {
             // 正常繪製
