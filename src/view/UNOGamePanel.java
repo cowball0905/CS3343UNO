@@ -39,7 +39,6 @@ public class UNOGamePanel extends JPanel {
         
         // UI initialization only
         
-        // Add mouse listener for card selection
         // addMouseListener(new MouseAdapter() {
         //     @Override
         //     public void mouseClicked(MouseEvent e) {
@@ -118,25 +117,27 @@ public class UNOGamePanel extends JPanel {
     //     Card clickedCard = controller.getCardAt(x, y);
     //     if (clickedCard != null) {
     //         controller.playCard(clickedCard);
+    //         updateDisplay();
     //         return;
     //     }
         
     //     // Check if player clicked on the deck
     //     if (controller.isDeckClicked(x, y)) {
     //         controller.drawCard();
+    //         updateDisplay();
     //     }
     // }
     
-    private void drawCenteredString(Graphics2D g, String text, java.awt.Rectangle rect) {
-        // Center text in the given rectangle
-        java.awt.FontMetrics metrics = g.getFontMetrics(g.getFont());
-        int x = rect.x + (rect.width - metrics.stringWidth(text)) / 2;
-        int y = rect.y + ((rect.height - metrics.getHeight()) / 2) + metrics.getAscent();
-        g.drawString(text, x, y);
-    }
+
     
     // 繪製旋轉卡牌的方法
     private void drawRotatedCard(Graphics2D g2d, Card card) {
+        // 檢查卡牌和圖像是否存在
+        if (card == null || card.getImage() == null) {
+            System.err.println("Warning: Card or image is null, skipping draw");
+            return;
+        }
+        
         if (card.isRotated()) {
             // 保存當前變換狀態
             AffineTransform oldTransform = g2d.getTransform();
@@ -190,6 +191,12 @@ public class UNOGamePanel extends JPanel {
         List<Card> computer3Hand = controller.getCPUCard(2);
         Card topCard = controller.getTopCard();
         
+        // Null safety checks
+        if (playerHand == null) playerHand = new java.util.ArrayList<>();
+        if (computer1Hand == null) computer1Hand = new java.util.ArrayList<>();
+        if (computer2Hand == null) computer2Hand = new java.util.ArrayList<>();
+        if (computer3Hand == null) computer3Hand = new java.util.ArrayList<>();
+        
         // Enable anti-aliasing for smoother graphics
         g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
         g2d.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
@@ -198,38 +205,35 @@ public class UNOGamePanel extends JPanel {
         g2d.setColor(new Color(0, 100, 0));
         g2d.fillRect(0, 0, getWidth(), getHeight());
         
-        // Draw computer's hand (face down)
-        g2d.setFont(new Font("Arial", Font.BOLD, 18));
-        g2d.setColor(Color.WHITE);
-        drawCenteredString(g2d, "CPU 1 (" + computer1Hand.size() + " cards)", 
-                         new java.awt.Rectangle(0, 20, WIDTH, 30));
-                         
-        // Draw computer's cards (face down)
+        // === 第一層：繪製所有卡牌 (底層) ===
+        // Draw CPU1 cards
         for (Card card : computer1Hand) {
             drawRotatedCard(g2d, card);
         }
-
-        // Draw computer's hand (face down)
-        g2d.setFont(new Font("Arial", Font.BOLD, 18));
-        g2d.setColor(Color.WHITE);
-        drawCenteredString(g2d, "CPU 2 (" + computer2Hand.size() + " cards)", 
-                         new java.awt.Rectangle(0, 20, WIDTH, 30));
-                         
-        // Draw computer's cards (face down)
+        
+        // Draw CPU2 cards
         for (Card card : computer2Hand) {
             drawRotatedCard(g2d, card);
         }
-
-        // Draw computer's hand (face down)
-        g2d.setFont(new Font("Arial", Font.BOLD, 18));
-        g2d.setColor(Color.WHITE);
-        drawCenteredString(g2d, "CPU 3 (" + computer3Hand.size() + " cards)", 
-                         new java.awt.Rectangle(0, 20, WIDTH, 30));
-                         
-        // Draw computer's cards (face down)
+        
+        // Draw CPU3 cards
         for (Card card : computer3Hand) {
             drawRotatedCard(g2d, card);
         }
+        
+        // === 第二層：繪製所有文字標籤 (上層，不會被卡牌覆蓋) ===
+        g2d.setFont(new Font("Arial", Font.BOLD, 18));
+        g2d.setColor(Color.WHITE);
+        
+        // CPU1 標籤 (左側)
+        g2d.drawString("CPU 1 (" + computer1Hand.size() + " cards)", 40, 220);
+        
+        // CPU2 標籤 (頂部居中)
+        g2d.drawString("CPU 2 (" + computer2Hand.size() + " cards)", 
+                         370, 40);
+        
+        // CPU3 標籤 (右側)
+        g2d.drawString("CPU 3 (" + computer3Hand.size() + " cards)", 620, 220);
         
         // // Draw deck (back of cards)
         // if (deckCard != null) {
@@ -246,30 +250,33 @@ public class UNOGamePanel extends JPanel {
         //                              deckCard.getWidth(), 20));
         // }
         
+        // === 繼續第一層：繪製其他卡牌 ===
+        // Draw player's cards (底層)
+        for (Card card : playerHand) {
+            drawRotatedCard(g2d, card);
+        }
+        
         // Draw discard pile (top card)
         if (topCard != null) {
             g2d.drawImage(topCard.getImage(),
                          topCard.getX(), topCard.getY(),
                          topCard.getWidth(), topCard.getHeight(),
                          this);
-            
-            // Draw discard pile label
-            g2d.setColor(Color.WHITE);
-            g2d.setFont(new Font("Arial", Font.PLAIN, 14));
-            drawCenteredString(g2d, "DISCARD", 
-                new java.awt.Rectangle(topCard.getX(), topCard.getY() + topCard.getHeight() + 5, 
-                                     topCard.getWidth(), 20));
         }
         
-        // Draw player's hand (face up)
+        // === 第二層：繼續繪製文字標籤 (上層) ===
+        // Player 標籤
         g2d.setFont(new Font("Arial", Font.BOLD, 18));
         g2d.setColor(Color.WHITE);
-        drawCenteredString(g2d, "YOU (" + playerHand.size() + " cards)", 
-                         new java.awt.Rectangle(0, HEIGHT - 150, WIDTH, 30));
+        g2d.drawString("YOU (" + playerHand.size() + " cards)", 370, 600);
         
-        // Draw cards in player's hand
-        for (Card card : playerHand) {
-            drawRotatedCard(g2d, card);
+        // Discard pile label
+        if (topCard != null) {
+            g2d.setColor(Color.WHITE);
+            g2d.setFont(new Font("Arial", Font.PLAIN, 14));
+            g2d.drawString("DISCARD", 
+                topCard.getX() + (topCard.getWidth() / 2) - 30, 
+                topCard.getY() + topCard.getHeight() + 20);
         }
     }
 }

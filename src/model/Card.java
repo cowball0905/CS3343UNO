@@ -16,7 +16,7 @@ public abstract class Card {
     protected int height = 120;
     protected Color color;
     protected Type type;
-    protected String path;
+    protected Boolean isRevealed;
     
     // 旋轉相關屬性
     protected boolean isRotated = false;  // 是否旋轉
@@ -31,7 +31,6 @@ public abstract class Card {
     protected void loadImage(String path) {
         try {
             // Try to load from classpath (works in JAR)
-            this.path = path;
             java.net.URL imageUrl = getClass().getResource(path);
             if (imageUrl != null) {
                 image = ImageIO.read(imageUrl);
