@@ -8,6 +8,7 @@ import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.geom.AffineTransform;
 import java.util.List;
 import javax.swing.JButton;
 import javax.swing.JPanel;
@@ -47,8 +48,8 @@ public class UNOGamePanel extends JPanel {
         // });
     }
     
-    private static final int CARD_OFFSET_X = 25; // Horizontal overlap between cards in hand
-    private static final int CARD_OVERLAP = 15;   // How much cards overlap in hand
+    private static final int CARD_OFFSET_X = 25; // 水平方向的卡牌間距
+    private static final int CARD_OFFSET_Y = 20; // 垂直方向的卡牌間距
     
     private void updateCardPositions() {
         // Get current game state from controller
@@ -67,35 +68,47 @@ public class UNOGamePanel extends JPanel {
             topCard.setPosition(200, 200);
         }
         
-        // Update positions of all cards in player's hand
+        // 玩家手牌 - 底部水平排列（不旋轉）
         for (int i = 0; i < playerHand.size(); i++) {
             Card card = playerHand.get(i);
+            // 不旋轉
             int cardX = (WIDTH / 2) - (playerHand.size() * CARD_OFFSET_X / 2) + (i * CARD_OFFSET_X);
-            int cardY = HEIGHT - 150; // Position near bottom of screen
+            int cardY = HEIGHT - 150;
             card.setPosition(cardX, cardY);
         }
         
-        // Update positions of all cards in computer's hand
+        // CPU1 - 左側垂直排列
         for (int i = 0; i < computer1Hand.size(); i++) {
             Card card = computer1Hand.get(i);
-            int cardX = (WIDTH / 2) - (computer1Hand.size() * CARD_OFFSET_X / 2) + (i * CARD_OFFSET_X);
-            int cardY = 50; // Position near top of screen
+            card.setRotation(90); // 順時針旋轉90度
+            
+            // X坐標：固定在左側
+            int cardX = 50;
+            // Y坐標：垂直居中排列
+            int cardY = (HEIGHT / 2) - (computer1Hand.size() * CARD_OFFSET_Y / 2) + (i * CARD_OFFSET_Y);
+            
             card.setPosition(cardX, cardY);
         }
 
-        // Update positions of all cards in computer's hand
+        // CPU3 - 右側垂直排列
         for (int i = 0; i < computer3Hand.size(); i++) {
             Card card = computer3Hand.get(i);
-            int cardX = (WIDTH / 2) - (computer3Hand.size() * CARD_OFFSET_X / 2) + (i * CARD_OFFSET_X);
-            int cardY = 50; // Position near top of screen
+            card.setRotation(270); // 逆時針旋轉90度
+            
+            // X坐標：固定在右側
+            int cardX = WIDTH - 50 - card.getWidth();
+            // Y坐標：垂直居中排列
+            int cardY = (HEIGHT / 2) - (computer3Hand.size() * CARD_OFFSET_Y / 2) + (i * CARD_OFFSET_Y);
+            
             card.setPosition(cardX, cardY);
         }
 
-        // Update positions of all cards in computer's hand
+        // CPU2 - 頂部水平排列（不旋轉）
         for (int i = 0; i < computer2Hand.size(); i++) {
             Card card = computer2Hand.get(i);
+            // 不旋轉
             int cardX = (WIDTH / 2) - (computer2Hand.size() * CARD_OFFSET_X / 2) + (i * CARD_OFFSET_X);
-            int cardY = 50; // Position near top of screen
+            int cardY = 50;
             card.setPosition(cardX, cardY);
         }
     }
@@ -120,6 +133,29 @@ public class UNOGamePanel extends JPanel {
         int x = rect.x + (rect.width - metrics.stringWidth(text)) / 2;
         int y = rect.y + ((rect.height - metrics.getHeight()) / 2) + metrics.getAscent();
         g.drawString(text, x, y);
+    }
+    
+    // 繪製旋轉卡牌的方法
+    private void drawRotatedCard(Graphics2D g2d, Card card) {
+        if (card.isRotated()) {
+            // 保存當前變換狀態
+            AffineTransform oldTransform = g2d.getTransform();
+            
+            // 移動到卡牌中心，旋轉，再移回來
+            g2d.translate(card.getX() + card.getWidth()/2, card.getY() + card.getHeight()/2);
+            g2d.rotate(Math.toRadians(card.getRotationAngle()));
+            g2d.translate(-card.getWidth()/2, -card.getHeight()/2);
+            
+            // 繪製卡牌
+            g2d.drawImage(card.getImage(), 0, 0, card.getWidth(), card.getHeight(), this);
+            
+            // 恢復變換狀態
+            g2d.setTransform(oldTransform);
+        } else {
+            // 正常繪製
+            g2d.drawImage(card.getImage(), card.getX(), card.getY(), 
+                         card.getWidth(), card.getHeight(), this);
+        }
     }
     
     public void startGame() {
@@ -160,10 +196,7 @@ public class UNOGamePanel extends JPanel {
                          
         // Draw computer's cards (face down)
         for (Card card : computer1Hand) {
-            g2d.drawImage(card.getImage(), 
-                         card.getX(), card.getY(),
-                         card.getWidth(), card.getHeight(),
-                         this);
+            drawRotatedCard(g2d, card);
         }
 
         // Draw computer's hand (face down)
@@ -174,10 +207,7 @@ public class UNOGamePanel extends JPanel {
                          
         // Draw computer's cards (face down)
         for (Card card : computer2Hand) {
-            g2d.drawImage(card.getImage(), 
-                         card.getX(), card.getY(),
-                         card.getWidth(), card.getHeight(),
-                         this);
+            drawRotatedCard(g2d, card);
         }
 
         // Draw computer's hand (face down)
@@ -188,10 +218,7 @@ public class UNOGamePanel extends JPanel {
                          
         // Draw computer's cards (face down)
         for (Card card : computer3Hand) {
-            g2d.drawImage(card.getImage(), 
-                         card.getX(), card.getY(),
-                         card.getWidth(), card.getHeight(),
-                         this);
+            drawRotatedCard(g2d, card);
         }
         
         // // Draw deck (back of cards)
@@ -232,10 +259,7 @@ public class UNOGamePanel extends JPanel {
         
         // Draw cards in player's hand
         for (Card card : playerHand) {
-            g2d.drawImage(card.getImage(),
-                         card.getX(), card.getY(),
-                         card.getWidth(), card.getHeight(),
-                         this);
+            drawRotatedCard(g2d, card);
         }
     }
 }
