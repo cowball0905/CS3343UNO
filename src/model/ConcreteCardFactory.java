@@ -8,7 +8,7 @@ public class ConcreteCardFactory extends CardFactory {
     private static final Random random = new Random();
 
     @Override
-    public Card createCard(ArrayList<String> Deck, Boolean isTop) {
+    public Card createCard(ArrayList<String> Deck, Boolean isTop, boolean isRevealed) {
         int Decklen = Deck.size();
         if(isTop){
             Decklen = 76;
@@ -17,9 +17,9 @@ public class ConcreteCardFactory extends CardFactory {
         String card = Deck.get(index);
         Deck.remove(index);
         if (card.equals("WildCard")){
-            return new WildCard();
+            return new WildCard(isRevealed);
         } else if (card.equals("WildDrawFour")){
-            return new WildDrawFourCard();
+            return new WildDrawFourCard(isRevealed);
         } else {
             Color cardcolor;
             switch (card.charAt(0)){
@@ -38,13 +38,13 @@ public class ConcreteCardFactory extends CardFactory {
             }
             switch (card.substring(1)) {
                 case "Skip":
-                    return new SkipCard(cardcolor);
+                    return new SkipCard(cardcolor, isRevealed);
                 case "Reverse":
-                    return new ReverseCard(cardcolor);
+                    return new ReverseCard(cardcolor, isRevealed);
                 case "DrawTwo":
-                    return new DrawTwoCard(cardcolor);
+                    return new DrawTwoCard(cardcolor, isRevealed);
                 default:
-                    return new NumberCard(cardcolor, Integer.parseInt(card.substring(1)));
+                    return new NumberCard(cardcolor, Integer.parseInt(card.substring(1)), isRevealed);
             }
         }
     }

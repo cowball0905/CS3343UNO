@@ -1,8 +1,8 @@
 package model;
 
 public class WildDrawFourCard extends Card {
-    public WildDrawFourCard() {
-        super(Type.WildDrawFour, null);
+    public WildDrawFourCard(boolean isRevealed) {
+        super(Type.WildDrawFour, null, isRevealed);
         loadImage("/asset/uno-card-images-master/Wild_Card_Draw_4.png");
     }
 

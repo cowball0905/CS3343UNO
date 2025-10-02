@@ -134,7 +134,7 @@ public class UNOGamePanel extends JPanel {
     private void drawRotatedCard(Graphics2D g2d, Card card) {
         // 檢查卡牌和圖像是否存在
         if (card == null || card.getImage() == null) {
-            System.err.println("Warning: Card or image is null, skipping draw");
+            System.err.println("Warning: Card or image " + card.getType().toString() + " " + card.getColor().toString() + " is null, skipping draw");
             return;
         }
         
@@ -170,7 +170,6 @@ public class UNOGamePanel extends JPanel {
     }
     
     public void startGame() {
-        // Just update the display
         updateDisplay();
     }
     

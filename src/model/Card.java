@@ -3,7 +3,6 @@ package model;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.util.Random;
 import java.awt.RenderingHints;
 import java.awt.Graphics2D;
 import javax.imageio.ImageIO;
@@ -17,26 +16,33 @@ public abstract class Card {
     protected Color color;
     protected Type type;
     protected Boolean isRevealed;
+    protected String cardImagePath;  // 保存卡牌真實圖像路徑
     
     // 旋轉相關屬性
     protected boolean isRotated = false;  // 是否旋轉
     protected double rotationAngle = 0.0; // 旋轉角度（度數）
 
-    public Card(Type type, Color color) {
+    public Card(Type type, Color color, boolean isRevealed) {
         this.type = type;
         this.color = color;
+        this.isRevealed = isRevealed;
     }
 
     // In Card.java, update the loadImage method
     protected void loadImage(String path) {
+        this.cardImagePath = path;  // 保存真實卡牌路徑
+        
+        // 根據isRevealed決定載入哪個圖像
+        String actualPath = isRevealed ? path : "/asset/uno-card-images-master/Back.jpg";
+        
         try {
             // Try to load from classpath (works in JAR)
-            java.net.URL imageUrl = getClass().getResource(path);
+            java.net.URL imageUrl = getClass().getResource(actualPath);
             if (imageUrl != null) {
                 image = ImageIO.read(imageUrl);
             } else {
                 // Fallback to file system (for development)
-                image = ImageIO.read(new File("src" + path));
+                image = ImageIO.read(new File("src" + actualPath));
             }
             
             if (image != null) {
@@ -127,6 +133,35 @@ public abstract class Card {
     // 獲取旋轉角度
     public double getRotationAngle() {
         return rotationAngle;
+    }
+    
+    // 翻牌方法 - 顯示真實卡牌
+    public void reveal() {
+        if (!isRevealed && cardImagePath != null) {
+            isRevealed = true;
+            loadImage(cardImagePath);  // 重新載入真實卡牌圖像
+        }
+    }
+    
+    // 隱藏卡牌 - 顯示背面
+    public void hide() {
+        if (isRevealed && cardImagePath != null) {
+            isRevealed = false;
+            loadImage(cardImagePath);  // 重新載入（會顯示背面）
+        }
+    }
+    
+    // 獲取是否已翻牌
+    public boolean isRevealed() {
+        return isRevealed;
+    }
+    
+    // 設置翻牌狀態
+    public void setRevealed(boolean revealed) {
+        this.isRevealed = revealed;
+        if (cardImagePath != null) {
+            loadImage(cardImagePath);  // 重新載入對應圖像
+        }
     }
 
     abstract public void cardFunction();

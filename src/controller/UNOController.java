@@ -90,12 +90,12 @@ public class UNOController {
             "WildDrawFour", "WildDrawFour", "WildDrawFour", "WildDrawFour"
         ));
 
-        PlayedCard.add(cardFactory.giveCard(Deck,true));
+        PlayedCard.add(cardFactory.giveCard(Deck,true, true)); // 已打出的牌顯示
         
         for (int i = 0; i < 7; i++) {
-            player.drawCard(cardFactory.giveCard(Deck,false));
+            player.drawCard(cardFactory.giveCard(Deck,false, true)); // 玩家的牌顯示
             for(Player cpu:CPU){
-                cpu.drawCard(cardFactory.giveCard(Deck,false));
+                cpu.drawCard(cardFactory.giveCard(Deck,false, false)); // CPU的牌隱藏
             }
         }
         currentColor = PlayedCard.get(0).getColor();

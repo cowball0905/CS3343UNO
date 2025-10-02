@@ -1,8 +1,9 @@
 package model;
 
 public class ReverseCard extends Card {
-    public ReverseCard(Color color) {
-        super(Type.Number, color);
+    public ReverseCard(Color color, boolean isRevealed) {
+        super(Type.Reverse, color, isRevealed);
+        loadImage("/asset/uno-card-images-master/"+color.toString()+"_Reverse.png");
     }
 
     @Override

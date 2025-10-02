@@ -1,8 +1,8 @@
 package model;
 
 public class WildCard extends Card {
-    public WildCard() {
-        super(Type.Wild, null);
+    public WildCard(boolean isRevealed) {
+        super(Type.Wild, null, isRevealed);
         loadImage("/asset/uno-card-images-master/Wild_Card_Change_Colour.png");
     }
 

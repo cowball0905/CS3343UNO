@@ -1,8 +1,8 @@
 package model;
 
 public class DrawTwoCard extends Card {
-    public DrawTwoCard(Color color) {
-        super(Type.DrawTwo, color);
+    public DrawTwoCard(Color color, boolean isRevealed) {
+        super(Type.DrawTwo, color, isRevealed);
         loadImage("/asset/uno-card-images-master/"+color.toString()+"_Draw_2.png");
     }
 
