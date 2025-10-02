@@ -141,13 +141,23 @@ public class UNOGamePanel extends JPanel {
             // 保存當前變換狀態
             AffineTransform oldTransform = g2d.getTransform();
             
-            // 移動到卡牌中心，旋轉，再移回來
-            g2d.translate(card.getX() + card.getWidth()/2, card.getY() + card.getHeight()/2);
-            g2d.rotate(Math.toRadians(card.getRotationAngle()));
-            g2d.translate(-card.getWidth()/2, -card.getHeight()/2);
+            // 獲取圖像的原始尺寸（旋轉前）
+            int imageWidth = card.getImage().getWidth();
+            int imageHeight = card.getImage().getHeight();
             
-            // 繪製卡牌
-            g2d.drawImage(card.getImage(), 0, 0, card.getWidth(), card.getHeight(), this);
+            // 計算旋轉中心 - 使用卡牌在螢幕上應該占據的空間
+            double centerX = card.getX() + card.getWidth() / 2.0;
+            double centerY = card.getY() + card.getHeight() / 2.0;
+            
+            // 移動到旋轉中心
+            g2d.translate(centerX, centerY);
+            // 執行旋轉
+            g2d.rotate(Math.toRadians(card.getRotationAngle()));
+            // 移動到繪製位置（圖像左上角）
+            g2d.translate(-imageWidth / 2.0, -imageHeight / 2.0);
+            
+            // 繪製卡牌 - 使用原始圖像尺寸
+            g2d.drawImage(card.getImage(), 0, 0, imageWidth, imageHeight, this);
             
             // 恢復變換狀態
             g2d.setTransform(oldTransform);
