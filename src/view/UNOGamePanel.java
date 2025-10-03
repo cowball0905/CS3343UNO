@@ -62,14 +62,14 @@ public class UNOGamePanel extends JPanel {
         //     deckCard.setPosition(50, 200);
         // }
         if (topCard != null) {
-            topCard.setPosition(200, 200);
+            topCard.setPosition(450, 240);
         }
         
         // 玩家手牌 - 底部水平排列（不旋轉）
         for (int i = 0; i < playerHand.size(); i++) {
             Card card = playerHand.get(i);
             // 不旋轉
-            int cardX = (WIDTH / 2) - (playerHand.size() * CARD_OFFSET_X / 2) + (i * CARD_OFFSET_X);
+            int cardX = (WIDTH / 2) - (playerHand.size() * CARD_OFFSET_X / 2) + (i * CARD_OFFSET_X) + 60;
             int cardY = HEIGHT - 150;
             card.setPosition(cardX, cardY);
         }
@@ -80,7 +80,7 @@ public class UNOGamePanel extends JPanel {
             card.setRotation(90); // 順時針旋轉90度
             
             // X坐標：固定在左側
-            int cardX = 50;
+            int cardX = 50 + 60;
             // Y坐標：垂直居中排列
             int cardY = (HEIGHT / 2) - (computer1Hand.size() * CARD_OFFSET_Y / 2) + (i * CARD_OFFSET_Y);
             
@@ -93,7 +93,7 @@ public class UNOGamePanel extends JPanel {
             card.setRotation(270); // 逆時針旋轉90度
             
             // X坐標：固定在右側
-            int cardX = WIDTH - 50 - card.getWidth();
+            int cardX = WIDTH - 50 - card.getWidth() + 120;
             // Y坐標：垂直居中排列
             int cardY = (HEIGHT / 2) - (computer3Hand.size() * CARD_OFFSET_Y / 2) + (i * CARD_OFFSET_Y);
             
@@ -104,7 +104,7 @@ public class UNOGamePanel extends JPanel {
         for (int i = 0; i < computer2Hand.size(); i++) {
             Card card = computer2Hand.get(i);
             // 不旋轉
-            int cardX = (WIDTH / 2) - (computer2Hand.size() * CARD_OFFSET_X / 2) + (i * CARD_OFFSET_X);
+            int cardX = (WIDTH / 2) - (computer2Hand.size() * CARD_OFFSET_X / 2) + (i * CARD_OFFSET_X) + 60;
             int cardY = 50;
             card.setPosition(cardX, cardY);
         }
@@ -240,14 +240,14 @@ public class UNOGamePanel extends JPanel {
         g2d.setColor(Color.WHITE);
         
         // CPU1 標籤 (左側)
-        g2d.drawString("CPU 1 (" + computer1Hand.size() + " cards)", 40, 220);
+        g2d.drawString("CPU 1 (" + computer1Hand.size() + " cards)", 105, 220);
         
         // CPU2 標籤 (頂部居中)
         g2d.drawString("CPU 2 (" + computer2Hand.size() + " cards)", 
-                         370, 40);
+                         420, 40);
         
         // CPU3 標籤 (右側)
-        g2d.drawString("CPU 3 (" + computer3Hand.size() + " cards)", 620, 220);
+        g2d.drawString("CPU 3 (" + computer3Hand.size() + " cards)", 745, 220);
         
         // // Draw deck (back of cards)
         // if (deckCard != null) {
@@ -282,7 +282,7 @@ public class UNOGamePanel extends JPanel {
         // Player 標籤
         g2d.setFont(new Font("Arial", Font.BOLD, 18));
         g2d.setColor(Color.WHITE);
-        g2d.drawString("YOU (" + playerHand.size() + " cards)", 370, 600);
+        g2d.drawString("YOU (" + playerHand.size() + " cards)", 420, 600);
         
         // Discard pile label
         if (topCard != null) {
