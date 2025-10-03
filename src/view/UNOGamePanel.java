@@ -9,10 +9,13 @@ import java.awt.RenderingHints;
 import java.awt.geom.AffineTransform;
 import java.util.ArrayList;
 import java.util.List;
+import java.awt.Image;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 import controller.UNOController;
 import model.Card;
+import java.awt.Image;
 
 public class UNOGamePanel extends JPanel {
     
@@ -21,6 +24,8 @@ public class UNOGamePanel extends JPanel {
     private static final int HEIGHT = 600;
     private List <JButton> cardButtons = new ArrayList<JButton>();
     private int currentSelectedCardIndex = -1;
+    private String errorMessage = null;
+    private long errorMessageTimer = 0;
     
     private UNOController controller;
     private JButton menuButton;
@@ -50,6 +55,21 @@ public class UNOGamePanel extends JPanel {
     
     private static final int CARD_OFFSET_X = 25; // 水平方向的卡牌間距
     private static final int CARD_OFFSET_Y = 20; // 垂直方向的卡牌間距
+
+    
+    private JButton updateDeck(){
+        JButton button = new JButton();
+        button.setBounds(140, 30, 80, 120);
+        button.setBorderPainted(false);
+        button.setContentAreaFilled(false);
+        button.setFocusPainted(false);
+        
+        button.addActionListener(e -> {
+            // selectedCard(index);
+        });
+        
+        return button;
+    }
     
     private void updateCardPositions() {
         // Get current game state from controller
@@ -207,15 +227,21 @@ public class UNOGamePanel extends JPanel {
             currentSelectedCardIndex = index;
             playerHand.get(index).setCardSelected(true);
         } else if (index == currentSelectedCardIndex){ //Click selected card
-            // controller.playCard(index)
-            currentSelectedCardIndex = -1;
-            playerHand.get(index).setCardSelected(false);
+            boolean isPlayed = controller.playCard(playerHand.get(index));
+            if (isPlayed){
+                currentSelectedCardIndex = -1;
+                playerHand.get(index).setCardSelected(false);
+            } else {
+                errorMessage = "Can't play this card!";
+                errorMessageTimer = System.currentTimeMillis();
+            }
         } else { // Click another card
             playerHand.get(currentSelectedCardIndex).setCardSelected(false);
             currentSelectedCardIndex = index;
             playerHand.get(index).setCardSelected(true);
         }
         updateCardButtons();
+        updateDeck();
         repaint();
     }
     
@@ -247,6 +273,7 @@ public class UNOGamePanel extends JPanel {
     public void updateDisplay() {
         updateCardPositions();
         updateCardButtons();
+        updateDeck();
         repaint();
     }
     
@@ -306,21 +333,6 @@ public class UNOGamePanel extends JPanel {
         // CPU3 標籤 (右側)
         g2d.drawString("CPU 3 (" + computer3Hand.size() + " cards)", 745, 220);
         
-        // // Draw deck (back of cards)
-        // if (deckCard != null) {
-        //     g2d.drawImage(deckCard.getImage(), 
-        //                  deckCard.getX(), deckCard.getY(),
-        //                  deckCard.getWidth(), deckCard.getHeight(),
-        //                  this);
-            
-        //     // Draw deck label
-        //     g2d.setColor(Color.WHITE);
-        //     g2d.setFont(new Font("Arial", Font.PLAIN, 14));
-        //     drawCenteredString(g2d, "DECK", 
-        //         new java.awt.Rectangle(deckCard.getX(), deckCard.getY() + deckCard.getHeight() + 5, 
-        //                              deckCard.getWidth(), 20));
-        // }
-        
         // === 繼續第一層：繪製其他卡牌 ===
         // Draw player's cards (底層)
         for (Card card : playerHand) {
@@ -348,6 +360,23 @@ public class UNOGamePanel extends JPanel {
             g2d.drawString("DISCARD", 
                 topCard.getX() + (topCard.getWidth() / 2) - 30, 
                 topCard.getY() + topCard.getHeight() + 20);
+        }
+
+        Image image = new ImageIcon("src/asset/uno-card-images-master/Back.jpg").getImage();
+        g2d.drawImage(image,140,30, 80,120,null);
+        g2d.drawString("DECK", 160, 165);
+        
+        // Draw error message if it exists and hasn't timed out
+        if (errorMessage != null) {
+            long currentTime = System.currentTimeMillis();
+            if (currentTime - errorMessageTimer < 2000) { // Show message for 2 seconds
+                g2d.setColor(Color.RED);
+                g2d.setFont(new Font("Arial", Font.BOLD, 24));
+                // Draw the error message in the center of the screen
+                g2d.drawString(errorMessage, 630, 550);
+            } else {
+                errorMessage = null; // Clear the message after timeout
+            }
         }
     }
 }

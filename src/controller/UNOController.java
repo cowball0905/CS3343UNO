@@ -132,17 +132,36 @@ public class UNOController {
     //     }
     // }
 
-    // public boolean playCard(Card card) {
-    //     if (gameState.isPlayerTurn() && playerHand.contains(card) && gameState.isValidMove(card)) {
-    //         playerHand.remove(card);
-    //         gameState.playCard(card);
-    //         if (gamePanel != null) {
-    //             gamePanel.updateGameState();
-    //         }
-    //         return true;
-    //     }
-    //     return false;
-    // }
+    public boolean playCard(Card playedCard) {
+        if (currentPlayer != player) {
+            System.out.println("It's not the player's turn!");
+            return false;
+        }
+        Card topCard = getTopCard();
+        switch (playedCard.getType()) {
+            case Wild:
+                
+                break;
+            case WildDrawFour:
+                
+                break;
+            case Number:
+                
+                break;
+            case Skip:
+                
+                break;
+            case Reverse:
+                
+                break;
+            case DrawTwo:
+                
+                break;
+            default:
+                return false;
+        }
+        return false;
+    }
 
     // public Card drawCard() {
     //     if (gameState.isPlayerTurn()) {
