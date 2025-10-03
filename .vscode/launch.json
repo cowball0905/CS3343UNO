@@ -9,6 +9,13 @@
             "name": "Main",
             "request": "launch",
             "mainClass": "controller.Main",
+            "projectName": "CS3343-Group19-UNO"
+        },
+        {
+            "type": "java",
+            "name": "Main",
+            "request": "launch",
+            "mainClass": "controller.Main",
             "projectName": "src"
         },
         {

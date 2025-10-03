@@ -16,6 +16,7 @@ public abstract class Card {
     protected Color color;
     protected Type type;
     protected Boolean isRevealed;
+    protected Boolean isSelected;
     protected String cardImagePath;  // 保存卡牌真實圖像路徑
     
     // 旋轉相關屬性
@@ -87,6 +88,18 @@ public abstract class Card {
         System.out.println("After setting: " + this.width + "x" + this.height);
     }
     
+    public boolean isCardSelected(){
+        return isSelected;
+    }
+
+    public void setCardSelected(boolean selected){
+        this.isSelected = selected;
+        if (selected){
+            y = y - 40;
+        } else {
+            y = y + 40;
+        }
+    }
 
     public boolean contains(int pointX, int pointY) {
         return pointX >= x && pointX <= x + width &&
