@@ -7,6 +7,7 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.geom.AffineTransform;
+import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JButton;
 import javax.swing.JPanel;
@@ -18,6 +19,8 @@ public class UNOGamePanel extends JPanel {
     private static final long serialVersionUID = 1L;
     private static final int WIDTH = 800;
     private static final int HEIGHT = 600;
+    private List <JButton> cardButtons = new ArrayList<JButton>();
+    private int currentSelectedCardIndex = -1;
     
     private UNOController controller;
     private JButton menuButton;
@@ -183,13 +186,67 @@ public class UNOGamePanel extends JPanel {
                          card.getWidth(), card.getHeight(), this);
         }
     }
+
+    public JButton createCardButton(Card card, int index, List<Card> Cards) {
+        JButton button = new JButton();
+        button.setBounds(card.getX(), card.getY(), card.getWidth(), card.getHeight());
+        button.setBorderPainted(false);
+        button.setContentAreaFilled(false);
+        button.setFocusPainted(false);
+        
+        button.addActionListener(e -> {
+            selectedCard(index);
+        });
+        
+        return button;
+    }
+
+    public void selectedCard(int index) {
+        List<Card> playerHand = controller.getPlayedCard();
+        if (currentSelectedCardIndex == -1){ //Click unselected card
+            currentSelectedCardIndex = index;
+            playerHand.get(index).setCardSelected(true);
+        } else if (index == currentSelectedCardIndex){ //Click selected card
+            // controller.playCard(index)
+            currentSelectedCardIndex = -1;
+            playerHand.get(index).setCardSelected(false);
+        } else { // Click another card
+            playerHand.get(currentSelectedCardIndex).setCardSelected(false);
+            currentSelectedCardIndex = index;
+            playerHand.get(index).setCardSelected(true);
+        }
+        updateCardButtons();
+        repaint();
+    }
     
+    public void updateCardButtons() {
+        for (JButton btn : cardButtons) {
+            remove(btn);
+        }
+        cardButtons.clear();
+        List<Card> playerHand = controller.getPlayedCard();
+        
+        for (int i = 0; i < playerHand.size(); i++) {
+            Card card = playerHand.get(i);
+            JButton button = createCardButton(card, i, playerHand);
+            cardButtons.add(button);
+            add(button);
+        }
+        for (int i = 0; i < playerHand.size(); i++) {
+            JButton button = cardButtons.get(i);
+            setComponentZOrder(button, playerHand.size() - 1 - i);
+        }
+        
+        revalidate();
+    }
+
     public void startGame() {
         updateDisplay();
     }
     
     public void updateDisplay() {
         updateCardPositions();
+        updateCardButtons();
         repaint();
     }
     
