@@ -104,6 +104,8 @@ public class UNOController {
         players.addAll(CPU);
         currentPlayer = players.get(0);
         playDirection = 1;
+
+        eachRound();
     }
 
     public void getCardFromDeck(){
@@ -144,10 +146,13 @@ public class UNOController {
 
     public void eachRound(){ 
         Card topCard = PlayedCard.size()>0? PlayedCard.get(PlayedCard.size()-1) : null;
-        if(currentPlayer.getHand().size()==0){
-            return;
-        }
-        if (PlayedCard.size() > 0 && PlayedCard.get(PlayedCard.size()-1) != topCard){
+
+        currentPlayer.allowPlay();
+
+        if (PlayedCard.get(PlayedCard.size()-1) != topCard){
+            if(currentPlayer.getHand().size()==0){
+            return; //遊戲結束
+            }
             int addition = PlayedCard.get(PlayedCard.size()-1).cardFunction();
             int nextPlayerIndex = (players.indexOf(currentPlayer) + addition * playDirection) % 4;
             currentPlayer = players.get(nextPlayerIndex);

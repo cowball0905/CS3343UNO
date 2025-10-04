@@ -5,6 +5,8 @@ import java.util.List;
 import java.util.Random;
 import java.util.stream.Collectors;
 
+import controller.UNOController;
+
 public class CPUPlayer extends Player {
 
     private Random random;
@@ -190,4 +192,40 @@ public class CPUPlayer extends Player {
         return Color.values()[maxIndex];
     }
 
+    @Override
+    public void allowPlay() {
+        UNOController controller = UNOController.getInstance();
+        ArrayList<Card> playerCards = this.getHand();
+        ArrayList<Card> validCards = new ArrayList<>();
+
+        for (Card c : playerCards) {
+            if (this.canPlayCard(c, controller.getTopCard())) {
+                validCards.add(c);
+            }
+        }
+
+        if (validCards.isEmpty()) {
+            System.out.println(name + " (CPU) has no valid cards to play and must draw.");
+            this.drawCard(controller.getCardFactory().giveCard(controller.getDeck(),false, false));
+            return;
+        }
+
+        Card chosenCard = chooseCard(validCards); //Use random function to choose a card
+
+        playCard(chosenCard);
+        UNOController.getInstance().playCard(chosenCard);
+
+        // If the played card is a Wild card, choose a color
+        if (chosenCard instanceof WildCard || chosenCard instanceof WildDrawFourCard) {
+            Color chosenColor = chooseWildCardColor();
+            System.out.println(name + " (CPU) chooses color: " + chosenColor);
+            UNOController.getInstance().setCurrentColor(chosenColor);
+        }
+    }
+
+    private Card chooseCard(List<Card> validCards) {
+        Random random = new Random();
+        int randomIndex = random.nextInt(validCards.size());
+        return validCards.get(randomIndex);
+    }
 }
