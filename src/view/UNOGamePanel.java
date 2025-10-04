@@ -190,9 +190,9 @@ public void selectedCard(int index) {
                 currentSelectedCardIndex = -1;
                 selectedCard.setCardSelected(false);
 
-                updateDisplay();
-
                 selectedCard.cardFunction(); //Using polymorphism to handle special card effects
+
+                updateDisplay();
             } else {
                 errorMessage = "Can't play this card!";
                 errorMessageTimer = System.currentTimeMillis();

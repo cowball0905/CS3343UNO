@@ -32,7 +32,7 @@ public class DrawTwoCard extends Card {
 
         // Make the next player draw 2 cards
         for (int i = 0; i < 2; i++) {
-            nextPlayer.drawCard(cardFactory.giveCard(controller.getDeck(),false, true));
+            nextPlayer.drawCard(cardFactory.giveCard(controller.getDeck(),false, playerList.indexOf(nextPlayer)==0 ? true:false));
         }
     }
 }
