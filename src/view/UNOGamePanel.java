@@ -65,7 +65,9 @@ public class UNOGamePanel extends JPanel {
         button.setFocusPainted(false);
         
         button.addActionListener(e -> {
-            // selectedCard(index);
+            controller.getCardFromDeck();
+            updateCardPositions();
+            repaint();
         });
         
         return button;
@@ -241,7 +243,6 @@ public class UNOGamePanel extends JPanel {
             playerHand.get(index).setCardSelected(true);
         }
         updateCardButtons();
-        updateDeck();
         repaint();
     }
     
@@ -262,6 +263,9 @@ public class UNOGamePanel extends JPanel {
             JButton button = cardButtons.get(i);
             setComponentZOrder(button, playerHand.size() - 1 - i);
         }
+
+        JButton button = updateDeck();
+        add(button);
         
         revalidate();
     }
@@ -273,7 +277,6 @@ public class UNOGamePanel extends JPanel {
     public void updateDisplay() {
         updateCardPositions();
         updateCardButtons();
-        updateDeck();
         repaint();
     }
     
@@ -369,7 +372,7 @@ public class UNOGamePanel extends JPanel {
         // Draw error message if it exists and hasn't timed out
         if (errorMessage != null) {
             long currentTime = System.currentTimeMillis();
-            if (currentTime - errorMessageTimer < 2000) { // Show message for 2 seconds
+            if (currentTime - errorMessageTimer < 1000) { // Show message for 2 seconds
                 g2d.setColor(Color.RED);
                 g2d.setFont(new Font("Arial", Font.BOLD, 24));
                 // Draw the error message in the center of the screen

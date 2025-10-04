@@ -106,6 +106,10 @@ public class UNOController {
         playDirection = Direction.Clockwise;
     }
 
+    public void getCardFromDeck(){
+        currentPlayer.getHand().add(cardFactory.giveCard(Deck,false, true));
+    }
+
     public ArrayList<Card> getPlayedCard() {
         return players.get(0).getHand();
     }
