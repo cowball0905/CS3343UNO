@@ -125,13 +125,6 @@ public class UNOController {
         
     }
 
-    // public void setGamePanel(UNOGamePanel panel) {
-    //     this.gamePanel = panel;
-    //     if (gamePanel != null) {
-    //         gamePanel.initialize(this);
-    //     }
-    // }
-
     public boolean playCard(Card playedCard) {
         if (currentPlayer != player) {
             System.out.println("It's not the player's turn!");
@@ -140,64 +133,18 @@ public class UNOController {
         Card topCard = getTopCard();
         switch (playedCard.getType()) {
             case Wild:
-                
-                break;
             case WildDrawFour:
-                
-                break;
-            case Number:
-                
-                break;
+                return true;
             case Skip:
-                
-                break;
             case Reverse:
-                
-                break;
             case DrawTwo:
-                
-                break;
-            default:
+                if(playedCard.getColor()==topCard.getColor()){return true;}
                 return false;
+            default:
+                if(playedCard.getColor()==topCard.getColor() || ((NumberCard) playedCard).getValue() == ((NumberCard)topCard).getValue()){return true;}
         }
         return false;
     }
-
-    // public Card drawCard() {
-    //     if (gameState.isPlayerTurn()) {
-    //         Card card = gameState.drawCard();
-    //         if (card != null) {
-    //             playerHand.add(card);
-    //             if (gamePanel != null) {
-    //                 gamePanel.updateGameState();
-    //             }
-    //             return card;
-    //         }
-    //     }
-    //     return null;
-    // }
-
-    // // Getters for view
-    // public Card getTopCard() {
-    //     return gameState.getTopCard();
-    // }
-
-
-    // public boolean isPlayerTurn() {
-    //     return gameState.isPlayerTurn();
-    // }
-
-    // public Color getCurrentColor() {
-    //     return gameState.getCurrentColor();
-    // }
-
-    // public List<Card> getPlayerHand() {
-    //     return new ArrayList<>(player.getHand());
-    // }
-
-    // public List<Card> getComputerHand() {
-    //     return new ArrayList<>(CPU.getHand());
-    // }
 
     // In UNOController.java
     public void startGame() {
