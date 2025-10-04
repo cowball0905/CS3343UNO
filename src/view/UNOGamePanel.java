@@ -188,7 +188,7 @@ public void selectedCard(int index) {
                 errorMessageTimer = System.currentTimeMillis();
 
                 currentSelectedCardIndex = -1;
-                playerHand.get(index).setCardSelected(false);
+                selectedCard.setCardSelected(false);
 
                 updateDisplay();
 
