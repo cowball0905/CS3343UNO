@@ -14,7 +14,7 @@ public class NumberCard extends Card {
     }
     
     @Override
-    public void cardFunction() {
-        // Number cards have no special functions
+    public int cardFunction() {
+        return 1;
     }
 }

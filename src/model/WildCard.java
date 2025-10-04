@@ -7,7 +7,8 @@ public class WildCard extends Card {
     }
 
     @Override
-    public void cardFunction() {
+    public int cardFunction() {
         System.out.println("Wild card played: change color");
+        return 1;
     }
 }

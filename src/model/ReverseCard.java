@@ -9,12 +9,13 @@ public class ReverseCard extends Card {
     }
 
     @Override
-    public void cardFunction() {
+    public int cardFunction() {
         System.out.println("ReverseCard function called");
 
         UNOController controller = UNOController.getInstance();
 
         int playDirection = controller.getPlayDirection();
         controller.setPlayDirection(-playDirection); // Reverse the direction
+        return 1;
     }
 }

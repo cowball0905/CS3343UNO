@@ -142,11 +142,16 @@ public class UNOController {
         this.playDirection = direction;
     } 
 
-    public void eachRound(){
-        Scanner scanner = new Scanner(System.in);
-        
-
-        
+    public void eachRound(){ 
+        Card topCard = PlayedCard.size()>0? PlayedCard.get(PlayedCard.size()-1) : null;
+        if(currentPlayer.getHand().size()==0){
+            return;
+        }
+        if (PlayedCard.size() > 0 && PlayedCard.get(PlayedCard.size()-1) != topCard){
+            int addition = PlayedCard.get(PlayedCard.size()-1).cardFunction();
+            int nextPlayerIndex = (players.indexOf(currentPlayer) + addition * playDirection) % 4;
+            currentPlayer = players.get(nextPlayerIndex);
+        };
     }
 
     public boolean playCard(Card playedCard) {
@@ -201,6 +206,7 @@ public class UNOController {
             mainFrame.revalidate();
             gamePanel.requestFocusInWindow();
             gamePanel.startGame(); 
+            this.eachRound();
         }
     }
 

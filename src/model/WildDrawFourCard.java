@@ -7,8 +7,9 @@ public class WildDrawFourCard extends Card {
     }
 
     @Override
-    public void cardFunction() {
+    public int cardFunction() {
         System.out.println("Wild Draw Four card played: opponent draws 4 cards and change color");
         // 具体抽4张卡和变色逻辑实现
+        return 1;
     }
 }

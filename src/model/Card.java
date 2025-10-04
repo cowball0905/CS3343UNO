@@ -177,5 +177,5 @@ public abstract class Card {
         }
     }
 
-    abstract public void cardFunction();
+    abstract public int cardFunction();
 }
