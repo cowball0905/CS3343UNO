@@ -15,7 +15,6 @@ import javax.swing.JButton;
 import javax.swing.JPanel;
 import controller.UNOController;
 import model.Card;
-import java.awt.Image;
 
 public class UNOGamePanel extends JPanel {
     
@@ -42,15 +41,6 @@ public class UNOGamePanel extends JPanel {
         menuButton.setBounds(10, 10, 120, 30);
         menuButton.addActionListener(e -> controller.showMenu());
         add(menuButton);
-        
-        // UI initialization only
-        
-        // addMouseListener(new MouseAdapter() {
-        //     @Override
-        //     public void mouseClicked(MouseEvent e) {
-        //         handleCardClick(e.getX(), e.getY());
-        //     }
-        // });
     }
     
     private static final int CARD_OFFSET_X = 25; // 水平方向的卡牌間距
@@ -66,8 +56,7 @@ public class UNOGamePanel extends JPanel {
         
         button.addActionListener(e -> {
             controller.getCardFromDeck();
-            updateCardPositions();
-            repaint();
+            updateDisplay();
         });
         
         return button;
@@ -80,12 +69,7 @@ public class UNOGamePanel extends JPanel {
         List<Card> computer2Hand = controller.getCPUCard(1);
         List<Card> computer3Hand = controller.getCPUCard(2);
         Card topCard = controller.getTopCard();
-        // Card deckCard = controller.getDeckCard();
-        
-        // // Set positions for deck and top card
-        // if (deckCard != null) {
-        //     deckCard.setPosition(50, 200);
-        // }
+
         if (topCard != null) {
             topCard.setPosition(450, 240);
         }
@@ -135,24 +119,6 @@ public class UNOGamePanel extends JPanel {
         }
     }
     
-    // private void handleCardClick(int x, int y) {
-    //     // Check if player clicked on a card in their hand
-    //     Card clickedCard = controller.getCardAt(x, y);
-    //     if (clickedCard != null) {
-    //         controller.playCard(clickedCard);
-    //         updateDisplay();
-    //         return;
-    //     }
-        
-    //     // Check if player clicked on the deck
-    //     if (controller.isDeckClicked(x, y)) {
-    //         controller.drawCard();
-    //         updateDisplay();
-    //     }
-    // }
-    
-
-    
     // 繪製旋轉卡牌的方法
     private void drawRotatedCard(Graphics2D g2d, Card card) {
         // 檢查卡牌和圖像是否存在
@@ -171,20 +137,6 @@ public class UNOGamePanel extends JPanel {
             int imageHeight = card.getImage().getHeight();
             
             // 計算旋轉中心 - 使用卡牌在螢幕上應該占據的空間
-            /*計算公式分解：
-
-            WIDTH / 2: 螢幕寬度的中心點 (400)
-            playerHand.size() * CARD_OFFSET_X: 所有卡牌總寬度
-            (playerHand.size() * CARD_OFFSET_X / 2): 所有卡牌總寬度的一半
-            i * CARD_OFFSET_X: 第 i 張卡牌的偏移量
-            實際計算範例： 假設玩家有 5 張牌，CARD_OFFSET_X = 25：
-
-            第1張(i=0): cardX = 400 - (5×25/2) + (0×25) = 400 - 62.5 + 0 = 337.5
-            第2張(i=1): cardX = 400 - 62.5 + 25 = 362.5
-            第3張(i=2): cardX = 400 - 62.5 + 50 = 387.5 (中心)
-            第4張(i=3): cardX = 400 - 62.5 + 75 = 412.5
-            第5張(i=4): cardX = 400 - 62.5 + 100 = 437.5 
-            */
             double centerX = card.getX() + card.getWidth() / 2.0;
             double centerY = card.getY() + card.getHeight() / 2.0;
             
@@ -223,16 +175,24 @@ public class UNOGamePanel extends JPanel {
         return button;
     }
 
-    public void selectedCard(int index) {
+public void selectedCard(int index) {
         List<Card> playerHand = controller.getPlayedCard();
         if (currentSelectedCardIndex == -1){ //Click unselected card
             currentSelectedCardIndex = index;
             playerHand.get(index).setCardSelected(true);
         } else if (index == currentSelectedCardIndex){ //Click selected card
-            boolean isPlayed = controller.playCard(playerHand.get(index));
+            Card selectedCard = playerHand.get(index);
+            boolean isPlayed = controller.playCard(selectedCard);
             if (isPlayed){
+                errorMessage = "Card played!";
+                errorMessageTimer = System.currentTimeMillis();
+
                 currentSelectedCardIndex = -1;
                 playerHand.get(index).setCardSelected(false);
+
+                updateDisplay();
+
+                selectedCard.cardFunction(); //Using polymorphism to handle special card effects
             } else {
                 errorMessage = "Can't play this card!";
                 errorMessageTimer = System.currentTimeMillis();
@@ -243,6 +203,7 @@ public class UNOGamePanel extends JPanel {
             playerHand.get(index).setCardSelected(true);
         }
         updateCardButtons();
+        updateDeck();
         repaint();
     }
     

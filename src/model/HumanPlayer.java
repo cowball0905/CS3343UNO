@@ -19,8 +19,7 @@ public class HumanPlayer extends Player {
         if (hand.contains(card)) {
             hand.remove(card);
             System.out.println(name + " plays " + card.getClass().getSimpleName());
-            
-            // Check if player should shout UNO (when only 1 card left)
+
             if (hand.size() == 1 && !isShout) {
                 System.out.println(name + " should shout UNO!");
             }

@@ -23,7 +23,7 @@ public class UNOController {
     private Color currentColor;
     private Player currentPlayer;
     private ArrayList<Player> players;
-    private Direction playDirection;
+    private int playDirection;
 
     private UNOController() {
         // Create the main frame
@@ -103,11 +103,11 @@ public class UNOController {
         players.add(player);
         players.addAll(CPU);
         currentPlayer = players.get(0);
-        playDirection = Direction.Clockwise;
+        playDirection = 1;
     }
 
     public void getCardFromDeck(){
-        currentPlayer.getHand().add(cardFactory.giveCard(Deck,false, true));
+        currentPlayer.drawCard(cardFactory.giveCard(Deck,false, players.indexOf(currentPlayer)==0 ? true:false));
     }
 
     public ArrayList<Card> getPlayedCard() {
@@ -121,6 +121,26 @@ public class UNOController {
     public Card getTopCard() {
         return PlayedCard.get(PlayedCard.size() - 1);
     }
+
+    public Player getCurrentPlayer() {
+        return player;
+    }
+
+    public void setCurrentPlayer(Player player) {
+        this.currentPlayer = player;
+    }
+
+    public ArrayList<Player> getPlayerList(){
+        return players;
+    }
+
+    public int getPlayDirection() {
+        return playDirection;
+    }
+
+    public void setPlayDirection(int direction) {
+        this.playDirection = direction;
+    } 
 
     public void eachRound(){
         Scanner scanner = new Scanner(System.in);
@@ -142,12 +162,24 @@ public class UNOController {
             case Skip:
             case Reverse:
             case DrawTwo:
-                if(playedCard.getColor()==topCard.getColor()){return true;}
+                if (playedCard.getColor() == currentColor) {
+                    PlayedCard.add(playedCard);
+                    player.playCard(playedCard);
+                    currentColor = playedCard.getColor();
+                    return true;
+                }
+                return false;
+            case Number:
+            if(playedCard.getColor()==topCard.getColor() || ((NumberCard) playedCard).getValue() == ((NumberCard)topCard).getValue()){
+                    PlayedCard.add(playedCard);
+                    player.playCard(playedCard);
+                    currentColor = playedCard.getColor();
+                    return true;
+                }
                 return false;
             default:
-                if(playedCard.getColor()==topCard.getColor() || ((NumberCard) playedCard).getValue() == ((NumberCard)topCard).getValue()){return true;}
+                return false;
         }
-        return false;
     }
 
     // In UNOController.java
@@ -181,5 +213,13 @@ public class UNOController {
             mainFrame.revalidate();
             mainFrame.repaint();
         }
+    }
+
+    public CardFactory getCardFactory() {
+        return this.cardFactory;
+    }
+
+    public ArrayList<String> getDeck() {
+        return this.Deck;
     }
 }
