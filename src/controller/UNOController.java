@@ -53,7 +53,7 @@ public class UNOController {
         System.out.println("UNO Game window created and should be visible!");
     }
 
-    public static synchronized UNOController getInstance() {
+    public static UNOController getInstance() {
         if (instance == null) {
             instance = new UNOController();
         }
@@ -145,18 +145,18 @@ public class UNOController {
     } 
 
     public void eachRound(){ 
-        Card topCard = PlayedCard.size()>0? PlayedCard.get(PlayedCard.size()-1) : null;
+        // Card topCard = PlayedCard.size()>0? PlayedCard.get(PlayedCard.size()-1) : null;
 
-        currentPlayer.allowPlay();
+        // currentPlayer.allowPlay();
 
-        if (PlayedCard.get(PlayedCard.size()-1) != topCard){
-            if(currentPlayer.getHand().size()==0){
-            return; //遊戲結束
-            }
-            int addition = PlayedCard.get(PlayedCard.size()-1).cardFunction();
-            int nextPlayerIndex = (players.indexOf(currentPlayer) + addition * playDirection) % 4;
-            currentPlayer = players.get(nextPlayerIndex);
-        };
+        // if (PlayedCard.get(PlayedCard.size()-1) != topCard){
+        //     if(currentPlayer.getHand().size()==0){
+        //     return; //遊戲結束
+        //     }
+        //     int addition = PlayedCard.get(PlayedCard.size()-1).cardFunction();
+        //     int nextPlayerIndex = (players.indexOf(currentPlayer) + addition * playDirection) % 4;
+        //     currentPlayer = players.get(nextPlayerIndex);
+        // };
     }
 
     public boolean playCard(Card playedCard) {

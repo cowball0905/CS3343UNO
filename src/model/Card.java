@@ -148,22 +148,6 @@ public abstract class Card {
         return rotationAngle;
     }
     
-    // 翻牌方法 - 顯示真實卡牌
-    public void reveal() {
-        if (!isRevealed && cardImagePath != null) {
-            isRevealed = true;
-            loadImage(cardImagePath);  // 重新載入真實卡牌圖像
-        }
-    }
-    
-    // 隱藏卡牌 - 顯示背面
-    public void hide() {
-        if (isRevealed && cardImagePath != null) {
-            isRevealed = false;
-            loadImage(cardImagePath);  // 重新載入（會顯示背面）
-        }
-    }
-    
     // 獲取是否已翻牌
     public boolean isRevealed() {
         return isRevealed;

@@ -9,7 +9,6 @@ import java.awt.RenderingHints;
 import java.awt.geom.AffineTransform;
 import java.util.ArrayList;
 import java.util.List;
-import java.awt.Image;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JPanel;
@@ -326,8 +325,12 @@ public void selectedCard(int index) {
                 topCard.getY() + topCard.getHeight() + 20);
         }
 
-        Image image = new ImageIcon("src/asset/uno-card-images-master/Back.jpg").getImage();
-        g2d.drawImage(image,140,30, 80,120,null);
+        ImageIcon icon = new ImageIcon(getClass().getResource("/asset/uno-card-images-master/Back.jpg"));
+        if (icon.getImage() == null) {
+            System.err.println("Failed to load card back image");
+        } else {
+            g2d.drawImage(icon.getImage(), 140, 30, 80, 120, null);
+        }
         g2d.drawString("DECK", 160, 165);
         
         // Draw error message if it exists and hasn't timed out
