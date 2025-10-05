@@ -172,7 +172,7 @@ public class UNOController {
             case Skip:
             case Reverse:
             case DrawTwo:
-                if (playedCard.getColor() == currentColor) {
+                if (playedCard.getColor() == topCard.getColor() || playedCard.getType() == topCard.getType()) {
                     PlayedCard.add(playedCard);
                     player.playCard(playedCard);
                     currentColor = playedCard.getColor();
@@ -180,7 +180,7 @@ public class UNOController {
                 }
                 return false;
             case Number:
-            if(playedCard.getColor()==topCard.getColor() || ((NumberCard) playedCard).getValue() == ((NumberCard)topCard).getValue()){
+            if(playedCard.getColor() == topCard.getColor() || ((NumberCard) playedCard).getValue() == ((NumberCard)topCard).getValue()){
                     PlayedCard.add(playedCard);
                     player.playCard(playedCard);
                     currentColor = playedCard.getColor();
