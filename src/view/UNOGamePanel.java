@@ -14,6 +14,7 @@ import javax.swing.JButton;
 import javax.swing.JPanel;
 import controller.UNOController;
 import model.Card;
+import java.awt.image.BufferedImage;
 
 public class UNOGamePanel extends JPanel {
     
