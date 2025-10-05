@@ -341,7 +341,7 @@ public void selectedCard(int index) {
                 g2d.setColor(Color.RED);
                 g2d.setFont(new Font("Arial", Font.BOLD, 24));
                 // Draw the error message in the center of the screen
-                g2d.drawString(errorMessage, 630, 550);
+                g2d.drawString(errorMessage, 630, 580);
             } else {
                 errorMessage = null; // Clear the message after timeout
             }

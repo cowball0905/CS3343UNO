@@ -68,6 +68,10 @@ public abstract class Card {
         return color;
     }
 
+    public void setColor(Color color) {
+        this.color = color;
+    }
+
     public int getX() {
         return x;
     }

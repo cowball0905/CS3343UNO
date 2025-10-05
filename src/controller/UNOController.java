@@ -20,10 +20,12 @@ public class UNOController {
     private ArrayList<Player> CPU;
     private CardFactory cardFactory = new ConcreteCardFactory();
     private ArrayList<Card> PlayedCard = new ArrayList<>();
-    private Color currentColor;
     private Player currentPlayer;
     private ArrayList<Player> players;
     private int playDirection;
+    private boolean isAction = false;
+    private boolean actionFinished = false;
+
 
     private UNOController() {
         // Create the main frame
@@ -98,18 +100,28 @@ public class UNOController {
                 cpu.drawCard(cardFactory.giveCard(Deck,false, false)); // CPU的牌隱藏
             }
         }
-        currentColor = PlayedCard.get(0).getColor();
         players = new ArrayList<>();
         players.add(player);
         players.addAll(CPU);
         currentPlayer = players.get(0);
         playDirection = 1;
-
-        eachRound();
+        boolean isEnd = false;
+        while (!isEnd){
+            isEnd = eachRound();
+            if(isEnd){
+                break;
+            }
+            System.out.println("Next Round!");
+        }
     }
 
     public void getCardFromDeck(){
-        currentPlayer.drawCard(cardFactory.giveCard(Deck,false, players.indexOf(currentPlayer)==0 ? true:false));
+        if(!isAction){
+            isAction = true;
+            currentPlayer.drawCard(cardFactory.giveCard(Deck,false, players.indexOf(currentPlayer)==0 ? true:false));
+            isAction = false;
+            actionFinished = true;
+        }
     }
 
     public ArrayList<Card> getPlayedCard() {
@@ -144,7 +156,17 @@ public class UNOController {
         this.playDirection = direction;
     } 
 
-    public void eachRound(){ 
+    public boolean eachRound(){ 
+        
+        if (currentPlayer == player){
+
+        } else {
+
+        }
+        if (currentPlayer.getHand().size() == 0) {
+            return true; // Game ends
+        }
+        return false;
         // Card topCard = PlayedCard.size()>0? PlayedCard.get(PlayedCard.size()-1) : null;
 
         // currentPlayer.allowPlay();
@@ -158,38 +180,53 @@ public class UNOController {
         //     currentPlayer = players.get(nextPlayerIndex);
         // };
     }
-
+    
     public boolean playCard(Card playedCard) {
         if (currentPlayer != player) {
             System.out.println("It's not the player's turn!");
             return false;
         }
-        Card topCard = getTopCard();
-        switch (playedCard.getType()) {
-            case Wild:
-            case WildDrawFour:
-                return true;
-            case Skip:
-            case Reverse:
-            case DrawTwo:
-                if (playedCard.getColor() == topCard.getColor() || playedCard.getType() == topCard.getType()) {
+        if(!isAction){
+            isAction = true;
+            Card topCard = getTopCard();
+            switch (playedCard.getType()) {
+                case Wild:
+                case WildDrawFour:
                     PlayedCard.add(playedCard);
                     player.playCard(playedCard);
-                    currentColor = playedCard.getColor();
+                    actionFinished = true;
+                    isAction = false;
                     return true;
-                }
-                return false;
-            case Number:
-            if(playedCard.getColor() == topCard.getColor() || ((NumberCard) playedCard).getValue() == ((NumberCard)topCard).getValue()){
-                    PlayedCard.add(playedCard);
-                    player.playCard(playedCard);
-                    currentColor = playedCard.getColor();
-                    return true;
-                }
-                return false;
-            default:
-                return false;
+                case Skip:
+                case Reverse:
+                case DrawTwo:
+                    if (playedCard.getColor() == topCard.getColor() || playedCard.getType() == topCard.getType()) {
+                        PlayedCard.add(playedCard);
+                        player.playCard(playedCard);
+                        actionFinished = true;
+                        isAction = false;
+                        return true;
+                    }
+                    isAction = false;
+                    return false;
+                case Number:
+                    if(playedCard.getColor() == topCard.getColor() || ((NumberCard) playedCard).getValue() == ((NumberCard)topCard).getValue()){
+                        PlayedCard.add(playedCard);
+                        player.playCard(playedCard);
+                        actionFinished = true;
+                        isAction = false;
+                        return true;
+                    }
+                    isAction = false;
+                    return false;
+                default:
+                    isAction = false;
+                    return false;
+            }
         }
+        isAction = false;
+        return false;
+        
     }
 
     // In UNOController.java
