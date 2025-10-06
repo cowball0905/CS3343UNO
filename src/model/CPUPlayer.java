@@ -26,7 +26,6 @@ public class CPUPlayer extends Player {
             hand.remove(card);
             System.out.println(name + " (CPU) plays " + card.getClass().getSimpleName());
 
-            // CPU automatically shouts UNO when appropriate
             if (hand.size() == 1) {
                 shoutUno();
             }
@@ -89,5 +88,26 @@ public class CPUPlayer extends Player {
         Random random = new Random();
         int randomIndex = random.nextInt(validCards.size());
         return validCards.get(randomIndex);
+    }
+
+    public Color chooseColor(){
+        ArrayList<Card> playerCards = this.getHand();
+        int max = 0;
+        int each = 0;
+        int colorIndex = 0;
+
+        for(int i=0; i< Color.values().length; i++){
+            for (Card c : playerCards) {
+                if (c.getColor()==Color.values()[i]) {
+                    each++;
+                }
+            }
+            if(each > max){
+                max = each;
+                colorIndex = i;
+            }
+            each = 0;
+        }
+        return Color.values()[colorIndex];
     }
 }

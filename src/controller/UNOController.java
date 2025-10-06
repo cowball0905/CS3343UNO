@@ -35,7 +35,6 @@ public class UNOController {
         mainFrame.setLocationRelativeTo(null);
         mainFrame.setResizable(false);
         
-        // Initialize game components
         players = new ArrayList<>();
         for(int i=0;i<4;i++){
             if(i==0){
@@ -45,7 +44,6 @@ public class UNOController {
             }
         }
         
-        // Create panels
         menuPanel = new UNOMenuPanel(this);
         gamePanel = new UNOGamePanel(this);
         wildCardViewer = new WildCardViewer();
@@ -54,9 +52,20 @@ public class UNOController {
         turnTimer = new CountDownTimer(gamePanel, new CountDownTimer.TimerCallback() {
             @Override
             public void onTimerComplete() {
-                getCardFromDeck();
+                if (wildCardViewer.isHavingWild()) {
+                    wildCardViewer.autoSelectRandomColor();
+                    wildCardViewer.setHavingWild(false);
+                    passNextPlayer(false);
+                    eachRound();
+                } else {
+                    getCardFromDeck();
+                }
             }
         });
+        
+        wildCardViewer.setTimer(turnTimer);
+        wildCardViewer.setController(this);
+        wildCardViewer.setPanel(gamePanel);
         
         initializeGame();
         
@@ -127,7 +136,6 @@ public class UNOController {
     }
 
     public ArrayList<Card> getHumanPlayedCard() {
-        // 始终返回人类玩家的手牌（用于显示在界面底部）
         return players.get(0).getHand();
     }
 
@@ -177,13 +185,19 @@ public class UNOController {
     }
 
     public void playCard(Card card){
+        isAction = true;
         card.setRotation(0);
         PlayedCard.add(card);
         currentPlayer.playCard(card);
         gamePanel.updateDisplay();
-        passNextPlayer(true);
-        isAction = false;
-        eachRound();
+        
+        if ((card.getType() == Type.Wild) && players.indexOf(currentPlayer) == 0) {
+            card.cardFunction();
+        } else {
+            passNextPlayer(true);
+            isAction = false;
+            eachRound();
+        }
     }
 
     public void passNextPlayer(boolean playCard){
@@ -226,17 +240,14 @@ public class UNOController {
         }
     }
 
-    // In UNOController.java
     public void startGame() {
         if (mainFrame == null && menuPanel != null) {
             mainFrame = (JFrame) SwingUtilities.getWindowAncestor(menuPanel);
         }
         
         if (mainFrame != null) {
-            // Remove current panel
             mainFrame.getContentPane().removeAll();
             
-            // Create and add game panel if not exists
             if (gamePanel == null) {
                 gamePanel = new UNOGamePanel(this);
             }

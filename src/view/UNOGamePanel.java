@@ -27,12 +27,11 @@ public class UNOGamePanel extends JPanel {
     
     private UNOController controller;
     private JButton menuButton;
-    // Card dimensions can be accessed from the Card class if needed
     
     public UNOGamePanel(UNOController controller) {
         this.controller = controller;
         setPreferredSize(new Dimension(WIDTH, HEIGHT));
-        setBackground(new Color(0, 100, 0)); // Slightly darker green for game area
+        setBackground(new Color(255, 255, 255)); 
         setLayout(null);
         
         // Initialize menu button

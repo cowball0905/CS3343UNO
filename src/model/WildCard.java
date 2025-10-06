@@ -13,7 +13,14 @@ public class WildCard extends Card {
         System.out.println("Wild card played: change color");
         UNOController controller = UNOController.getInstance();
 
-        controller.getWildCardViewer().setWildCard(this);
+        if(controller.getPlayerList().indexOf(controller.getCurrentPlayer())==0){
+            controller.getWildCardViewer().setWildCard(this);
+            controller.getTurnTimer().startTimer(10);
+        }else{
+            Color chooseColor = ((CPUPlayer) controller.getCurrentPlayer()).chooseColor();
+            this.setColor(chooseColor);
+            System.out.println(chooseColor.toString());
+        }
         return 1;
     }
 }

@@ -25,7 +25,7 @@ public class DrawTwoCard extends Card {
         int currentIndex = playerList.indexOf(currentPlayer);
 
         // Calculate next player index (skip one player)
-        int nextIndex = (currentIndex + (1 * playDirection)) % playerList.size();
+        int nextIndex = (currentIndex + (1 * playDirection) + playerList.size()) % playerList.size();
 
         // Get next player object
         Player nextPlayer = playerList.get(nextIndex);

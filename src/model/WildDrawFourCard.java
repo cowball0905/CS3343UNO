@@ -12,7 +12,7 @@ public class WildDrawFourCard extends Card {
     public int cardFunction() {
         System.out.println("Wild Draw Four card played: opponent draws 4 cards and change color");
         // 具体抽4张卡和变色逻辑实现
-        setColor(selectedColor);
+        setColor(Color.Red);
         return 1;
     }
 }

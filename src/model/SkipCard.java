@@ -1,9 +1,5 @@
 package model;
 
-import java.util.ArrayList;
-
-import controller.UNOController;
-
 public class SkipCard extends Card {
     public SkipCard(Color color, boolean isRevealed) {
         super(Type.Skip, color, isRevealed);
