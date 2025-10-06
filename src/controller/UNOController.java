@@ -33,6 +33,7 @@ public class UNOController {
         mainFrame.setResizable(false);
         
         // Initialize game components
+        players = new ArrayList<>();
         for(int i=0;i<4;i++){
             if(i==0){
                 players.add(new HumanPlayer("Player"));
@@ -98,7 +99,6 @@ public class UNOController {
             "WildCard", "WildCard", "WildCard", "WildCard",
             "WildDrawFour", "WildDrawFour", "WildDrawFour", "WildDrawFour"
         ));
-        players = new ArrayList<>();
 
         PlayedCard.add(cardFactory.giveCard(Deck,true, true)); // 已打出的牌顯示
         
@@ -136,7 +136,7 @@ public class UNOController {
     }
 
     public Player getCurrentPlayer() {
-        return player;
+        return players.get(players.indexOf(currentPlayer));
     }
 
     public void setCurrentPlayer(Player player) {

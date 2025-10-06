@@ -47,10 +47,4 @@ public class HumanPlayer extends Player {
         System.out.println(name + " challenges " + targetPlayer.getName() + "'s Wild Draw Four card!");
         // Game controller should handle the challenge logic
     }
-    
-    // Get valid cards that can be played
-    public List<Card> getValidCards(Card topCard) {
-        List<Card> test = new ArrayList<>();
-        return test;
-    }
 }
