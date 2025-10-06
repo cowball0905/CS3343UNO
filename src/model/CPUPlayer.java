@@ -59,48 +59,6 @@ public class CPUPlayer extends Player {
         }
     }
 
-    // AI logic to choose which card to play using optimal strategy
-    public Card chooseCardToPlay(Card topCard) {
-        List<Card> playableCards = new ArrayList<>();
-        
-        // Find all playable cards
-        for (Card card : hand) {
-            if (isCardPlayable(card, topCard)) {
-                playableCards.add(card);
-            }
-        }
-        
-        if (playableCards.isEmpty()) {
-            return null;
-        }
-        
-        // Simple strategy: prefer special cards
-        for (Card card : playableCards) {
-            if (card.getType() != Type.Number) {
-                return card;
-            }
-        }
-        
-        // Otherwise return the first playable card
-        return playableCards.get(0);
-    }
-
-    private boolean isCardPlayable(Card card, Card topCard) {
-        if (card == null) return false;
-        if (topCard == null) return true;
-        
-        // Wild cards can always be played
-        if (card.getType() == Type.Wild || card.getType() == Type.WildDrawFour) {
-            return true;
-        }
-        
-        // Match color or type/number
-        return card.getColor() == topCard.getColor() || 
-               card.getType() == topCard.getType() || 
-               (card instanceof NumberCard && topCard instanceof NumberCard && 
-                ((NumberCard)card).getValue() == ((NumberCard)topCard).getValue());
-    }
-
     public void chooseCard() {
         UNOController controller = UNOController.getInstance();
         ArrayList<Card> playerCards = this.getHand();
