@@ -17,8 +17,8 @@ import model.Card;
 public class UNOGamePanel extends JPanel {
     private static final int WIDTH = 800;
     private static final int HEIGHT = 600;
-    private static final int CARD_OFFSET_X = 25; 
-    private static final int CARD_OFFSET_Y = 20; 
+    private static final int card_gap_x = 25; 
+    private static final int card_gap_y = 20; 
     private List <JButton> cardButtons = new ArrayList<JButton>();
     private int currentSelectedCardIndex = -1;
     private String errorMessage = null;
@@ -71,7 +71,7 @@ public class UNOGamePanel extends JPanel {
         
         for (int i = 0; i < playerHand.size(); i++) {
             Card card = playerHand.get(i);
-            int cardX = (WIDTH / 2) - (playerHand.size() * CARD_OFFSET_X / 2) + (i * CARD_OFFSET_X) + 60;
+            int cardX = (WIDTH / 2) - (playerHand.size() * card_gap_x / 2) + (i * card_gap_x) + 60;
             int cardY = HEIGHT - 150;
             card.setPosition(cardX, cardY);
         }
@@ -82,7 +82,7 @@ public class UNOGamePanel extends JPanel {
             card.setRotation(90); 
             
             int cardX = 50 + 60;
-            int cardY = (HEIGHT / 2) - (computer1Hand.size() * CARD_OFFSET_Y / 2) + (i * CARD_OFFSET_Y);
+            int cardY = (HEIGHT / 2) - (computer1Hand.size() * card_gap_y / 2) + (i * card_gap_y);
             
             card.setPosition(cardX, cardY);
         }
@@ -94,7 +94,7 @@ public class UNOGamePanel extends JPanel {
             // X坐標：固定在右側
             int cardX = WIDTH - 50 - card.getWidth() + 120;
             // Y坐標：垂直居中排列
-            int cardY = (HEIGHT / 2) - (computer3Hand.size() * CARD_OFFSET_Y / 2) + (i * CARD_OFFSET_Y);
+            int cardY = (HEIGHT / 2) - (computer3Hand.size() * card_gap_y / 2) + (i * card_gap_y);
             
             card.setPosition(cardX, cardY);
         }
@@ -102,7 +102,7 @@ public class UNOGamePanel extends JPanel {
         // CPU2 - 頂部水平排列（不旋轉）
         for (int i = 0; i < computer2Hand.size(); i++) {
             Card card = computer2Hand.get(i);
-            int cardX = (WIDTH / 2) - (computer2Hand.size() * CARD_OFFSET_X / 2) + (i * CARD_OFFSET_X) + 60;
+            int cardX = (WIDTH / 2) - (computer2Hand.size() * card_gap_x / 2) + (i * card_gap_x) + 60;
             int cardY = 50;
             card.setPosition(cardX, cardY);
         }
