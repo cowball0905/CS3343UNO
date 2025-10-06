@@ -182,8 +182,9 @@ public void selectedCard(int index) {
             playerHand.get(index).setCardSelected(true);
         } else if (index == currentSelectedCardIndex){ //Click selected card
             Card selectedCard = playerHand.get(index);
-            boolean isPlayed = controller.playCard(selectedCard);
+            boolean isPlayed = controller.canPlayCard(selectedCard);
             if (isPlayed){
+                controller.playCard(selectedCard);
                 errorMessage = "Card played!";
                 errorMessageTimer = System.currentTimeMillis();
 

@@ -126,101 +126,38 @@ public class CPUPlayer extends Player {
                 return drawFourCards.get(0);
             }
         }
+    }
 
         // 3. Prefer action cards that hinder opponent (Skip, Reverse, Draw Two)
-        List<Card> hinderCards = validCards.stream()
-                .filter(card -> card instanceof SkipCard || card instanceof ReverseCard ||
-                        card instanceof DrawTwoCard)
-                .collect(Collectors.toList());
-
-        if (!hinderCards.isEmpty()) {
-            return hinderCards.get(random.nextInt(hinderCards.size()));
-        }
-
-        // 4. Play number cards that match color (preserve color control)
-        List<Card> sameColorCards = validCards.stream()
-                .filter(card -> card instanceof NumberCard &&
-                        card.getColor().equals(topCard.getColor()))
-                .collect(Collectors.toList());
-
-        if (!sameColorCards.isEmpty()) {
-            return sameColorCards.get(random.nextInt(sameColorCards.size()));
-        }
-
-        // 5. Finally, play any remaining valid card
-        return validCards.get(random.nextInt(validCards.size()));
-    }
-
-    // Get valid cards that can be played
-    public List<Card> getValidCards(Card topCard) {
-        return hand.stream()
-                .filter(card -> canPlayCard(card, topCard))
-                .collect(Collectors.toList());
-    }
-
-    // Check if a card can be played
-    public boolean canPlayCard(Card card, Card topCard) {
-        // Wild cards can always be played
-        if (card instanceof WildCard || card instanceof WildDrawFourCard) {
-            return true;
-        }
-
-        // Same color or same type/number
-        return card.getColor().equals(topCard.getColor()) ||
-                card.getClass().equals(topCard.getClass());
-    }
-
-
-    // Choose a color for wild cards
-    public Color chooseWildCardColor() {
-        // Simple strategy: choose the most common color in hand
-        int[] colorCount = new int[4]; // Assuming 4 colors
-        for (Card card : hand) {
-            if (card.getColor() != null) {
-                colorCount[card.getColor().ordinal()]++;
-            }
-        }
-
-        // Find the most common color
-        int maxIndex = 0;
-        for (int i = 1; i < colorCount.length; i++) {
-            if (colorCount[i] > colorCount[maxIndex]) {
-                maxIndex = i;
-            }
-        }
-
-        return Color.values()[maxIndex];
-    }
-
     @Override
     public void allowPlay() {
-        // UNOController controller = UNOController.getInstance();
-        // ArrayList<Card> playerCards = this.getHand();
-        // ArrayList<Card> validCards = new ArrayList<>();
+        UNOController controller = UNOController.getInstance();
+        ArrayList<Card> playerCards = this.getHand();
+        ArrayList<Card> validCards = new ArrayList<>();
 
-        // for (Card c : playerCards) {
-        //     if (this.canPlayCard(c, controller.getTopCard())) {
-        //         validCards.add(c);
-        //     }
-        // }
+        for (Card c : playerCards) {
+            if (controller.playCard(c)) {
+                validCards.add(c);
+            }
+        }
 
-        // if (validCards.isEmpty()) {
-        //     System.out.println(name + " (CPU) has no valid cards to play and must draw.");
-        //     this.drawCard(controller.getCardFactory().giveCard(controller.getDeck(),false, false));
-        //     return;
-        // }
+        if (validCards.isEmpty()) {
+            System.out.println(name + " (CPU) has no valid cards to play and must draw.");
+            this.drawCard(controller.getCardFactory().giveCard(controller.getDeck(),false, false));
+            return;
+        }
 
-        // Card chosenCard = chooseCard(validCards); //Use random function to choose a card
+        Card chosenCard = chooseCard(validCards); //Use random function to choose a card
 
-        // playCard(chosenCard);
-        // UNOController.getInstance().playCard(chosenCard);
+        playCard(chosenCard);
+        UNOController.getInstance().playCard(chosenCard);
 
-        // // If the played card is a Wild card, choose a color
-        // if (chosenCard instanceof WildCard || chosenCard instanceof WildDrawFourCard) {
-        //     Color chosenColor = chooseWildCardColor();
-        //     System.out.println(name + " (CPU) chooses color: " + chosenColor);
-        //     UNOController.getInstance().setCurrentColor(chosenColor);
-        // }
+        // If the played card is a Wild card, choose a color
+        if (chosenCard instanceof WildCard || chosenCard instanceof WildDrawFourCard) {
+            Color chosenColor = chooseWildCardColor();
+            System.out.println(name + " (CPU) chooses color: " + chosenColor);
+            UNOController.getInstance().setCurrentColor(chosenColor);
+        }
     }
 
     private Card chooseCard(List<Card> validCards) {
