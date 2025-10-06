@@ -150,14 +150,17 @@ public class CPUPlayer extends Player {
         Card chosenCard = chooseCard(validCards); //Use random function to choose a card
 
         playCard(chosenCard);
+        System.out.println(" (CPU) chose their Card!");
+        chosenCard.setRevealed(true);
+        Thread.sleep(10);
         UNOController.getInstance().playCard(chosenCard);
 
-        // If the played card is a Wild card, choose a color
-        if (chosenCard instanceof WildCard || chosenCard instanceof WildDrawFourCard) {
-            Color chosenColor = chooseWildCardColor();
-            System.out.println(name + " (CPU) chooses color: " + chosenColor);
-            UNOController.getInstance().setCurrentColor(chosenColor);
-        }
+        // // If the played card is a Wild card, choose a color
+        // if (chosenCard instanceof WildCard || chosenCard instanceof WildDrawFourCard) {
+        //     Color chosenColor = chooseWildCardColor();
+        //     System.out.println(name + " (CPU) chooses color: " + chosenColor);
+        //     UNOController.getInstance().setCurrentColor(chosenColor);
+        // }
     }
 
     private Card chooseCard(List<Card> validCards) {

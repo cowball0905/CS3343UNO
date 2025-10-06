@@ -157,10 +157,10 @@ public class UNOController {
 
     public boolean eachRound(){ 
         
-        if (currentPlayer == player){
-
+        if (currentPlayer == players.get(0)){
+            
         } else {
-
+            currentPlayer.allowPlay();
         }
         if (currentPlayer.getHand().size() == 0) {
             return true; // Game ends
