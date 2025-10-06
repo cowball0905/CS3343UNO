@@ -101,42 +101,13 @@ public class CPUPlayer extends Player {
                 ((NumberCard)card).getValue() == ((NumberCard)topCard).getValue());
     }
 
-    private Card chooseBestStrategy(List<Card> validCards, Card topCard) {
-        // Optimal strategy: prioritize cards that benefit CPU most
-
-        // 1. If hand is large (>3 cards), save Wild cards for later unless no other
-        // option
-        if (hand.size() > 3) {
-            List<Card> nonWildCards = validCards.stream()
-                    .filter(card -> !(card instanceof WildCard) && !(card instanceof WildDrawFourCard))
-                    .collect(Collectors.toList());
-
-            if (!nonWildCards.isEmpty()) {
-                validCards = nonWildCards;
-            }
-        }
-
-        // 2. Prioritize Draw Four cards when hand is small (aggressive finish)
-        if (hand.size() <= 2) {
-            List<Card> drawFourCards = validCards.stream()
-                    .filter(card -> card instanceof WildDrawFourCard)
-                    .collect(Collectors.toList());
-
-            if (!drawFourCards.isEmpty()) {
-                return drawFourCards.get(0);
-            }
-        }
-    }
-
-        // 3. Prefer action cards that hinder opponent (Skip, Reverse, Draw Two)
-    @Override
-    public void allowPlay() {
+    public void chooseCard() {
         UNOController controller = UNOController.getInstance();
         ArrayList<Card> playerCards = this.getHand();
         ArrayList<Card> validCards = new ArrayList<>();
 
         for (Card c : playerCards) {
-            if (controller.playCard(c)) {
+            if (controller.canPlayCard(c)) {
                 validCards.add(c);
             }
         }
@@ -152,7 +123,6 @@ public class CPUPlayer extends Player {
         playCard(chosenCard);
         System.out.println(" (CPU) chose their Card!");
         chosenCard.setRevealed(true);
-        Thread.sleep(10);
         UNOController.getInstance().playCard(chosenCard);
 
         // // If the played card is a Wild card, choose a color

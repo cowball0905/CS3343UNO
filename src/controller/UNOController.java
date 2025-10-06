@@ -23,11 +23,11 @@ public class UNOController {
     private Player currentPlayer;
     private ArrayList<Player> players;
     private int playDirection;
+    CountDownTimer turnTimer;
     private boolean isAction = false;
 
 
     private UNOController() {
-        // Create the main frame
         mainFrame = new JFrame("UNO Game");
         mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         mainFrame.setSize(1000, 700);
@@ -40,6 +40,13 @@ public class UNOController {
         for(int i=0;i<3;i++){
             CPU.add(new CPUPlayer("CPU"+(i+1)));
         }
+
+        turnTimer = new CountDownTimer(gamePanel, new CountDownTimer.TimerCallback() {
+            @Override
+            public void onTimerComplete() {
+                getCardFromDeck();
+            }
+        });
         
         // Create panels
         menuPanel = new UNOMenuPanel(this);
@@ -156,33 +163,24 @@ public class UNOController {
     } 
 
     public boolean eachRound(){ 
-        
         if (currentPlayer == players.get(0)){
-            
+            turnTimer.startTimer(30); 
         } else {
-            currentPlayer.allowPlay();
+            ((CPUPlayer)currentPlayer).chooseCard();
         }
         if (currentPlayer.getHand().size() == 0) {
             return true; // Game ends
         }
         return false;
-        // Card topCard = PlayedCard.size()>0? PlayedCard.get(PlayedCard.size()-1) : null;
-
-        // currentPlayer.allowPlay();
-
-        // if (PlayedCard.get(PlayedCard.size()-1) != topCard){
-        //     if(currentPlayer.getHand().size()==0){
-        //     return; //遊戲結束
-        //     }
-        //     int addition = PlayedCard.get(PlayedCard.size()-1).cardFunction();
-        //     int nextPlayerIndex = (players.indexOf(currentPlayer) + addition * playDirection) % 4;
-        //     currentPlayer = players.get(nextPlayerIndex);
-        // };
     }
 
     public void playCard(Card card){
         PlayedCard.add(card);
         currentPlayer.playCard(card);
+        gamePanel.updateDisplay();
+        Card topCard = getTopCard();
+        int nextPlayer = topCard.cardFunction();
+        currentPlayer = players.get(players.indexOf(currentPlayer) + nextPlayer * playDirection);
         gamePanel.updateDisplay();
         isAction = false;
     }

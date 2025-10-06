@@ -48,17 +48,6 @@ public class HumanPlayer extends Player {
         // Game controller should handle the challenge logic
     }
     
-    // Method to check if the human player can play a card
-    public boolean canPlayCard(Card card, Card topCard) {
-        // Basic UNO rules: same color, same number/type, or wild card
-        if (card instanceof WildCard || card instanceof WildDrawFourCard) {
-            return true;
-        }
-        
-        return card.getColor().equals(topCard.getColor()) || 
-               card.getClass().equals(topCard.getClass());
-    }
-    
     // Get valid cards that can be played
     public List<Card> getValidCards(Card topCard) {
         List<Card> test = new ArrayList<>();
