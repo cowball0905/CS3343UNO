@@ -104,7 +104,7 @@ public class UNOController {
         
         for (int i = 0; i < 7; i++) {
             players.get(0).drawCard(cardFactory.giveCard(Deck,false, true)); // 玩家的牌顯示
-            for(int j=1;j<3;j++){
+            for(int j=1;j<4;j++){
                 players.get(j).drawCard(cardFactory.giveCard(Deck,false, false)); // CPU的牌隱藏
             }
         }
@@ -123,8 +123,9 @@ public class UNOController {
         }
     }
 
-    public ArrayList<Card> getPlayedCard() {
-        return currentPlayer.getHand();
+    public ArrayList<Card> getHumanPlayedCard() {
+        // 始终返回人类玩家的手牌（用于显示在界面底部）
+        return players.get(0).getHand();
     }
 
     public ArrayList<Card> getCPUCard(int index) {
@@ -163,10 +164,13 @@ public class UNOController {
         if (currentPlayer == players.get(0)){
             turnTimer.startTimer(30); 
         } else {
+            // 捕获当前的CPU玩家引用，避免在回调时currentPlayer已改变
+            CPUPlayer cpuPlayer = (CPUPlayer) currentPlayer;
+            
             javax.swing.Timer cpuTimer = new javax.swing.Timer(500, new java.awt.event.ActionListener() {
                 @Override
                 public void actionPerformed(java.awt.event.ActionEvent e) {
-                    ((CPUPlayer)currentPlayer).chooseCard();
+                    cpuPlayer.chooseCard();  // 使用捕获的引用，而不是currentPlayer
                 }
             });
             cpuTimer.setRepeats(false);  
@@ -175,6 +179,7 @@ public class UNOController {
     }
 
     public void playCard(Card card){
+        card.setRotation(0);
         PlayedCard.add(card);
         currentPlayer.playCard(card);
         gamePanel.updateDisplay();
@@ -199,35 +204,28 @@ public class UNOController {
     }
     
     public boolean canPlayCard(Card playedCard) {
-        // if (currentPlayer != players.get(0)) { move to all Jbuttons
-        //     System.out.println("It's not the player's turn!");
-        //     return false;
-        // }
-        if(!isAction){
-            isAction = true;
-            Card topCard = getTopCard();
-            switch (playedCard.getType()) {
-                case Wild:
-                case WildDrawFour:
+        Card topCard = getTopCard();
+        switch (playedCard.getType()) {
+            case Wild:
+            case WildDrawFour:
+                return true;
+            case Skip:
+            case Reverse:
+            case DrawTwo:
+                if (playedCard.getColor() == topCard.getColor() || playedCard.getType() == topCard.getType()) {
                     return true;
-                case Skip:
-                case Reverse:
-                case DrawTwo:
-                    if (playedCard.getColor() == topCard.getColor() || playedCard.getType() == topCard.getType()) {
-                        return true;
-                    }
-                    return false;
-                case Number:
-                    if(playedCard.getColor() == topCard.getColor() || ((NumberCard) playedCard).getValue() == ((NumberCard)topCard).getValue()){
-                        return true;
-                    }
-                    return false;
-                default:
-                    return false;
-            }
+                }
+                return false;
+            case Number:
+                if(playedCard.getColor() == topCard.getColor()){
+                    return true;
+                }else if(topCard.getType()==Type.Number && ((NumberCard) playedCard).getValue() == ((NumberCard)topCard).getValue()){
+                    return true;
+                }
+                return false;
+            default:
+                return false;
         }
-        return false;
-        
     }
 
     // In UNOController.java
@@ -270,5 +268,9 @@ public class UNOController {
 
     public ArrayList<String> getDeck() {
         return this.Deck;
+    }
+    
+    public CountDownTimer getTurnTimer() {
+        return this.turnTimer;
     }
 }

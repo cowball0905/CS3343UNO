@@ -64,13 +64,15 @@ public class UNOGamePanel extends JPanel {
     
     private void updateCardPositions() {
         // Get current game state from controller
-        List<Card> playerHand = controller.getPlayedCard();
+        List<Card> playerHand = controller.getHumanPlayedCard();
         List<Card> computer1Hand = controller.getCPUCard(0);
         List<Card> computer2Hand = controller.getCPUCard(1);
         List<Card> computer3Hand = controller.getCPUCard(2);
         Card topCard = controller.getTopCard();
 
         if (topCard != null) {
+            // 确保弃牌堆顶部的牌不旋转
+            topCard.setRotation(0);
             topCard.setPosition(450, 240);
         }
         
@@ -176,7 +178,13 @@ public class UNOGamePanel extends JPanel {
     }
 
 public void selectedCard(int index) {
-        List<Card> playerHand = controller.getPlayedCard();
+        if (controller.getCurrentPlayer() != controller.getPlayerList().get(0)) {
+            errorMessage = "It's not your turn!";
+            errorMessageTimer = System.currentTimeMillis();
+            repaint();
+            return;
+        }
+        List<Card> playerHand = controller.getHumanPlayedCard();
         if (currentSelectedCardIndex == -1){ //Click unselected card
             currentSelectedCardIndex = index;
             playerHand.get(index).setCardSelected(true);
@@ -187,12 +195,8 @@ public void selectedCard(int index) {
                 controller.playCard(selectedCard);
                 errorMessage = "Card played!";
                 errorMessageTimer = System.currentTimeMillis();
-
                 currentSelectedCardIndex = -1;
                 selectedCard.setCardSelected(false);
-
-                selectedCard.cardFunction(); //Using polymorphism to handle special card effects
-
                 updateDisplay();
             } else {
                 errorMessage = "Can't play this card!";
@@ -213,7 +217,7 @@ public void selectedCard(int index) {
             remove(btn);
         }
         cardButtons.clear();
-        List<Card> playerHand = controller.getPlayedCard();
+        List<Card> playerHand = controller.getHumanPlayedCard();
         
         for (int i = 0; i < playerHand.size(); i++) {
             Card card = playerHand.get(i);
@@ -248,7 +252,7 @@ public void selectedCard(int index) {
         Graphics2D g2d = (Graphics2D) g;
         
         // Get current game state from controller
-        List<Card> playerHand = controller.getPlayedCard();
+        List<Card> playerHand = controller.getHumanPlayedCard();
         List<Card> computer1Hand = controller.getCPUCard(0);
         List<Card> computer2Hand = controller.getCPUCard(1);
         List<Card> computer3Hand = controller.getCPUCard(2);
@@ -346,6 +350,10 @@ public void selectedCard(int index) {
             } else {
                 errorMessage = null; // Clear the message after timeout
             }
+        }
+        
+        if (controller.getTurnTimer() != null) {
+            controller.getTurnTimer().drawTimer(g);
         }
     }
 }

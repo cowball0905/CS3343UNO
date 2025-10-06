@@ -132,14 +132,20 @@ public abstract class Card {
     
     // 設定旋轉角度
     public void setRotation(double angle) {
-        this.rotationAngle = angle;
-        this.isRotated = (angle != 0);
-        if (angle == 90 || angle == 270) {
+        // 如果之前是旋转状态（90或270度），现在要改变角度
+        boolean wasRotated = (this.rotationAngle == 90 || this.rotationAngle == 270);
+        boolean willBeRotated = (angle == 90 || angle == 270);
+        
+        // 如果旋转状态改变，需要交换宽高
+        if (wasRotated != willBeRotated) {
             int tempWidth = this.width;
             int tempHeight = this.height;
             this.width = tempHeight;
             this.height = tempWidth;
         }
+        
+        this.rotationAngle = angle;
+        this.isRotated = (angle != 0);
     }
     
     // 獲取是否旋轉
