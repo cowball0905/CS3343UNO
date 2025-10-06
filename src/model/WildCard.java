@@ -1,5 +1,7 @@
 package model;
 
+import controller.UNOController;
+
 public class WildCard extends Card {
     public WildCard(boolean isRevealed) {
         super(Type.Wild, null, isRevealed);
@@ -9,6 +11,9 @@ public class WildCard extends Card {
     @Override
     public int cardFunction() {
         System.out.println("Wild card played: change color");
+        UNOController controller = UNOController.getInstance();
+
+        controller.getWildCardViewer().setWildCard(this);
         return 1;
     }
 }

@@ -17,7 +17,7 @@ public abstract class Card {
     protected Type type;
     protected Boolean isRevealed;
     protected Boolean isSelected;
-    protected String cardImagePath;  // 保存卡牌真實圖像路徑
+    protected String cardImagePath;
     
     // 旋轉相關屬性
     protected boolean isRotated = false;  // 是否旋轉
@@ -68,8 +68,8 @@ public abstract class Card {
         return color;
     }
 
-    public void setColor(Color color) {
-        this.color = color;
+    public void setColor(Color red) {
+        this.color = red;
     }
 
     public int getX() {
@@ -105,11 +105,6 @@ public abstract class Card {
         }
     }
 
-    public boolean contains(int pointX, int pointY) {
-        return pointX >= x && pointX <= x + width &&
-                pointY >= y && pointY <= y + height;
-    }
-
     public int getWidth() {
         return width;
     }
@@ -125,49 +120,46 @@ public abstract class Card {
     public void draw(Graphics g, int x, int y) {
         this.x = x;
         this.y = y;
-        if (image != null) {
-            g.drawImage(image, x, y, null);
-        }
+        g.drawImage(image, x, y, null);
     }
     
-    // 設定旋轉角度
     public void setRotation(double angle) {
-        // 如果之前是旋转状态（90或270度），现在要改变角度
-        boolean wasRotated = (this.rotationAngle == 90 || this.rotationAngle == 270);
-        boolean willBeRotated = (angle == 90 || angle == 270);
-        
-        // 如果旋转状态改变，需要交换宽高
-        if (wasRotated != willBeRotated) {
+        boolean isRotated1 = false; 
+        if(this.rotationAngle == 90 || this.rotationAngle == 270){
+            isRotated1 = true;
+        }
+        boolean isRotated2 = false; 
+        if(angle==90||angle==270){
+            isRotated2 = true;
+        }
+        if (isRotated1 != isRotated2) {
             int tempWidth = this.width;
             int tempHeight = this.height;
             this.width = tempHeight;
             this.height = tempWidth;
         }
-        
         this.rotationAngle = angle;
-        this.isRotated = (angle != 0);
+        if(angle!=0){
+            this.isRotated = true;
+        }
     }
     
-    // 獲取是否旋轉
     public boolean isRotated() {
         return isRotated;
     }
     
-    // 獲取旋轉角度
     public double getRotationAngle() {
         return rotationAngle;
     }
-    
-    // 獲取是否已翻牌
+
     public boolean isRevealed() {
         return isRevealed;
     }
     
-    // 設置翻牌狀態
     public void setRevealed(boolean revealed) {
         this.isRevealed = revealed;
         if (cardImagePath != null) {
-            loadImage(cardImagePath);  // 重新載入對應圖像
+            loadImage(cardImagePath);
         }
     }
 

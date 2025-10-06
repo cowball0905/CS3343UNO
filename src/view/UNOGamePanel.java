@@ -14,13 +14,12 @@ import javax.swing.JButton;
 import javax.swing.JPanel;
 import controller.UNOController;
 import model.Card;
-import java.awt.image.BufferedImage;
 
 public class UNOGamePanel extends JPanel {
-    
-    private static final long serialVersionUID = 1L;
     private static final int WIDTH = 800;
     private static final int HEIGHT = 600;
+    private static final int CARD_OFFSET_X = 25; 
+    private static final int CARD_OFFSET_Y = 20; 
     private List <JButton> cardButtons = new ArrayList<JButton>();
     private int currentSelectedCardIndex = -1;
     private String errorMessage = null;
@@ -42,9 +41,6 @@ public class UNOGamePanel extends JPanel {
         menuButton.addActionListener(e -> controller.showMenu());
         add(menuButton);
     }
-    
-    private static final int CARD_OFFSET_X = 25; // 水平方向的卡牌間距
-    private static final int CARD_OFFSET_Y = 20; // 垂直方向的卡牌間距
 
     
     private JButton updateDeck(){
@@ -130,8 +126,6 @@ public class UNOGamePanel extends JPanel {
         }
         
         if (card.isRotated()) {
-            // 保存當前變換狀態
-            //保存當前的圖形變換狀態，以便後續恢復
             AffineTransform oldTransform = g2d.getTransform();
             
             // 獲取圖像的原始尺寸（旋轉前）
@@ -354,6 +348,10 @@ public void selectedCard(int index) {
         
         if (controller.getTurnTimer() != null) {
             controller.getTurnTimer().drawTimer(g);
+        }
+
+        if(controller.getWildCardViewer().isHavingWild()){
+            controller.getWildCardViewer().drawWindow(g);
         }
     }
 }

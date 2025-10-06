@@ -14,8 +14,7 @@ public class ReverseCard extends Card {
 
         UNOController controller = UNOController.getInstance();
 
-        int playDirection = controller.getPlayDirection();
-        controller.setPlayDirection(-playDirection); // Reverse the direction
+        controller.setPlayDirection(-1); // Reverse the direction
         return 1;
     }
 }

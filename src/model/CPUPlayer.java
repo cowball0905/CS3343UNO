@@ -3,7 +3,6 @@ package model;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-import java.util.stream.Collectors;
 
 import controller.UNOController;
 
@@ -78,17 +77,15 @@ public class CPUPlayer extends Player {
             return;
         }
 
-        Card chosenCard = chooseCard(validCards); //Use random function to choose a card
+        Card chosenCard = randomChoose(validCards); //Use random function to choose a card
 
         playCard(chosenCard);
-        System.out.println(" (CPU) chose their Card!");
+        System.out.println(name + " (CPU) chose their Card!");
         chosenCard.setRevealed(true);
         controller.playCard(chosenCard);
-        controller.passNextPlayer(true);
-        controller.eachRound();
     }
 
-    private Card chooseCard(List<Card> validCards) {
+    private Card randomChoose(List<Card> validCards) {
         Random random = new Random();
         int randomIndex = random.nextInt(validCards.size());
         return validCards.get(randomIndex);

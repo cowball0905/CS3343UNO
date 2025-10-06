@@ -4,8 +4,10 @@ package controller;
 import model.*;
 import view.UNOGamePanel;
 import view.UNOMenuPanel;
+import view.WildCardViewer;
 
 import java.util.*;
+import javax.swing.Timer;
 
 import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
@@ -21,8 +23,9 @@ public class UNOController {
     private Player currentPlayer;
     private ArrayList<Player> players;
     private int playDirection;
-    CountDownTimer turnTimer;
+    private CountDownTimer turnTimer;
     private boolean isAction = false;
+    private WildCardViewer wildCardViewer;
 
 
     private UNOController() {
@@ -45,6 +48,7 @@ public class UNOController {
         // Create panels
         menuPanel = new UNOMenuPanel(this);
         gamePanel = new UNOGamePanel(this);
+        wildCardViewer = new WildCardViewer();
 
 
         turnTimer = new CountDownTimer(gamePanel, new CountDownTimer.TimerCallback() {
@@ -163,15 +167,10 @@ public class UNOController {
         if (currentPlayer == players.get(0)){
             turnTimer.startTimer(30); 
         } else {
-            // 捕获当前的CPU玩家引用，避免在回调时currentPlayer已改变
+            turnTimer.stopTimer();
             CPUPlayer cpuPlayer = (CPUPlayer) currentPlayer;
             
-            javax.swing.Timer cpuTimer = new javax.swing.Timer(500, new java.awt.event.ActionListener() {
-                @Override
-                public void actionPerformed(java.awt.event.ActionEvent e) {
-                    cpuPlayer.chooseCard();  // 使用捕获的引用，而不是currentPlayer
-                }
-            });
+            Timer cpuTimer = new Timer(500, e -> cpuPlayer.chooseCard());
             cpuTimer.setRepeats(false);  
             cpuTimer.start();
         }
@@ -271,5 +270,9 @@ public class UNOController {
     
     public CountDownTimer getTurnTimer() {
         return this.turnTimer;
+    }
+
+    public WildCardViewer getWildCardViewer(){
+        return wildCardViewer;
     }
 }
