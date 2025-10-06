@@ -109,7 +109,7 @@ public class UNOGamePanel extends JPanel {
     }
     
     // 繪製旋轉卡牌的方法
-    private void drawRotatedCard(Graphics2D g2d, Card card) {
+    private void drawRotatedCard(Graphics2D graphic2D, Card card) {
         // 檢查卡牌和圖像是否存在
         if (card == null || card.getImage() == null) {
             System.err.println("Warning: Card or image " + card.getType().toString() + " " + card.getColor().toString() + " is null, skipping draw");
@@ -117,7 +117,7 @@ public class UNOGamePanel extends JPanel {
         }
         
         if (card.isRotated()) {
-            AffineTransform oldTransform = g2d.getTransform();
+            AffineTransform oldTransform = graphic2D.getTransform();
             
             // 獲取圖像的原始尺寸（旋轉前）
             int imageWidth = card.getImage().getWidth();
@@ -129,21 +129,21 @@ public class UNOGamePanel extends JPanel {
             
             // 移動到旋轉中心
             // 平移
-            g2d.translate(centerX, centerY);
+            graphic2D.translate(centerX, centerY);
             // 執行旋轉
-            g2d.rotate(Math.toRadians(card.getRotationAngle()));
+            graphic2D.rotate(Math.toRadians(card.getRotationAngle()));
             // 移動到繪製位置（圖像左上角）
-            g2d.translate(-imageWidth / 2.0, -imageHeight / 2.0);
+            graphic2D.translate(-imageWidth / 2.0, -imageHeight / 2.0);
             
             // 繪製卡牌 - 使用原始圖像尺寸
-            g2d.drawImage(card.getImage(), 0, 0, imageWidth, imageHeight, this);
+            graphic2D.drawImage(card.getImage(), 0, 0, imageWidth, imageHeight, this);
             
             // 恢復變換狀態
             // 如果不恢復變換，第二張卡牌也會被旋轉90度！
-            g2d.setTransform(oldTransform);
+            graphic2D.setTransform(oldTransform);
         } else {
             // 正常繪製
-            g2d.drawImage(card.getImage(), card.getX(), card.getY(), 
+            graphic2D.drawImage(card.getImage(), card.getX(), card.getY(), 
                          card.getWidth(), card.getHeight(), this);
         }
     }
@@ -234,7 +234,7 @@ public void selectedCard(int index) {
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
-        Graphics2D g2d = (Graphics2D) g;
+        Graphics2D graphic2D = (Graphics2D) g;
         
         // Get current game state from controller
         List<Card> playerHand = controller.getHumanPlayedCard();
@@ -250,48 +250,48 @@ public void selectedCard(int index) {
         if (computer3Hand == null) computer3Hand = new java.util.ArrayList<>();
         
         // Draw background
-        g2d.setColor(new Color(0, 100, 0));
-        g2d.fillRect(0, 0, getWidth(), getHeight());
+        graphic2D.setColor(new Color(0, 100, 0));
+        graphic2D.fillRect(0, 0, getWidth(), getHeight());
         
         // === 第一層：繪製所有卡牌 (底層) ===
         // Draw CPU1 cards
         for (Card card : computer1Hand) {
-            drawRotatedCard(g2d, card);
+            drawRotatedCard(graphic2D, card);
         }
         
         // Draw CPU2 cards
         for (Card card : computer2Hand) {
-            drawRotatedCard(g2d, card);
+            drawRotatedCard(graphic2D, card);
         }
         
         // Draw CPU3 cards
         for (Card card : computer3Hand) {
-            drawRotatedCard(g2d, card);
+            drawRotatedCard(graphic2D, card);
         }
         
         // === 第二層：繪製所有文字標籤 (上層，不會被卡牌覆蓋) ===
-        g2d.setFont(new Font("Arial", Font.BOLD, 18));
-        g2d.setColor(Color.WHITE);
+        graphic2D.setFont(new Font("Arial", Font.BOLD, 18));
+        graphic2D.setColor(Color.WHITE);
         
         // CPU1 標籤 (左側)
-        g2d.drawString("CPU 1 (" + computer1Hand.size() + " cards)", 105, 220);
+        graphic2D.drawString("CPU 1 (" + computer1Hand.size() + " cards)", 105, 220);
         
         // CPU2 標籤 (頂部居中)
-        g2d.drawString("CPU 2 (" + computer2Hand.size() + " cards)", 
+        graphic2D.drawString("CPU 2 (" + computer2Hand.size() + " cards)", 
                          420, 40);
         
         // CPU3 標籤 (右側)
-        g2d.drawString("CPU 3 (" + computer3Hand.size() + " cards)", 745, 220);
+        graphic2D.drawString("CPU 3 (" + computer3Hand.size() + " cards)", 745, 220);
         
         // === 繼續第一層：繪製其他卡牌 ===
         // Draw player's cards (底層)
         for (Card card : playerHand) {
-            drawRotatedCard(g2d, card);
+            drawRotatedCard(graphic2D, card);
         }
         
         // Draw discard pile (top card)
         if (topCard != null) {
-            g2d.drawImage(topCard.getImage(),
+            graphic2D.drawImage(topCard.getImage(),
                          topCard.getX(), topCard.getY(),
                          topCard.getWidth(), topCard.getHeight(),
                          this);
@@ -299,15 +299,15 @@ public void selectedCard(int index) {
         
         // === 第二層：繼續繪製文字標籤 (上層) ===
         // Player 標籤
-        g2d.setFont(new Font("Arial", Font.BOLD, 18));
-        g2d.setColor(Color.WHITE);
-        g2d.drawString("YOU (" + playerHand.size() + " cards)", 420, 600);
+        graphic2D.setFont(new Font("Arial", Font.BOLD, 18));
+        graphic2D.setColor(Color.WHITE);
+        graphic2D.drawString("YOU (" + playerHand.size() + " cards)", 420, 600);
         
         // Discard pile label
         if (topCard != null) {
-            g2d.setColor(Color.WHITE);
-            g2d.setFont(new Font("Arial", Font.PLAIN, 14));
-            g2d.drawString("DISCARD", 
+            graphic2D.setColor(Color.WHITE);
+            graphic2D.setFont(new Font("Arial", Font.PLAIN, 14));
+            graphic2D.drawString("DISCARD", 
                 topCard.getX() + (topCard.getWidth() / 2) - 30, 
                 topCard.getY() + topCard.getHeight() + 20);
         }
@@ -316,18 +316,18 @@ public void selectedCard(int index) {
         if (icon.getImage() == null) {
             System.err.println("Failed to load card back image");
         } else {
-            g2d.drawImage(icon.getImage(), 140, 30, 80, 120, null);
+            graphic2D.drawImage(icon.getImage(), 140, 30, 80, 120, null);
         }
-        g2d.drawString("DECK", 160, 165);
+        graphic2D.drawString("DECK", 160, 165);
         
         // Draw error message if it exists and hasn't timed out
         if (errorMessage != null) {
             long currentTime = System.currentTimeMillis();
             if (currentTime - errorMessageTimer < 1000) { // Show message for 2 seconds
-                g2d.setColor(Color.RED);
-                g2d.setFont(new Font("Arial", Font.BOLD, 24));
+                graphic2D.setColor(Color.RED);
+                graphic2D.setFont(new Font("Arial", Font.BOLD, 24));
                 // Draw the error message in the center of the screen
-                g2d.drawString(errorMessage, 630, 580);
+                graphic2D.drawString(errorMessage, 630, 580);
             } else {
                 errorMessage = null; // Clear the message after timeout
             }
