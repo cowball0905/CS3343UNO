@@ -40,6 +40,11 @@ public class UNOController {
         for(int i=0;i<3;i++){
             CPU.add(new CPUPlayer("CPU"+(i+1)));
         }
+        
+        // Create panels
+        menuPanel = new UNOMenuPanel(this);
+        gamePanel = new UNOGamePanel(this);
+
 
         turnTimer = new CountDownTimer(gamePanel, new CountDownTimer.TimerCallback() {
             @Override
@@ -47,10 +52,6 @@ public class UNOController {
                 getCardFromDeck();
             }
         });
-        
-        // Create panels
-        menuPanel = new UNOMenuPanel(this);
-        gamePanel = new UNOGamePanel(this);
         
         initializeGame();
         
@@ -111,14 +112,7 @@ public class UNOController {
         players.addAll(CPU);
         currentPlayer = players.get(0);
         playDirection = 1;
-        boolean isEnd = false;
-        while (!isEnd){
-            isEnd = eachRound();
-            if(isEnd){
-                break;
-            }
-            System.out.println("Next Round!");
-        }
+        eachRound();
     }
 
     public void getCardFromDeck(){
@@ -126,7 +120,8 @@ public class UNOController {
             isAction = true;
             currentPlayer.drawCard(cardFactory.giveCard(Deck,false, players.indexOf(currentPlayer)==0 ? true:false));
             isAction = false;
-            gamePanel.updateDisplay();
+            passNextPlayer(false);
+            eachRound();
         }
     }
 
@@ -162,34 +157,54 @@ public class UNOController {
         this.playDirection = direction;
     } 
 
-    public boolean eachRound(){ 
+    public void eachRound(){ 
+        gamePanel.updateDisplay();
+        if (currentPlayer.getHand().size() == 0) {
+            return; // Game ends
+        }
         if (currentPlayer == players.get(0)){
             turnTimer.startTimer(30); 
         } else {
-            ((CPUPlayer)currentPlayer).chooseCard();
+            javax.swing.Timer cpuTimer = new javax.swing.Timer(500, new java.awt.event.ActionListener() {
+                @Override
+                public void actionPerformed(java.awt.event.ActionEvent e) {
+                    ((CPUPlayer)currentPlayer).chooseCard();
+                }
+            });
+            cpuTimer.setRepeats(false);  // 只执行一次
+            cpuTimer.start();
         }
-        if (currentPlayer.getHand().size() == 0) {
-            return true; // Game ends
-        }
-        return false;
     }
 
     public void playCard(Card card){
         PlayedCard.add(card);
         currentPlayer.playCard(card);
         gamePanel.updateDisplay();
-        Card topCard = getTopCard();
-        int nextPlayer = topCard.cardFunction();
-        currentPlayer = players.get(players.indexOf(currentPlayer) + nextPlayer * playDirection);
-        gamePanel.updateDisplay();
+        passNextPlayer(true);
         isAction = false;
+        eachRound();
+    }
+
+    public void passNextPlayer(boolean playCard){
+        if(playCard){
+            Card topCard = getTopCard();
+            int nextPlayer = topCard.cardFunction();
+            int currentIndex = players.indexOf(currentPlayer);
+            int nextIndex = (currentIndex + nextPlayer * playDirection + players.size()) % players.size();
+            currentPlayer = players.get(nextIndex);
+        }else{
+            int currentIndex = players.indexOf(currentPlayer);
+            int nextIndex = (currentIndex + 1 * playDirection + players.size()) % players.size();
+            currentPlayer = players.get(nextIndex);
+        }
+        gamePanel.updateDisplay();
     }
     
     public boolean canPlayCard(Card playedCard) {
-        if (currentPlayer != players.get(0)) {
-            System.out.println("It's not the player's turn!");
-            return false;
-        }
+        // if (currentPlayer != players.get(0)) { move to all Jbuttons
+        //     System.out.println("It's not the player's turn!");
+        //     return false;
+        // }
         if(!isAction){
             isAction = true;
             Card topCard = getTopCard();

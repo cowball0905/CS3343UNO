@@ -115,6 +115,8 @@ public class CPUPlayer extends Player {
         if (validCards.isEmpty()) {
             System.out.println(name + " (CPU) has no valid cards to play and must draw.");
             this.drawCard(controller.getCardFactory().giveCard(controller.getDeck(),false, false));
+            controller.passNextPlayer(false);
+            controller.eachRound();
             return;
         }
 
@@ -123,14 +125,8 @@ public class CPUPlayer extends Player {
         playCard(chosenCard);
         System.out.println(" (CPU) chose their Card!");
         chosenCard.setRevealed(true);
-        UNOController.getInstance().playCard(chosenCard);
+        controller.playCard(chosenCard);
 
-        // // If the played card is a Wild card, choose a color
-        // if (chosenCard instanceof WildCard || chosenCard instanceof WildDrawFourCard) {
-        //     Color chosenColor = chooseWildCardColor();
-        //     System.out.println(name + " (CPU) chooses color: " + chosenColor);
-        //     UNOController.getInstance().setCurrentColor(chosenColor);
-        // }
     }
 
     private Card chooseCard(List<Card> validCards) {
