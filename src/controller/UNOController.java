@@ -16,8 +16,6 @@ public class UNOController {
     private UNOMenuPanel menuPanel;
     private JFrame mainFrame;
     private ArrayList<String> Deck;
-    private Player player;
-    private ArrayList<Player> CPU;
     private CardFactory cardFactory = new ConcreteCardFactory();
     private ArrayList<Card> PlayedCard = new ArrayList<>();
     private Player currentPlayer;
@@ -35,10 +33,12 @@ public class UNOController {
         mainFrame.setResizable(false);
         
         // Initialize game components
-        this.player = new HumanPlayer("Player");
-        this.CPU = new ArrayList<>();
-        for(int i=0;i<3;i++){
-            CPU.add(new CPUPlayer("CPU"+(i+1)));
+        for(int i=0;i<4;i++){
+            if(i==0){
+                players.add(new HumanPlayer("Player"));
+            }else{
+                players.add(new CPUPlayer("CPU"+(i)));
+            }
         }
         
         // Create panels
@@ -98,18 +98,16 @@ public class UNOController {
             "WildCard", "WildCard", "WildCard", "WildCard",
             "WildDrawFour", "WildDrawFour", "WildDrawFour", "WildDrawFour"
         ));
+        players = new ArrayList<>();
 
         PlayedCard.add(cardFactory.giveCard(Deck,true, true)); // 已打出的牌顯示
         
         for (int i = 0; i < 7; i++) {
-            player.drawCard(cardFactory.giveCard(Deck,false, true)); // 玩家的牌顯示
-            for(Player cpu:CPU){
-                cpu.drawCard(cardFactory.giveCard(Deck,false, false)); // CPU的牌隱藏
+            players.get(0).drawCard(cardFactory.giveCard(Deck,false, true)); // 玩家的牌顯示
+            for(int j=1;j<3;j++){
+                players.get(j).drawCard(cardFactory.giveCard(Deck,false, false)); // CPU的牌隱藏
             }
         }
-        players = new ArrayList<>();
-        players.add(player);
-        players.addAll(CPU);
         currentPlayer = players.get(0);
         playDirection = 1;
         eachRound();
@@ -171,7 +169,7 @@ public class UNOController {
                     ((CPUPlayer)currentPlayer).chooseCard();
                 }
             });
-            cpuTimer.setRepeats(false);  // 只执行一次
+            cpuTimer.setRepeats(false);  
             cpuTimer.start();
         }
     }

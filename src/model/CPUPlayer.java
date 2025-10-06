@@ -126,7 +126,7 @@ public class CPUPlayer extends Player {
         System.out.println(" (CPU) chose their Card!");
         chosenCard.setRevealed(true);
         controller.playCard(chosenCard);
-
+        controller.eachRound();
     }
 
     private Card chooseCard(List<Card> validCards) {

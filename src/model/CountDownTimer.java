@@ -13,7 +13,6 @@ public class CountDownTimer {
     private Timer timer;
     private int remainingSeconds;
     private boolean isRunning;
-    private String instructions;
     private JPanel panel; // The panel to repaint for timer display
     private TimerCallback callback;
 
@@ -87,8 +86,6 @@ public class CountDownTimer {
             g.setFont(new Font("Arial", Font.BOLD, 24));
             String timerText = "Time: " + remainingSeconds;
             
-            // Calculate position based on panel size if at default top-right position
-            FontMetrics metrics = g.getFontMetrics();
             
             g.drawString(timerText, 700, 100);
         }
