@@ -5,7 +5,6 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.RenderingHints;
 import java.awt.geom.AffineTransform;
 import java.util.ArrayList;
 import java.util.List;
@@ -66,15 +65,12 @@ public class UNOGamePanel extends JPanel {
         Card topCard = controller.getTopCard();
 
         if (topCard != null) {
-            // 确保弃牌堆顶部的牌不旋转
             topCard.setRotation(0);
             topCard.setPosition(450, 240);
         }
         
-        // 玩家手牌 - 底部水平排列（不旋轉）
         for (int i = 0; i < playerHand.size(); i++) {
             Card card = playerHand.get(i);
-            // 不旋轉
             int cardX = (WIDTH / 2) - (playerHand.size() * CARD_OFFSET_X / 2) + (i * CARD_OFFSET_X) + 60;
             int cardY = HEIGHT - 150;
             card.setPosition(cardX, cardY);
@@ -83,17 +79,14 @@ public class UNOGamePanel extends JPanel {
         // CPU1 - 左側垂直排列
         for (int i = 0; i < computer1Hand.size(); i++) {
             Card card = computer1Hand.get(i);
-            card.setRotation(90); // 順時針旋轉90度
+            card.setRotation(90); 
             
-            // X坐標：固定在左側
             int cardX = 50 + 60;
-            // Y坐標：垂直居中排列
             int cardY = (HEIGHT / 2) - (computer1Hand.size() * CARD_OFFSET_Y / 2) + (i * CARD_OFFSET_Y);
             
             card.setPosition(cardX, cardY);
         }
 
-        // CPU3 - 右側垂直排列
         for (int i = 0; i < computer3Hand.size(); i++) {
             Card card = computer3Hand.get(i);
             card.setRotation(270); // 逆時針旋轉90度
@@ -109,7 +102,6 @@ public class UNOGamePanel extends JPanel {
         // CPU2 - 頂部水平排列（不旋轉）
         for (int i = 0; i < computer2Hand.size(); i++) {
             Card card = computer2Hand.get(i);
-            // 不旋轉
             int cardX = (WIDTH / 2) - (computer2Hand.size() * CARD_OFFSET_X / 2) + (i * CARD_OFFSET_X) + 60;
             int cardY = 50;
             card.setPosition(cardX, cardY);
@@ -256,10 +248,6 @@ public void selectedCard(int index) {
         if (computer1Hand == null) computer1Hand = new java.util.ArrayList<>();
         if (computer2Hand == null) computer2Hand = new java.util.ArrayList<>();
         if (computer3Hand == null) computer3Hand = new java.util.ArrayList<>();
-        
-        // Enable anti-aliasing for smoother graphics
-        g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-        g2d.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
         
         // Draw background
         g2d.setColor(new Color(0, 100, 0));
