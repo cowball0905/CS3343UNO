@@ -33,7 +33,6 @@ public class UNOGamePanel extends JPanel {
         setBackground(new Color(255, 255, 255)); 
         setLayout(null);
         
-        // Initialize menu button
         menuButton = new JButton("Back to Menu");
         menuButton.setBounds(10, 10, 120, 30);
         menuButton.addActionListener(e -> controller.showMenu());
@@ -168,7 +167,7 @@ public class UNOGamePanel extends JPanel {
         return button;
     }
 
-public void selectedCard(int index) {
+    public void selectedCard(int index) {
         if (controller.getCurrentPlayer() != controller.getPlayerList().get(0)) {
             errorMessage = "It's not your turn!";
             errorMessageTimer = System.currentTimeMillis();

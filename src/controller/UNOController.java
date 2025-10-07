@@ -95,6 +95,8 @@ public class UNOController {
             "r0","r1","r2","r3","r4","r5","r6","r7","r8","r9",
             "r1","r2","r3","r4","r5","r6","r7","r8","r9",
             "g0","g1","g2","g3","g4","g5","g6","g7","g8","g9",
+            "g1","g2","g3","g4","g5","g6","g7","g8","g9",
+            "b0","b1","b2","b3","b4","b5","b6","b7","b8","b9",
             "b1","b2","b3","b4","b5","b6","b7","b8","b9",
             "y0","y1","y2","y3","y4","y5","y6","y7","y8","y9",
             "y1","y2","y3","y4","y5","y6","y7","y8","y9",
@@ -110,6 +112,19 @@ public class UNOController {
             "WildDrawFour", "WildDrawFour", "WildDrawFour", "WildDrawFour"
         ));
 
+        // Clear played cards
+        PlayedCard.clear();
+        // Clear each player's hand
+        for (Player player : players) {
+            player.getHand().clear();
+        }
+        // Stop turn timer
+        turnTimer.stopTimer();
+        turnTimer.startTimer(30); 
+
+        // Reset other game state variables if needed
+        isAction = false;
+
         PlayedCard.add(cardFactory.giveCard(Deck,true, true)); // 已打出的牌顯示
         
         for (int i = 0; i < 7; i++) {
@@ -120,7 +135,8 @@ public class UNOController {
         }
         currentPlayer = players.get(0);
         playDirection = 1;
-        eachRound();
+
+        //eachRound();
     }
 
     public void getCardFromDeck(){
@@ -185,9 +201,9 @@ public class UNOController {
         PlayedCard.add(card);
         currentPlayer.playCard(card);
         gamePanel.updateDisplay();
-        if (currentPlayer.getHand().size() == 0) {
-            return; // Game ends
-        }
+        // if (currentPlayer.getHand().size() == 0) {
+        //     return; // Game ends
+        // }
         
         if ((card.getType() == Type.Wild) && players.indexOf(currentPlayer) == 0) {
             card.cardFunction();
@@ -248,6 +264,8 @@ public class UNOController {
         if (mainFrame == null && menuPanel != null) {
             mainFrame = (JFrame) SwingUtilities.getWindowAncestor(menuPanel);
         }
+
+        initializeGame();
         
         if (mainFrame != null) {
             mainFrame.getContentPane().removeAll();
@@ -260,8 +278,13 @@ public class UNOController {
             mainFrame.revalidate();
             gamePanel.requestFocusInWindow();
             gamePanel.startGame(); 
-            this.eachRound();
         }
+
+        // Ensure currentPlayer is human before starting the round
+        currentPlayer = players.get(0);
+
+        // Only call eachRound() once, after everything is set up
+        this.eachRound();
     }
 
     public void showMenu() {

@@ -11,7 +11,7 @@ public class ConcreteCardFactory extends CardFactory {
     public Card createCard(ArrayList<String> Deck, Boolean isTop, boolean isRevealed) {
         int Decklen = Deck.size();
         if(isTop){
-            Decklen = 76;
+            Decklen = 56;
         }
         int index = random.nextInt(Decklen);
         String card = Deck.get(index);
