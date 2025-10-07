@@ -169,9 +169,6 @@ public class UNOController {
 
     public void eachRound(){ 
         gamePanel.updateDisplay();
-        if (currentPlayer.getHand().size() == 0) {
-            return; // Game ends
-        }
         if (currentPlayer == players.get(0)){
             turnTimer.startTimer(30); 
         } else {
@@ -190,6 +187,9 @@ public class UNOController {
         PlayedCard.add(card);
         currentPlayer.playCard(card);
         gamePanel.updateDisplay();
+        if (currentPlayer.getHand().size() == 0) {
+            return; // Game ends
+        }
         
         if ((card.getType() == Type.Wild) && players.indexOf(currentPlayer) == 0) {
             card.cardFunction();
@@ -208,8 +208,14 @@ public class UNOController {
             int nextIndex = (currentIndex + nextPlayer * playDirection + players.size()) % players.size();
             currentPlayer = players.get(nextIndex);
         }else{
+            Card topCard = getTopCard();
+            int nextIndex = 1;
             int currentIndex = players.indexOf(currentPlayer);
-            int nextIndex = (currentIndex + 1 * playDirection + players.size()) % players.size();
+            if(topCard.getType()==Type.WildDrawFour){
+                nextIndex = (currentIndex + 2 * playDirection + players.size()) % players.size();
+            }else{
+                nextIndex = (currentIndex + 1 * playDirection + players.size()) % players.size();
+            }
             currentPlayer = players.get(nextIndex);
         }
         gamePanel.updateDisplay();

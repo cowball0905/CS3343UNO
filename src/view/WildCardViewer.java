@@ -2,13 +2,17 @@ package view;
 
 import java.awt.Font;
 import java.awt.Graphics;
+import java.util.ArrayList;
 import java.awt.Color;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 
 import controller.UNOController;
 import model.CountDownTimer;
+import model.Player;
+import model.Type;
 import model.Card;
+import model.CardFactory;
 
 public class WildCardViewer {
     private boolean isHavingWild;
@@ -60,6 +64,10 @@ public class WildCardViewer {
             this.isHavingWild = false;
             timer.stopTimer();
             removeButtons();
+            if(this.wild.getType()==Type.WildDrawFour){
+                this.drawFour();
+                return;
+            }
             controller.passNextPlayer(false);
             controller.eachRound();
         });
@@ -75,6 +83,10 @@ public class WildCardViewer {
             this.isHavingWild = false;
             timer.stopTimer();
             removeButtons();
+            if(this.wild.getType()==Type.WildDrawFour){
+                this.drawFour();
+                return;
+            }
             controller.passNextPlayer(false);
             controller.eachRound();
         });
@@ -90,6 +102,10 @@ public class WildCardViewer {
             this.isHavingWild = false;
             timer.stopTimer();
             removeButtons();
+            if(this.wild.getType()==Type.WildDrawFour){
+                this.drawFour();
+                return;
+            }
             controller.passNextPlayer(false);
             controller.eachRound();
         });
@@ -105,6 +121,10 @@ public class WildCardViewer {
             this.isHavingWild = false;
             timer.stopTimer();
             removeButtons();
+            if(this.wild.getType()==Type.WildDrawFour){
+                this.drawFour();
+                return;
+            }
             controller.passNextPlayer(false);
             controller.eachRound();
         });
@@ -141,5 +161,29 @@ public class WildCardViewer {
         yellowButton = null;
         greenButton = null;
         panel.repaint();
+    }
+
+    private void drawFour(){
+        UNOController controller = UNOController.getInstance();
+        Player currentPlayer = controller.getCurrentPlayer();
+        ArrayList<Player> playerList = controller.getPlayerList();
+        int playDirection = controller.getPlayDirection(); // 1 for clockwise, -1 for counter-clockwise
+        CardFactory cardFactory = controller.getCardFactory();
+
+        // Get current player index
+        int currentIndex = playerList.indexOf(currentPlayer);
+
+        // Calculate next player index (skip one player)
+        int nextIndex = (currentIndex + (1 * playDirection) + playerList.size()) % playerList.size();
+
+        // Get next player object
+        Player nextPlayer = playerList.get(nextIndex);
+
+        // Make the next player draw 2 cards
+        for (int i = 0; i < 4; i++) {
+            nextPlayer.drawCard(cardFactory.giveCard(controller.getDeck(),false, playerList.indexOf(nextPlayer)==0 ? true:false));
+        }
+
+        controller.passNextPlayer(false);
     }
 }

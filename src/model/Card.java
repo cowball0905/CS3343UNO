@@ -86,10 +86,8 @@ public abstract class Card {
     }
 
     public void setSize(int width, int height){
-        System.out.println("setSize called: " + width + "x" + height);
         this.width = width;
         this.height = height;
-        System.out.println("After setting: " + this.width + "x" + this.height);
     }
     
     public boolean isCardSelected(){
