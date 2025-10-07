@@ -25,7 +25,7 @@ public class UNOController {
     private CountDownTimer turnTimer;
     private boolean isAction = false;
     private WildCardViewer wildCardViewer;
-
+    private final int INITCARDSIZE = 1;
 
     private UNOController() {
         mainFrame = new JFrame("UNO Game");
@@ -121,19 +121,20 @@ public class UNOController {
         // Stop turn timer
         turnTimer.stopTimer();
         turnTimer.startTimer(30); 
-
+        gamePanel.setIsGameEnd(false);
         // Reset other game state variables if needed
         isAction = false;
 
         PlayedCard.add(cardFactory.giveCard(Deck,true, true)); // 已打出的牌顯示
         
-        for (int i = 0; i < 7; i++) {
+        for (int i = 0; i < INITCARDSIZE; i++) {
             players.get(0).drawCard(cardFactory.giveCard(Deck,false, true)); // 玩家的牌顯示
             for(int j = 1 ; j < 4 ; j++){
                 players.get(j).drawCard(cardFactory.giveCard(Deck,false, false)); // CPU的牌隱藏
             }
         }
         currentPlayer = players.get(0);
+        System.out.println("Current Player: " + currentPlayer.getName());
         playDirection = 1;
 
         //eachRound();
@@ -181,6 +182,15 @@ public class UNOController {
         this.playDirection = direction;
     } 
 
+    public boolean isGameEnd(Card card) {
+        if (currentPlayer.getHand().size() == 0 && canPlayCard(card)) {
+            System.out.println(currentPlayer.getName() + " win!");
+            gamePanel.setIsGameEnd(true);
+            return true;
+        }
+        return false;
+    }
+
     public void eachRound(){ 
         gamePanel.updateDisplay();
         if (currentPlayer == players.get(0)){
@@ -201,10 +211,9 @@ public class UNOController {
         PlayedCard.add(card);
         currentPlayer.playCard(card);
         gamePanel.updateDisplay();
-        // if (currentPlayer.getHand().size() == 0) {
-        //     return; // Game ends
-        // }
-        
+        if(isGameEnd(card)) {
+            return;
+        }
         if ((card.getType() == Type.Wild) && players.indexOf(currentPlayer) == 0) {
             card.cardFunction();
         } else {
@@ -313,4 +322,5 @@ public class UNOController {
     public WildCardViewer getWildCardViewer(){
         return wildCardViewer;
     }
+
 }

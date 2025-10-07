@@ -26,6 +26,7 @@ public class UNOGamePanel extends JPanel {
     
     private UNOController controller;
     private JButton menuButton;
+    private boolean isGameEnd = false;
     
     public UNOGamePanel(UNOController controller) {
         this.controller = controller;
@@ -39,6 +40,10 @@ public class UNOGamePanel extends JPanel {
         add(menuButton);
     }
 
+    public void setIsGameEnd(boolean isGameEnd) {
+        this.isGameEnd = isGameEnd;
+    }
+
     
     private JButton updateDeck(){
         JButton button = new JButton();
@@ -48,6 +53,9 @@ public class UNOGamePanel extends JPanel {
         button.setFocusPainted(false);
         
         button.addActionListener(e -> {
+            if (isGameEnd) {
+                return;
+            }
             if(controller.getPlayerList().indexOf(controller.getCurrentPlayer()) !=0){
                 errorMessage = "It's not your turn!";
                 errorMessageTimer = System.currentTimeMillis();
@@ -168,6 +176,9 @@ public class UNOGamePanel extends JPanel {
     }
 
     public void selectedCard(int index) {
+        if (isGameEnd) {
+            return;
+        }
         if (controller.getCurrentPlayer() != controller.getPlayerList().get(0)) {
             errorMessage = "It's not your turn!";
             errorMessageTimer = System.currentTimeMillis();
@@ -346,6 +357,12 @@ public class UNOGamePanel extends JPanel {
             graphic2D.setFont(new Font("Arial", 1, 28));
             graphic2D.drawString("Choose a new color", 350, 230);
             controller.getWildCardViewer().drawWindow(g);
+        }
+        if(isGameEnd) {
+            graphic2D.setColor(Color.BLUE);
+            graphic2D.setFont(new Font("Arial", 1, 100));
+            graphic2D.drawString(controller.getCurrentPlayer().getName() + " Win !!!", 150, 330);
+            
         }
     }
 }
