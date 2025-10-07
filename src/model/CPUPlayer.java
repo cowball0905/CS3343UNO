@@ -108,6 +108,7 @@ public class CPUPlayer extends Player {
             }
             each = 0;
         }
+        System.out.println("CPU change to "+Color.values()[colorIndex]);
         return Color.values()[colorIndex];
     }
 }

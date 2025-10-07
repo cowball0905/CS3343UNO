@@ -91,7 +91,7 @@ public class UNOController {
     }
 
     private void initializeGame() {
-        Deck = new ArrayList<String>(Arrays.asList(
+Deck = new ArrayList<String>(Arrays.asList(
             "r0","r1","r2","r3","r4","r5","r6","r7","r8","r9",
             "r1","r2","r3","r4","r5","r6","r7","r8","r9",
             "g0","g1","g2","g3","g4","g5","g6","g7","g8","g9",
@@ -100,14 +100,14 @@ public class UNOController {
             "b1","b2","b3","b4","b5","b6","b7","b8","b9",
             "y0","y1","y2","y3","y4","y5","y6","y7","y8","y9",
             "y1","y2","y3","y4","y5","y6","y7","y8","y9",
-            "rSkip","rReverse","rDrawTwo",
-            "rSkip","rReverse","rDrawTwo",
-            "gSkip","gReverse","gDrawTwo",
-            "gSkip","gReverse","gDrawTwo",
-            "bSkip","bReverse","bDrawTwo",
-            "bSkip","bReverse","bDrawTwo",
-            "ySkip","yReverse","yDrawTwo",
-            "ySkip","yReverse","yDrawTwo",
+            "WildCard", "WildCard", "WildCard",
+            "WildCard", "WildCard", "WildCard",
+            "WildCard", "WildCard", "WildCard",
+            "WildCard", "WildCard", "WildCard",
+            "WildCard", "WildCard", "WildCard",
+            "WildCard", "WildCard", "WildCard",
+            "WildCard", "WildCard", "WildCard",
+            "WildCard", "WildCard", "WildCard",
             "WildCard", "WildCard", "WildCard", "WildCard",
             "WildDrawFour", "WildDrawFour", "WildDrawFour", "WildDrawFour"
         ));
@@ -178,7 +178,7 @@ public class UNOController {
             turnTimer.stopTimer();
             CPUPlayer cpuPlayer = (CPUPlayer) currentPlayer;
             
-            Timer cpuTimer = new Timer(500, e -> cpuPlayer.chooseCard());
+            Timer cpuTimer = new Timer(2000, e -> cpuPlayer.chooseCard());
             cpuTimer.setRepeats(false);  
             cpuTimer.start();
         }

@@ -43,7 +43,6 @@ public class WildCardViewer {
     }
 
     public void drawWindow(Graphics g){
-      System.out.println("Drawing Wild Card Window");
       if (this.isHavingWild) {
         drawButtons(g);
       }
@@ -57,6 +56,7 @@ public class WildCardViewer {
         redButton.setBounds(350, 250, 120, 60);
         redButton.addActionListener(e -> {
             this.wild.setColor(model.Color.Red);
+            System.out.println("Change to Red");
             this.isHavingWild = false;
             timer.stopTimer();
             removeButtons();
@@ -71,6 +71,7 @@ public class WildCardViewer {
         blueButton.setBounds(490, 250, 120, 60);
         blueButton.addActionListener(e -> {
             this.wild.setColor(model.Color.Blue);
+            System.out.println("Change to Blue");
             this.isHavingWild = false;
             timer.stopTimer();
             removeButtons();
@@ -85,6 +86,7 @@ public class WildCardViewer {
         yellowButton.setBounds(350, 330, 120, 60);
         yellowButton.addActionListener(e -> {
             this.wild.setColor(model.Color.Yellow);
+            System.out.println("Change to Yellow");
             this.isHavingWild = false;
             timer.stopTimer();
             removeButtons();
@@ -99,6 +101,7 @@ public class WildCardViewer {
         greenButton.setBounds(490, 330, 120, 60);
         greenButton.addActionListener(e -> {
             this.wild.setColor(model.Color.Green);
+            System.out.println("Change to Green");
             this.isHavingWild = false;
             timer.stopTimer();
             removeButtons();
