@@ -49,6 +49,12 @@ public class UNOGamePanel extends JPanel {
         button.setFocusPainted(false);
         
         button.addActionListener(e -> {
+            if(controller.getPlayerList().indexOf(controller.getCurrentPlayer()) !=0){
+                errorMessage = "It's not your turn!";
+                errorMessageTimer = System.currentTimeMillis();
+                repaint();
+                return;
+            }
             controller.getCardFromDeck();
             updateDisplay();
         });

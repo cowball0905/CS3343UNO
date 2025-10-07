@@ -183,6 +183,7 @@ public class WildCardViewer {
         for (int i = 0; i < 4; i++) {
             nextPlayer.drawCard(cardFactory.giveCard(controller.getDeck(),false, playerList.indexOf(nextPlayer)==0 ? true:false));
         }
+        System.out.println(nextPlayer.getName()+ " got 4 cards");
 
         controller.passNextPlayer(false);
     }
