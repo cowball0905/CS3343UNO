@@ -336,8 +336,10 @@ public void selectedCard(int index) {
         if (controller.getTurnTimer() != null) {
             controller.getTurnTimer().drawTimer(g);
         }
-
         if(controller.getWildCardViewer().isHavingWild()){
+            graphic2D.drawRect(300, 200, 360, 230);
+            graphic2D.setFont(new Font("Arial", 1, 28));
+            graphic2D.drawString("Choose a new color", 350, 230);
             controller.getWildCardViewer().drawWindow(g);
         }
     }

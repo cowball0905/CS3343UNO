@@ -52,8 +52,9 @@ public class UNOController {
             @Override
             public void onTimerComplete() {
                 if (wildCardViewer.isHavingWild()) {
-                    wildCardViewer.autoSelectRandomColor();
+                    wildCardViewer.autoSelectColor();
                     wildCardViewer.setHavingWild(false);
+                    wildCardViewer.removeButtons();
                     passNextPlayer(false);
                     eachRound();
                 } else {

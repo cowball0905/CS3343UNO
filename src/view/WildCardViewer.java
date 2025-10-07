@@ -43,6 +43,7 @@ public class WildCardViewer {
     }
 
     public void drawWindow(Graphics g){
+      System.out.println("Drawing Wild Card Window");
       if (this.isHavingWild) {
         drawButtons(g);
       }
@@ -52,7 +53,7 @@ public class WildCardViewer {
         if(redButton!=null){return;}
         redButton = new JButton();
         redButton.setBackground(Color.RED);
-        redButton.setForeground(Color.WHITE);
+        redButton.setOpaque(true);
         redButton.setBounds(350, 250, 120, 60);
         redButton.addActionListener(e -> {
             this.wild.setColor(model.Color.Red);
@@ -66,7 +67,7 @@ public class WildCardViewer {
         
         blueButton = new JButton();
         blueButton.setBackground(Color.BLUE);
-        blueButton.setForeground(Color.WHITE);
+        blueButton.setOpaque(true);
         blueButton.setBounds(490, 250, 120, 60);
         blueButton.addActionListener(e -> {
             this.wild.setColor(model.Color.Blue);
@@ -80,7 +81,7 @@ public class WildCardViewer {
         
         yellowButton = new JButton();
         yellowButton.setBackground(Color.YELLOW);
-        yellowButton.setForeground(Color.BLACK);
+        yellowButton.setOpaque(true);
         yellowButton.setBounds(350, 330, 120, 60);
         yellowButton.addActionListener(e -> {
             this.wild.setColor(model.Color.Yellow);
@@ -94,7 +95,7 @@ public class WildCardViewer {
         
         greenButton = new JButton();
         greenButton.setBackground(Color.GREEN);
-        greenButton.setForeground(Color.WHITE);
+        greenButton.setOpaque(true);
         greenButton.setBounds(490, 330, 120, 60);
         greenButton.addActionListener(e -> {
             this.wild.setColor(model.Color.Green);
@@ -105,10 +106,6 @@ public class WildCardViewer {
             controller.eachRound();
         });
         panel.add(greenButton);
-
-        g.drawRect(300, 200, 360, 230);
-        g.setFont(new Font("Arial", 1, 28));
-        g.drawString("Choose a new color", 350, 230);
         
         if (timer != null) {
             int remaining = timer.getRemainingSeconds();
@@ -116,7 +113,7 @@ public class WildCardViewer {
             g.setFont(new Font("Arial", Font.BOLD, 24));
             g.drawString("Time: " + remaining + "s", 420, 415);
         }
-      }
+    }
     
 
     public void setHavingWild(boolean hasWild) {
@@ -127,15 +124,19 @@ public class WildCardViewer {
         return isHavingWild;
     }
     
-    public void autoSelectRandomColor() {
+    public void autoSelectColor() {
         wild.setColor(model.Color.Red);
     }
     
-    private void removeButtons() {
+    public void removeButtons() {
         panel.remove(redButton);
         panel.remove(blueButton);
         panel.remove(yellowButton);
         panel.remove(greenButton);
+        redButton = null;
+        blueButton = null;
+        yellowButton = null;
+        greenButton = null;
         panel.repaint();
     }
 }
