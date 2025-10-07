@@ -91,7 +91,7 @@ public class UNOController {
     }
 
     private void initializeGame() {
-Deck = new ArrayList<String>(Arrays.asList(
+        Deck = new ArrayList<String>(Arrays.asList(
             "r0","r1","r2","r3","r4","r5","r6","r7","r8","r9",
             "r1","r2","r3","r4","r5","r6","r7","r8","r9",
             "g0","g1","g2","g3","g4","g5","g6","g7","g8","g9",
@@ -100,14 +100,14 @@ Deck = new ArrayList<String>(Arrays.asList(
             "b1","b2","b3","b4","b5","b6","b7","b8","b9",
             "y0","y1","y2","y3","y4","y5","y6","y7","y8","y9",
             "y1","y2","y3","y4","y5","y6","y7","y8","y9",
-            "WildCard", "WildCard", "WildCard",
-            "WildCard", "WildCard", "WildCard",
-            "WildCard", "WildCard", "WildCard",
-            "WildCard", "WildCard", "WildCard",
-            "WildCard", "WildCard", "WildCard",
-            "WildCard", "WildCard", "WildCard",
-            "WildCard", "WildCard", "WildCard",
-            "WildCard", "WildCard", "WildCard",
+            "rSkip","rReverse","rDrawTwo",
+            "rSkip","rReverse","rDrawTwo",
+            "gSkip","gReverse","gDrawTwo",
+            "gSkip","gReverse","gDrawTwo",
+            "bSkip","bReverse","bDrawTwo",
+            "bSkip","bReverse","bDrawTwo",
+            "ySkip","yReverse","yDrawTwo",
+            "ySkip","yReverse","yDrawTwo",
             "WildCard", "WildCard", "WildCard", "WildCard",
             "WildDrawFour", "WildDrawFour", "WildDrawFour", "WildDrawFour"
         ));
@@ -116,7 +116,7 @@ Deck = new ArrayList<String>(Arrays.asList(
         
         for (int i = 0; i < 7; i++) {
             players.get(0).drawCard(cardFactory.giveCard(Deck,false, true)); // 玩家的牌顯示
-            for(int j=1;j<4;j++){
+            for(int j = 1 ; j < 4 ; j++){
                 players.get(j).drawCard(cardFactory.giveCard(Deck,false, false)); // CPU的牌隱藏
             }
         }

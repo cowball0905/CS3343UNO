@@ -99,9 +99,9 @@ public abstract class Card {
     public void setCardSelected(boolean selected){
         this.isSelected = selected;
         if (selected){
-            y = y - 40;
+            y = 410;
         } else {
-            y = y + 40;
+            y = 450;
         }
     }
 
