@@ -25,7 +25,7 @@ public class UNOController {
     private CountDownTimer turnTimer;
     private boolean isAction = false;
     private WildCardViewer wildCardViewer;
-    private final int INITCARDSIZE = 1;
+    private final int INITCARDSIZE = 7;
 
     private UNOController() {
         mainFrame = new JFrame("UNO Game");
