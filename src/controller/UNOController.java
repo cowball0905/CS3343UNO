@@ -25,7 +25,7 @@ public class UNOController {
     private CountDownTimer turnTimer;
     private boolean isAction = false;
     private WildCardViewer wildCardViewer;
-    private final int INITCARDSIZE = 1;
+    private final int INITCARDSIZE = 7;
 
     private UNOController() {
         mainFrame = new JFrame("UNO Game");
@@ -55,7 +55,11 @@ public class UNOController {
                     wildCardViewer.autoSelectColor();
                     wildCardViewer.setHavingWild(false);
                     wildCardViewer.removeButtons();
-                    passNextPlayer(false);
+                    if(wildCardViewer.getCard().getType()==Type.WildDrawFour){
+                        wildCardViewer.drawFour();
+                    }else{  
+                        passNextPlayer(false);
+                    }
                     eachRound();
                 } else {
                     getCardFromDeck();
@@ -100,15 +104,13 @@ public class UNOController {
             "b1","b2","b3","b4","b5","b6","b7","b8","b9",
             "y0","y1","y2","y3","y4","y5","y6","y7","y8","y9",
             "y1","y2","y3","y4","y5","y6","y7","y8","y9",
-            "rSkip","rReverse","rDrawTwo",
-            "rSkip","rReverse","rDrawTwo",
-            "gSkip","gReverse","gDrawTwo",
-            "gSkip","gReverse","gDrawTwo",
-            "bSkip","bReverse","bDrawTwo",
-            "bSkip","bReverse","bDrawTwo",
-            "ySkip","yReverse","yDrawTwo",
-            "ySkip","yReverse","yDrawTwo",
-            "WildCard", "WildCard", "WildCard", "WildCard",
+            "WildDrawFour", "WildDrawFour", "WildDrawFour", "WildDrawFour",
+            "WildDrawFour", "WildDrawFour", "WildDrawFour", "WildDrawFour",
+            "WildDrawFour", "WildDrawFour", "WildDrawFour", "WildDrawFour",
+            "WildDrawFour", "WildDrawFour", "WildDrawFour", "WildDrawFour",
+            "WildDrawFour", "WildDrawFour", "WildDrawFour", "WildDrawFour",
+            "WildDrawFour", "WildDrawFour", "WildDrawFour", "WildDrawFour",
+            "WildDrawFour", "WildDrawFour", "WildDrawFour", "WildDrawFour",
             "WildDrawFour", "WildDrawFour", "WildDrawFour", "WildDrawFour"
         ));
 
@@ -214,7 +216,7 @@ public class UNOController {
         if(isGameEnd(card)) {
             return;
         }
-        if ((card.getType() == Type.Wild) && players.indexOf(currentPlayer) == 0) {
+        if ((card.getType() == Type.Wild || card.getType() == Type.WildDrawFour) && players.indexOf(currentPlayer) == 0) {
             card.cardFunction();
         } else {
             passNextPlayer(true);

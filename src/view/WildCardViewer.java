@@ -52,6 +52,10 @@ public class WildCardViewer {
       }
     }
 
+    public Card getCard(){
+        return wild;
+    }
+
     public void drawButtons(Graphics g){
         if(redButton!=null){return;}
         redButton = new JButton();
@@ -163,7 +167,7 @@ public class WildCardViewer {
         panel.repaint();
     }
 
-    private void drawFour(){
+    public void drawFour(){
         UNOController controller = UNOController.getInstance();
         Player currentPlayer = controller.getCurrentPlayer();
         ArrayList<Player> playerList = controller.getPlayerList();
@@ -186,5 +190,6 @@ public class WildCardViewer {
         System.out.println(nextPlayer.getName()+ " got 4 cards");
 
         controller.passNextPlayer(false);
+        controller.eachRound();
     }
 }
