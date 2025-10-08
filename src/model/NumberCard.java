@@ -1,5 +1,7 @@
 package model;
 
+import controller.UNOController;
+
 public class NumberCard extends Card {
     private final int value;
     
@@ -14,7 +16,9 @@ public class NumberCard extends Card {
     }
     
     @Override
-    public int cardFunction() {
-        return 1;
+    public void cardFunction() {
+        UNOController controller = UNOController.getInstance();
+        controller.passNextPlayer(1);
+        controller.eachRound();
     }
 }

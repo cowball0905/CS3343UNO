@@ -9,7 +9,7 @@ public class WildCard extends Card {
     }
 
     @Override
-    public int cardFunction() {
+    public void cardFunction() {
         System.out.println("Wild card played: change color");
         UNOController controller = UNOController.getInstance();
 
@@ -20,7 +20,8 @@ public class WildCard extends Card {
             Color chooseColor = ((CPUPlayer) controller.getCurrentPlayer()).chooseColor();
             this.setColor(chooseColor);
             System.out.println(chooseColor.toString());
+            controller.passNextPlayer(1);
+            controller.eachRound();
         }
-        return 1;
     }
 }

@@ -11,7 +11,7 @@ public class DrawTwoCard extends Card {
     }
 
     @Override
-    public int cardFunction() {
+    public void cardFunction() {
         System.out.println("Draw Two card played: next player draws 2 cards");
 
         UNOController controller = UNOController.getInstance();
@@ -35,6 +35,7 @@ public class DrawTwoCard extends Card {
             nextPlayer.drawCard(cardFactory.giveCard(controller.getDeck(),false, playerList.indexOf(nextPlayer)==0 ? true:false));
         }
 
-        return 2;
+        controller.passNextPlayer(2);
+        controller.eachRound();
     }
 }

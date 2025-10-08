@@ -58,7 +58,7 @@ public class UNOController {
                     if(wildCardViewer.getCard().getType()==Type.WildDrawFour){
                         wildCardViewer.drawFour();
                     }else{  
-                        passNextPlayer(false);
+                        passNextPlayer(1);
                     }
                     eachRound();
                 } else {
@@ -149,7 +149,7 @@ public class UNOController {
             isAction = true;
             currentPlayer.drawCard(cardFactory.giveCard(Deck,false, players.indexOf(currentPlayer)==0 ? true:false));
             isAction = false;
-            passNextPlayer(false);
+            passNextPlayer(1);
             eachRound();
         }
     }
@@ -218,33 +218,14 @@ public class UNOController {
         if(isGameEnd(card)) {
             return;
         }
-        if ((card.getType() == Type.Wild || card.getType() == Type.WildDrawFour) && players.indexOf(currentPlayer) == 0) {
-            card.cardFunction();
-        } else {
-            passNextPlayer(true);
-            isAction = false;
-            eachRound();
-        }
+        card.cardFunction();
+        isAction = false;
     }
 
-    public void passNextPlayer(boolean playCard){
-        if(playCard){
-            Card topCard = getTopCard();
-            int nextPlayer = topCard.cardFunction();
-            int currentIndex = players.indexOf(currentPlayer);
-            int nextIndex = (currentIndex + nextPlayer * playDirection + players.size()) % players.size();
-            currentPlayer = players.get(nextIndex);
-        }else{
-            Card topCard = getTopCard();
-            int nextIndex = 1;
-            int currentIndex = players.indexOf(currentPlayer);
-            if(topCard.getType()==Type.WildDrawFour){
-                nextIndex = (currentIndex + 2 * playDirection + players.size()) % players.size();
-            }else{
-                nextIndex = (currentIndex + 1 * playDirection + players.size()) % players.size();
-            }
-            currentPlayer = players.get(nextIndex);
-        }
+    public void passNextPlayer(int amount){
+        int currentIndex = players.indexOf(currentPlayer);
+        int nextIndex = (currentIndex + amount * playDirection + players.size()) % players.size();
+        currentPlayer = players.get(nextIndex);
         gamePanel.updateDisplay();
     }
     

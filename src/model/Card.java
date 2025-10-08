@@ -161,5 +161,5 @@ public abstract class Card {
         }
     }
 
-    abstract public int cardFunction();
+    abstract public void cardFunction();
 }

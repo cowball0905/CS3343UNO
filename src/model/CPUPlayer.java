@@ -71,7 +71,7 @@ public class CPUPlayer extends Player {
         if (validCards.isEmpty()) {
             System.out.println(name + " (CPU) has no valid cards to play and must draw.");
             this.drawCard(controller.getCardFactory().giveCard(controller.getDeck(),false, false));
-            controller.passNextPlayer(false);
+            controller.passNextPlayer(1);
             controller.eachRound();
             return;
         }

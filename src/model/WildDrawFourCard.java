@@ -5,15 +5,13 @@ import java.util.ArrayList;
 import controller.UNOController;
 
 public class WildDrawFourCard extends Card {
-    private Color selectedColor;
-
     public WildDrawFourCard(boolean isRevealed) {
         super(Type.WildDrawFour, null, isRevealed);
         loadImage("/asset/uno-card-images-master/Wild_Card_Draw_4.png");
     }
 
     @Override
-    public int cardFunction() {
+    public void cardFunction() {
         System.out.println("Wild card played: change color");
         UNOController controller = UNOController.getInstance();
         Player currentPlayer = controller.getCurrentPlayer();
@@ -42,7 +40,8 @@ public class WildDrawFourCard extends Card {
             for (int i = 0; i < 4; i++) {
                 nextPlayer.drawCard(cardFactory.giveCard(controller.getDeck(),false, playerList.indexOf(nextPlayer)==0 ? true:false));
             }
+            controller.passNextPlayer(2);
+            controller.eachRound();
         }
-        return 2;
     }
 }

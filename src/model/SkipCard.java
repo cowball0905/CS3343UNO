@@ -1,5 +1,7 @@
 package model;
 
+import controller.UNOController;
+
 public class SkipCard extends Card {
     public SkipCard(Color color, boolean isRevealed) {
         super(Type.Skip, color, isRevealed);
@@ -7,8 +9,10 @@ public class SkipCard extends Card {
     }
 
     @Override
-    public int cardFunction() {
+    public void cardFunction() {
         System.out.println("Skip card effect");
-        return 2;
+        UNOController controller = UNOController.getInstance();
+        controller.passNextPlayer(2);
+        controller.eachRound();
     }
 } 

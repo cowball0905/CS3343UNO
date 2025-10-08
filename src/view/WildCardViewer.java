@@ -72,7 +72,7 @@ public class WildCardViewer {
                 this.drawFour();
                 return;
             }
-            controller.passNextPlayer(false);
+            controller.passNextPlayer(1);
             controller.eachRound();
         });
         panel.add(redButton);
@@ -91,7 +91,7 @@ public class WildCardViewer {
                 this.drawFour();
                 return;
             }
-            controller.passNextPlayer(false);
+            controller.passNextPlayer(1);
             controller.eachRound();
         });
         panel.add(blueButton);
@@ -110,7 +110,7 @@ public class WildCardViewer {
                 this.drawFour();
                 return;
             }
-            controller.passNextPlayer(false);
+            controller.passNextPlayer(1);
             controller.eachRound();
         });
         panel.add(yellowButton);
@@ -129,7 +129,7 @@ public class WildCardViewer {
                 this.drawFour();
                 return;
             }
-            controller.passNextPlayer(false);
+            controller.passNextPlayer(1);
             controller.eachRound();
         });
         panel.add(greenButton);
@@ -189,7 +189,7 @@ public class WildCardViewer {
         }
         System.out.println(nextPlayer.getName()+ " got 4 cards");
 
-        controller.passNextPlayer(false);
+        controller.passNextPlayer(2);
         controller.eachRound();
     }
 }
