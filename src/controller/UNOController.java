@@ -336,4 +336,8 @@ public class UNOController {
     public WildCardViewer getWildCardViewer(){
         return wildCardViewer;
     }
+
+    public DeckPlayCardViewer getDeckPlayCardViewer(){
+        return deckPlayCardViewer;
+    }
 }
