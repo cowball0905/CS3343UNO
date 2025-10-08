@@ -51,8 +51,8 @@ public class CPUPlayer extends Player {
 
     @Override
     public void challengeDrawFour(Player targetPlayer) {
+        UNOController controller = UNOController.getInstance();
         if (random.nextDouble() < 0.5) {
-            UNOController controller = UNOController.getInstance();
             System.out.println(name + " (CPU) challenges " + targetPlayer.getName() + "'s Wild Draw Four card!");
             ArrayList<Card> cards = targetPlayer.getHand();
             ArrayList<Card> validCards = new ArrayList<>();
@@ -85,6 +85,8 @@ public class CPUPlayer extends Player {
             controller.eachRound();
         }else{
             System.out.println(name + " (CPU) does not challenge " + targetPlayer.getName() + "'s Wild Draw Four card");
+            controller.passNextPlayer(2);
+            controller.eachRound();
             return;
         }
     }
