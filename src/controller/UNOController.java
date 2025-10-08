@@ -47,7 +47,6 @@ public class UNOController {
         gamePanel = new UNOGamePanel(this);
         wildCardViewer = new WildCardViewer();
 
-
         turnTimer = new CountDownTimer(gamePanel, new CountDownTimer.TimerCallback() {
             @Override
             public void onTimerComplete() {
@@ -140,8 +139,6 @@ public class UNOController {
         currentPlayer = players.get(0);
         System.out.println("Current Player: " + currentPlayer.getName());
         playDirection = 1;
-
-        //eachRound();
     }
 
     public void getCardFromDeck(){
@@ -307,5 +304,4 @@ public class UNOController {
     public WildCardViewer getWildCardViewer(){
         return wildCardViewer;
     }
-
 }

@@ -266,7 +266,7 @@ public class UNOGamePanel extends JPanel {
         if (computer3Hand == null) computer3Hand = new java.util.ArrayList<>();
         
         // Draw background
-        graphic2D.setColor(new Color(0, 100, 0));
+        graphic2D.setColor(new Color(255,203,142));
         graphic2D.fillRect(0, 0, getWidth(), getHeight());
         
         // === 第一層：繪製所有卡牌 (底層) ===
