@@ -69,6 +69,8 @@ public class CPUPlayer extends Player {
                     for(int i=0;i<4;i++){
                         targetPlayer.drawCard(controller.getCardFactory().giveCard(controller.getDeck(), false, false));
                     }
+                    controller.passNextPlayer(2);
+                    controller.eachRound();
                     return;
                 }
             }
@@ -77,6 +79,8 @@ public class CPUPlayer extends Player {
             for(int i=0;i<6;i++){
                 drawCard(controller.getCardFactory().giveCard(controller.getDeck(), false, false));
             }
+            controller.passNextPlayer(1);
+            controller.eachRound();
         }else{
             System.out.println(name + " (CPU) does not challenge " + targetPlayer.getName() + "'s Wild Draw Four card");
             return;

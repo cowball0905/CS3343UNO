@@ -17,7 +17,6 @@ public class WildDrawFourCard extends Card {
         Player currentPlayer = controller.getCurrentPlayer();
         ArrayList<Player> playerList = controller.getPlayerList();
         int playDirection = controller.getPlayDirection(); // 1 for clockwise, -1 for counter-clockwise
-        CardFactory cardFactory = controller.getCardFactory();
 
         if(controller.getPlayerList().indexOf(controller.getCurrentPlayer())==0){
             controller.getWildCardViewer().setWildCard(this);
@@ -36,12 +35,12 @@ public class WildDrawFourCard extends Card {
             // Get next player object
             Player nextPlayer = playerList.get(nextIndex);
 
-            // Make the next player draw 2 cards
-            for (int i = 0; i < 4; i++) {
-                nextPlayer.drawCard(cardFactory.giveCard(controller.getDeck(),false, playerList.indexOf(nextPlayer)==0 ? true:false));
+            if(nextIndex==0){
+                controller.getChallengeViewer().setChallenge();
+                controller.getTurnTimer().startTimer(10);
+            }else{
+                nextPlayer.challengeDrawFour(currentPlayer);
             }
-            controller.passNextPlayer(2);
-            controller.eachRound();
         }
     }
 }

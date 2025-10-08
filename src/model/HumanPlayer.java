@@ -62,13 +62,17 @@ public class HumanPlayer extends Player {
                 for(int i=0;i<4;i++){
                     targetPlayer.drawCard(controller.getCardFactory().giveCard(controller.getDeck(), false, false));
                 }
+                controller.passNextPlayer(1);
+                controller.eachRound();
                 return;
             }
         }
-        
+
         System.out.println("Challenge Fail!");
         for(int i=0;i<6;i++){
             drawCard(controller.getCardFactory().giveCard(controller.getDeck(), false, false));
         }
+        controller.passNextPlayer(2);
+        controller.eachRound();
     }
 }
