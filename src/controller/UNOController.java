@@ -172,8 +172,12 @@ public class UNOController {
             currentPlayer.drawCard(cardFactory.giveCard(Deck,false, players.indexOf(currentPlayer)==0 ? true:false));
             Card card = currentPlayer.getHand().get(currentPlayer.getHand().size()-1);
             if(canPlayCard(card)){
-                deckPlayCardViewer.setIsDeciding(card);
-                turnTimer.startTimer(10);
+                if(players.indexOf(currentPlayer)==0){
+                    deckPlayCardViewer.setIsDeciding(card);
+                    turnTimer.startTimer(10);
+                }else{
+                    currentPlayer.playCard(card);
+                }
             }else{
                 passNextPlayer(1);
                 eachRound();

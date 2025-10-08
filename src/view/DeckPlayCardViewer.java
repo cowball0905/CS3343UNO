@@ -74,13 +74,6 @@ public class DeckPlayCardViewer {
             controller.eachRound();
         });
         panel.add(greenButton);
-        
-        if (timer != null) {
-            int remaining = timer.getRemainingSeconds();
-            g.setColor(Color.BLACK);
-            g.setFont(new Font("Arial", Font.BOLD, 24));
-            g.drawString("Time: " + remaining + "s", 420, 415);
-        }
     }
     
     public boolean getIsDeciding() {
