@@ -47,7 +47,7 @@ public class ChallengeViewer {
 
     public void drawButtons(Graphics g){
         if(redButton!=null){return;}
-        redButton = new JButton();
+        redButton = new JButton("Get 4 Cards");
         redButton.setBackground(Color.RED);
         redButton.setOpaque(true);
         redButton.setBounds(350, 250, 120, 60);
@@ -67,7 +67,7 @@ public class ChallengeViewer {
         });
         panel.add(redButton);
         
-        greenButton = new JButton();
+        greenButton = new JButton("Challenge");
         greenButton.setBackground(Color.GREEN);
         greenButton.setOpaque(true);
         greenButton.setBounds(490, 250, 120, 60);
