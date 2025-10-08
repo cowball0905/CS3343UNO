@@ -56,6 +56,8 @@ public class CPUPlayer extends Player {
             System.out.println(name + " (CPU) challenges " + targetPlayer.getName() + "'s Wild Draw Four card!");
             ArrayList<Card> cards = targetPlayer.getHand();
             ArrayList<Card> validCards = new ArrayList<>();
+            ArrayList<Player> players = controller.getPlayerList();
+            Player currentPlayer = controller.getCurrentPlayer();
 
             for(Card card:cards){
                 if(controller.canPlayCard(card)){
@@ -67,7 +69,7 @@ public class CPUPlayer extends Player {
                 if(card.getType()!=Type.Wild && card.getType()!=Type.WildDrawFour){
                     System.out.println("Challenge Success!");
                     for(int i=0;i<4;i++){
-                        targetPlayer.drawCard(controller.getCardFactory().giveCard(controller.getDeck(), false, false));
+                        targetPlayer.drawCard(controller.getCardFactory().giveCard(controller.getDeck(), false, players.indexOf(currentPlayer)==0? true:false));
                     }
                     controller.passNextPlayer(2);
                     controller.eachRound();
