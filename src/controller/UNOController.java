@@ -1,6 +1,7 @@
 package controller;
 
 import model.*;
+import view.ChallengeViewer;
 import view.UNOGamePanel;
 import view.UNOMenuPanel;
 import view.WildCardViewer;
@@ -25,6 +26,7 @@ public class UNOController {
     private CountDownTimer turnTimer;
     private boolean isAction = false;
     private WildCardViewer wildCardViewer;
+    private ChallengeViewer challengeViewer;
     private final int INITCARDSIZE = 7;
 
     private UNOController() {
@@ -46,6 +48,7 @@ public class UNOController {
         menuPanel = new UNOMenuPanel(this);
         gamePanel = new UNOGamePanel(this);
         wildCardViewer = new WildCardViewer();
+        challengeViewer = new ChallengeViewer();
 
         turnTimer = new CountDownTimer(gamePanel, new CountDownTimer.TimerCallback() {
             @Override
@@ -55,12 +58,19 @@ public class UNOController {
                     wildCardViewer.setHavingWild(false);
                     wildCardViewer.removeButtons();
                     if(wildCardViewer.getCard().getType()==Type.WildDrawFour){
-                        wildCardViewer.drawFour();
+                        wildCardViewer.callChallenge();
                     }else{  
                         passNextPlayer(1);
                     }
                     eachRound();
-                } else {
+                }else if(challengeViewer.getIsChallenging()){
+                    int currentIndex = players.indexOf(currentPlayer);
+                    int nextIndex = (currentIndex + (1 * playDirection) + players.size()) % players.size();
+                    Player nextPlayer = players.get(nextIndex);
+                    for(int i=0;i<4;i++){
+                        nextPlayer.drawCard(getCardFactory().giveCard(Deck, false, false));
+                    }
+                }else {
                     getCardFromDeck();
                 }
             }
@@ -69,6 +79,10 @@ public class UNOController {
         wildCardViewer.setTimer(turnTimer);
         wildCardViewer.setController(this);
         wildCardViewer.setPanel(gamePanel);
+
+        challengeViewer.setTimer(turnTimer);
+        challengeViewer.setController(this);
+        challengeViewer.setPanel(gamePanel);
         
         initializeGame();
         
@@ -249,6 +263,10 @@ public class UNOController {
             default:
                 return false;
         }
+    }
+
+    public ChallengeViewer getChallengeViewer(){
+        return this.challengeViewer;
     }
 
     public void startGame() {

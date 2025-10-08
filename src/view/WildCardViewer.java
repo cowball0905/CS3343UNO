@@ -11,8 +11,8 @@ import controller.UNOController;
 import model.CountDownTimer;
 import model.Player;
 import model.Type;
+import model.CPUPlayer;
 import model.Card;
-import model.CardFactory;
 
 public class WildCardViewer {
     private boolean isHavingWild;
@@ -69,7 +69,7 @@ public class WildCardViewer {
             timer.stopTimer();
             removeButtons();
             if(this.wild.getType()==Type.WildDrawFour){
-                this.drawFour();
+                this.callChallenge();
                 return;
             }
             controller.passNextPlayer(1);
@@ -88,7 +88,7 @@ public class WildCardViewer {
             timer.stopTimer();
             removeButtons();
             if(this.wild.getType()==Type.WildDrawFour){
-                this.drawFour();
+                this.callChallenge();
                 return;
             }
             controller.passNextPlayer(1);
@@ -107,7 +107,7 @@ public class WildCardViewer {
             timer.stopTimer();
             removeButtons();
             if(this.wild.getType()==Type.WildDrawFour){
-                this.drawFour();
+                this.callChallenge();
                 return;
             }
             controller.passNextPlayer(1);
@@ -126,7 +126,7 @@ public class WildCardViewer {
             timer.stopTimer();
             removeButtons();
             if(this.wild.getType()==Type.WildDrawFour){
-                this.drawFour();
+                this.callChallenge();
                 return;
             }
             controller.passNextPlayer(1);
@@ -167,29 +167,47 @@ public class WildCardViewer {
         panel.repaint();
     }
 
-    public void drawFour(){
-        UNOController controller = UNOController.getInstance();
-        Player currentPlayer = controller.getCurrentPlayer();
+    public void callChallenge(){
         ArrayList<Player> playerList = controller.getPlayerList();
+        Player currentPlayer = controller.getCurrentPlayer();
         int playDirection = controller.getPlayDirection(); // 1 for clockwise, -1 for counter-clockwise
-        CardFactory cardFactory = controller.getCardFactory();
-
         // Get current player index
         int currentIndex = playerList.indexOf(currentPlayer);
 
         // Calculate next player index (skip one player)
         int nextIndex = (currentIndex + (1 * playDirection) + playerList.size()) % playerList.size();
-
-        // Get next player object
-        Player nextPlayer = playerList.get(nextIndex);
-
-        // Make the next player draw 2 cards
-        for (int i = 0; i < 4; i++) {
-            nextPlayer.drawCard(cardFactory.giveCard(controller.getDeck(),false, playerList.indexOf(nextPlayer)==0 ? true:false));
+        if(nextIndex == 0){
+            controller.getChallengeViewer().setChallenge();
+            controller.getTurnTimer().startTimer(10);
+        }else{
+            CPUPlayer nextPlayer = ((CPUPlayer)playerList.get(nextIndex));
+            nextPlayer.challengeDrawFour(currentPlayer);
         }
-        System.out.println(nextPlayer.getName()+ " got 4 cards");
-
-        controller.passNextPlayer(2);
-        controller.eachRound();
     }
+
+    // public void drawFour(){
+    //     UNOController controller = UNOController.getInstance();
+    //     Player currentPlayer = controller.getCurrentPlayer();
+    //     ArrayList<Player> playerList = controller.getPlayerList();
+    //     int playDirection = controller.getPlayDirection(); // 1 for clockwise, -1 for counter-clockwise
+    //     CardFactory cardFactory = controller.getCardFactory();
+
+    //     // Get current player index
+    //     int currentIndex = playerList.indexOf(currentPlayer);
+
+    //     // Calculate next player index (skip one player)
+    //     int nextIndex = (currentIndex + (1 * playDirection) + playerList.size()) % playerList.size();
+
+    //     // Get next player object
+    //     Player nextPlayer = playerList.get(nextIndex);
+
+    //     // Make the next player draw 2 cards
+    //     for (int i = 0; i < 4; i++) {
+    //         nextPlayer.drawCard(cardFactory.giveCard(controller.getDeck(),false, playerList.indexOf(nextPlayer)==0 ? true:false));
+    //     }
+    //     System.out.println(nextPlayer.getName()+ " got 4 cards");
+
+    //     controller.passNextPlayer(2);
+    //     controller.eachRound();
+    // }
 }

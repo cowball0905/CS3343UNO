@@ -51,9 +51,35 @@ public class CPUPlayer extends Player {
 
     @Override
     public void challengeDrawFour(Player targetPlayer) {
-        // CPU challenges with optimal probability (50%)
         if (random.nextDouble() < 0.5) {
+            UNOController controller = UNOController.getInstance();
             System.out.println(name + " (CPU) challenges " + targetPlayer.getName() + "'s Wild Draw Four card!");
+            ArrayList<Card> cards = targetPlayer.getHand();
+            ArrayList<Card> validCards = new ArrayList<>();
+
+            for(Card card:cards){
+                if(controller.canPlayCard(card)){
+                    validCards.add(card);
+                }
+            }
+
+            for(Card card:validCards){
+                if(card.getType()!=Type.Wild && card.getType()!=Type.WildDrawFour){
+                    System.out.println("Challenge Success!");
+                    for(int i=0;i<4;i++){
+                        targetPlayer.drawCard(controller.getCardFactory().giveCard(controller.getDeck(), false, false));
+                    }
+                    return;
+                }
+            }
+
+            System.out.println("Challenge Fail!");
+            for(int i=0;i<6;i++){
+                drawCard(controller.getCardFactory().giveCard(controller.getDeck(), false, false));
+            }
+        }else{
+            System.out.println(name + " (CPU) does not challenge " + targetPlayer.getName() + "'s Wild Draw Four card");
+            return;
         }
     }
 

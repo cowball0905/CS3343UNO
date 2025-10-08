@@ -1,5 +1,9 @@
 package model;
 
+import java.util.ArrayList;
+
+import controller.UNOController;
+
 public class HumanPlayer extends Player {
     
     public HumanPlayer(String name) {
@@ -42,6 +46,29 @@ public class HumanPlayer extends Player {
     @Override
     public void challengeDrawFour(Player targetPlayer) {
         System.out.println(name + " challenges " + targetPlayer.getName() + "'s Wild Draw Four card!");
-        // Game controller should handle the challenge logic
+        UNOController controller = UNOController.getInstance();
+        ArrayList<Card> cards = targetPlayer.getHand();
+        ArrayList<Card> validCards = new ArrayList<>();
+
+        for(Card card:cards){
+            if(controller.canPlayCard(card)){
+                validCards.add(card);
+            }
+        }
+
+        for(Card card:validCards){
+            if(card.getType()!=Type.Wild && card.getType()!=Type.WildDrawFour){
+                System.out.println("Challenge Success!");
+                for(int i=0;i<4;i++){
+                    targetPlayer.drawCard(controller.getCardFactory().giveCard(controller.getDeck(), false, false));
+                }
+                return;
+            }
+        }
+        
+        System.out.println("Challenge Fail!");
+        for(int i=0;i<6;i++){
+            drawCard(controller.getCardFactory().giveCard(controller.getDeck(), false, false));
+        }
     }
 }

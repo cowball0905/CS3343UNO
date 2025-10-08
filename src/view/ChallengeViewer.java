@@ -10,9 +10,6 @@ import javax.swing.JPanel;
 import controller.UNOController;
 import model.CountDownTimer;
 import model.Player;
-import model.Type;
-import model.Card;
-import model.CardFactory;
 
 public class ChallengeViewer {
     private boolean isChallenging;
@@ -55,7 +52,6 @@ public class ChallengeViewer {
         redButton.setOpaque(true);
         redButton.setBounds(350, 250, 120, 60);
         redButton.addActionListener(e -> {
-            System.out.println("Draw 4 cards");
             timer.stopTimer();
             this.isChallenging = false;
             removeButtons();
@@ -65,14 +61,16 @@ public class ChallengeViewer {
             int currentIndex = playerList.indexOf(currentPlayer);
             int nextIndex = (currentIndex + (1 * playDirection) + playerList.size()) % playerList.size();
             Player nextPlayer = playerList.get(nextIndex);
-            this.drawCards(4, nextPlayer);
+            for(int i=0;i<4;i++){
+                nextPlayer.drawCard(controller.getCardFactory().giveCard(controller.getDeck(), false, false));
+            }
         });
         panel.add(redButton);
         
         greenButton = new JButton();
         greenButton.setBackground(Color.GREEN);
         greenButton.setOpaque(true);
-        greenButton.setBounds(490, 330, 120, 60);
+        greenButton.setBounds(490, 250, 120, 60);
         greenButton.addActionListener(e -> {
             Player currentPlayer = controller.getCurrentPlayer();
             ArrayList<Player> playerList = controller.getPlayerList();
@@ -81,13 +79,9 @@ public class ChallengeViewer {
             int nextIndex = (currentIndex + (1 * playDirection) + playerList.size()) % playerList.size();
             Player nextPlayer = playerList.get(nextIndex);
             timer.stopTimer();
-            if(this.checkCards()){
-                this.drawCards(6, nextPlayer);
-            }else{
-                this.drawCards(4, currentPlayer);
-            }
-            this.isChallenging = false;
             removeButtons();
+            nextPlayer.challengeDrawFour(currentPlayer);
+            this.isChallenging = false;
         });
         panel.add(greenButton);
         
@@ -109,38 +103,5 @@ public class ChallengeViewer {
         redButton = null;
         greenButton = null;
         panel.repaint();
-    }
-
-    public void drawCards(int amount, Player player){
-        UNOController controller = UNOController.getInstance();
-        CardFactory cardFactory = controller.getCardFactory();
-        ArrayList<Player> playerList = controller.getPlayerList();
-
-        for (int i = 0; i < amount; i++) {
-            player.drawCard(cardFactory.giveCard(controller.getDeck(),false, playerList.indexOf(player)==0 ? true:false));
-        }
-        System.out.println(player.getName()+ " got " + amount + " cards");
-
-        controller.passNextPlayer(2);
-        controller.eachRound();
-    }
-
-    public boolean checkCards(){
-        Player currentPlayer = controller.getCurrentPlayer();
-        ArrayList<Card> cards = currentPlayer.getHand();
-        ArrayList<Card> validCards = new ArrayList<>();
-
-        for(Card card:cards){
-            if(controller.canPlayCard(card)){
-                validCards.add(card);
-            }
-        }
-
-        for(Card card:validCards){
-            if(card.getType()!=Type.Wild && card.getType()!=Type.WildDrawFour){
-                return true;
-            }
-        }
-        return false;
     }
 }
