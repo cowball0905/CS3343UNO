@@ -368,7 +368,7 @@ public class UNOGamePanel extends JPanel {
             graphic2D.drawRect(300, 200, 360, 230);
             graphic2D.setFont(new Font("Arial", 1, 28));
             graphic2D.drawString("Play this card?", 350, 230);
-            controller.getChallengeViewer().drawWindow(g);  
+            controller.getDeckPlayCardViewer().drawWindow(g);  
         }
         if(isGameEnd) {
             graphic2D.setColor(Color.BLUE);

@@ -174,6 +174,9 @@ public class UNOController {
             if(canPlayCard(card)){
                 deckPlayCardViewer.setIsDeciding(card);
                 turnTimer.startTimer(10);
+            }else{
+                passNextPlayer(1);
+                eachRound();
             }
             isAction = false;
         }
