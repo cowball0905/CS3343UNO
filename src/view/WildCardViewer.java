@@ -176,38 +176,9 @@ public class WildCardViewer {
 
         // Calculate next player index (skip one player)
         int nextIndex = (currentIndex + (1 * playDirection) + playerList.size()) % playerList.size();
-        if(nextIndex == 0){
-            controller.getChallengeViewer().setChallenge();
-            controller.getTurnTimer().startTimer(10);
-        }else{
+        if(nextIndex != 0){
             CPUPlayer nextPlayer = ((CPUPlayer)playerList.get(nextIndex));
             nextPlayer.challengeDrawFour(currentPlayer);
         }
     }
-
-    // public void drawFour(){
-    //     UNOController controller = UNOController.getInstance();
-    //     Player currentPlayer = controller.getCurrentPlayer();
-    //     ArrayList<Player> playerList = controller.getPlayerList();
-    //     int playDirection = controller.getPlayDirection(); // 1 for clockwise, -1 for counter-clockwise
-    //     CardFactory cardFactory = controller.getCardFactory();
-
-    //     // Get current player index
-    //     int currentIndex = playerList.indexOf(currentPlayer);
-
-    //     // Calculate next player index (skip one player)
-    //     int nextIndex = (currentIndex + (1 * playDirection) + playerList.size()) % playerList.size();
-
-    //     // Get next player object
-    //     Player nextPlayer = playerList.get(nextIndex);
-
-    //     // Make the next player draw 2 cards
-    //     for (int i = 0; i < 4; i++) {
-    //         nextPlayer.drawCard(cardFactory.giveCard(controller.getDeck(),false, playerList.indexOf(nextPlayer)==0 ? true:false));
-    //     }
-    //     System.out.println(nextPlayer.getName()+ " got 4 cards");
-
-    //     controller.passNextPlayer(2);
-    //     controller.eachRound();
-    // }
 }

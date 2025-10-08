@@ -176,6 +176,7 @@ public class UNOController {
                     deckPlayCardViewer.setIsDeciding(card);
                     turnTimer.startTimer(10);
                 }else{
+                    System.out.println(currentPlayer.getName()+ " got a matching card! they choose to play the card");
                     currentPlayer.playCard(card);
                 }
             }else{
