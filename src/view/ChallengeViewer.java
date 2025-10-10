@@ -62,8 +62,10 @@ public class ChallengeViewer {
             int nextIndex = (currentIndex + (1 * playDirection) + playerList.size()) % playerList.size();
             Player nextPlayer = playerList.get(nextIndex);
             for(int i=0;i<4;i++){
-                nextPlayer.drawCard(controller.getCardFactory().giveCard(controller.getDeck(), false, false));
+                nextPlayer.drawCard(controller.getCardFactory().giveCard(controller.getDeck(), false, playerList.indexOf(nextPlayer)==0));
             }
+            controller.passNextPlayer(2);
+            controller.eachRound();
         });
         panel.add(redButton);
         
