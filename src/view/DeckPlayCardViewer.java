@@ -40,6 +40,10 @@ public class DeckPlayCardViewer {
         this.card = card;
     }
 
+    public void endDeckCardViewer(){
+        this.isDeciding = false;
+    }
+
     public void drawWindow(Graphics g){
       if (this.isDeciding) {
         drawButtons(g);
