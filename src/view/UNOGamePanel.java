@@ -26,6 +26,7 @@ public class UNOGamePanel extends JPanel {
     
     private UNOController controller;
     private JButton menuButton;
+    private JButton UnoButton;
     private boolean isGameEnd = false;
     
     public UNOGamePanel(UNOController controller) {
@@ -328,14 +329,35 @@ public class UNOGamePanel extends JPanel {
                 topCard.getY() + topCard.getHeight() + 20);
         }
 
-        ImageIcon icon = new ImageIcon(getClass().getResource("/asset/uno-card-images-master/Back.jpg"));
-        if (icon.getImage() == null) {
+        ImageIcon cardBackIcon = new ImageIcon(getClass().getResource("/asset/uno-card-images-master/Back.jpg"));
+        if (cardBackIcon.getImage() == null) {
             System.err.println("Failed to load card back image");
         } else {
-            graphic2D.drawImage(icon.getImage(), 140, 30, 80, 120, null);
+            graphic2D.drawImage(cardBackIcon.getImage(), 140, 30, 80, 120, null);
         }
         graphic2D.drawString("DECK", 160, 165);
+
+        // Uno button
+        ImageIcon unoButtonIcon = new ImageIcon(getClass().getResource("/asset/Uno_button.png"));
+        if (unoButtonIcon.getImage() == null) {
+            System.err.println("Failed to load Uno button image");
+        } else {
+            graphic2D.drawImage(unoButtonIcon.getImage(), 110, 460, 120, 106, null);
+        }
+        graphic2D.setFont(new Font("Arial", Font.BOLD, 24));
+        graphic2D.setColor(Color.BLUE);
+        graphic2D.drawString("UNO!", 140, 520);
         
+        UnoButton = new JButton();
+        UnoButton.setBounds(110, 460, 120, 106);
+        UnoButton.setBorderPainted(false);
+        UnoButton.setContentAreaFilled(false);
+        UnoButton.setFocusPainted(false);
+        UnoButton.addActionListener(e -> {
+            controller.getCurrentPlayer().shoutUno();
+        });
+        add(UnoButton);
+
         // Draw error message if it exists and hasn't timed out
         if (errorMessage != null) {
             long currentTime = System.currentTimeMillis();

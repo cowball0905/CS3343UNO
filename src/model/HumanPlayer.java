@@ -32,6 +32,9 @@ public class HumanPlayer extends Player {
         if (hand.size() == 1) {
             isShout = true;
             System.out.println(name + " shouts UNO!");
+        } else {
+            //print error message
+            System.out.println(name + " CANNOT SHOUT UNO!");
         }
     }
     

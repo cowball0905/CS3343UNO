@@ -25,10 +25,6 @@ public class CPUPlayer extends Player {
         if (hand.contains(card)) {
             hand.remove(card);
             System.out.println(name + " (CPU) plays " + card.getClass().getSimpleName());
-
-            if (hand.size() == 1) {
-                shoutUno();
-            }
         }
     }
 
@@ -37,6 +33,9 @@ public class CPUPlayer extends Player {
         if (hand.size() == 1) {
             isShout = true;
             System.out.println(name + " (CPU) shouts UNO!");
+        } else {
+            //print error message
+            System.out.println(name + " CANNOT SHOUT UNO!");
         }
     }
 
