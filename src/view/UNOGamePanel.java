@@ -13,6 +13,7 @@ import javax.swing.JButton;
 import javax.swing.JPanel;
 import controller.UNOController;
 import model.Card;
+import model.Player;
 
 public class UNOGamePanel extends JPanel {
     private static final int WIDTH = 800;
@@ -213,6 +214,15 @@ public class UNOGamePanel extends JPanel {
         updateDeck();
         repaint();
     }
+
+    public void shoutUno() {
+        if (isGameEnd) {
+            return;
+        }
+        errorMessage = controller.getPlayerList().get(0).shoutUno();
+        errorMessageTimer = System.currentTimeMillis();
+        repaint();
+    }
     
     public void updateCardButtons() {
         for (JButton btn : cardButtons) {
@@ -291,14 +301,13 @@ public class UNOGamePanel extends JPanel {
         graphic2D.setColor(Color.WHITE);
         
         // CPU1 標籤 (左側)
-        graphic2D.drawString("CPU 1 (" + computer1Hand.size() + " cards)", 105, 220);
+        graphic2D.drawString("CPU 1 (" + computer1Hand.size() + " cards)" + (controller.getPlayerList().get(1).getIsShout() ? " *UNO*" : ""), 105, 220);
         
         // CPU2 標籤 (頂部居中)
-        graphic2D.drawString("CPU 2 (" + computer2Hand.size() + " cards)", 
-                         420, 40);
+        graphic2D.drawString("CPU 2 (" + computer2Hand.size() + " cards)" + (controller.getPlayerList().get(2).getIsShout() ? " *UNO*" : ""),420, 40);
         
         // CPU3 標籤 (右側)
-        graphic2D.drawString("CPU 3 (" + computer3Hand.size() + " cards)", 745, 220);
+        graphic2D.drawString("CPU 3 (" + computer3Hand.size() + " cards)" + (controller.getPlayerList().get(3).getIsShout() ? " *UNO*" : ""), 745, 220);
         
         // === 繼續第一層：繪製其他卡牌 ===
         // Draw player's cards (底層)
@@ -318,8 +327,8 @@ public class UNOGamePanel extends JPanel {
         // Player 標籤
         graphic2D.setFont(new Font("Arial", Font.BOLD, 18));
         graphic2D.setColor(Color.WHITE);
-        graphic2D.drawString("YOU (" + playerHand.size() + " cards)", 420, 600);
-        
+        graphic2D.drawString("YOU (" + playerHand.size() + " cards)" + (controller.getPlayerList().get(0).getIsShout() ? " *UNO*" : ""), 420, 600);
+
         // Discard pile label
         if (topCard != null) {
             graphic2D.setColor(Color.WHITE);
@@ -354,7 +363,7 @@ public class UNOGamePanel extends JPanel {
         UnoButton.setContentAreaFilled(false);
         UnoButton.setFocusPainted(false);
         UnoButton.addActionListener(e -> {
-            controller.getCurrentPlayer().shoutUno();
+            shoutUno();
         });
         add(UnoButton);
 
@@ -392,6 +401,13 @@ public class UNOGamePanel extends JPanel {
             graphic2D.drawString("Play this card?", 350, 230);
             controller.getDeckPlayCardViewer().drawWindow(g);  
         }
+        // for (Player p : controller.getPlayerList()) {
+        //     if (p.getIsShout()) {
+        //         graphic2D.setFont(new Font("Arial", 1, 28));
+        //         graphic2D.drawString("UNO", 350, 230);
+        //         controller.getDeckPlayCardViewer().drawWindow(g); 
+        //     }
+        // }
         if(isGameEnd) {
             graphic2D.setColor(Color.BLUE);
             graphic2D.setFont(new Font("Arial", 1, 100));

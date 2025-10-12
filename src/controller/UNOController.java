@@ -29,7 +29,7 @@ public class UNOController {
     private WildCardViewer wildCardViewer;
     private ChallengeViewer challengeViewer;
     private DeckPlayCardViewer deckPlayCardViewer;
-    private final int INITCARDSIZE = 7;
+    private final int INITCARDSIZE = 2;
 
     private UNOController() {
         mainFrame = new JFrame("UNO Game");
@@ -73,12 +73,8 @@ public class UNOController {
                     for(int i=0;i<4;i++){
                         nextPlayer.drawCard(getCardFactory().giveCard(Deck, false, false));
                     }
-                    passNextPlayer(1);
-                    eachRound();
                 }else if(deckPlayCardViewer.getIsDeciding()){
                     currentPlayer.playCard(currentPlayer.getHand().get(currentPlayer.getHand().size()-1));
-                    deckPlayCardViewer.removeButtons();
-                    deckPlayCardViewer.endDeckCardViewer();
                     passNextPlayer(1);
                     eachRound();
                 }else {
@@ -127,6 +123,8 @@ public class UNOController {
             "r0","r1","r2","r3","r4","r5","r6","r7","r8","r9",
             "r1","r2","r3","r4","r5","r6","r7","r8","r9",
             "g0","g1","g2","g3","g4","g5","g6","g7","g8","g9",
+            "g1","g2","g3","g4","g5","g6","g7","g8","g9",
+            "b0","b1","b2","b3","b4","b5","b6","b7","b8","b9",
             "b1","b2","b3","b4","b5","b6","b7","b8","b9",
             "y0","y1","y2","y3","y4","y5","y6","y7","y8","y9",
             "y1","y2","y3","y4","y5","y6","y7","y8","y9",

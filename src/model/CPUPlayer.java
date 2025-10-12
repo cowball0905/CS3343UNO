@@ -18,6 +18,7 @@ public class CPUPlayer extends Player {
     @Override
     public void drawCard(Card card) {
         this.hand.add(card);
+        isShout = false;
     }
 
     @Override
@@ -25,18 +26,22 @@ public class CPUPlayer extends Player {
         if (hand.contains(card)) {
             hand.remove(card);
             System.out.println(name + " (CPU) plays " + card.getClass().getSimpleName());
+            if (hand.size() == 1) {
+                shoutUno();
+            }
         }
     }
 
     @Override
-    public void shoutUno() {
-        if (hand.size() == 1) {
+    public String shoutUno() {
+        UNOController controller = UNOController.getInstance();
+        if (!isShout && this == controller.getCurrentPlayer() && this.getHand().size() == 1) {
             isShout = true;
             System.out.println(name + " (CPU) shouts UNO!");
         } else {
-            //print error message
-            System.out.println(name + " CANNOT SHOUT UNO!");
+            System.out.println(name + " (CPU) failed to shout UNO!");
         }
+        return null;
     }
 
     @Override

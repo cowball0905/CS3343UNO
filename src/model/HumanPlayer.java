@@ -13,6 +13,7 @@ public class HumanPlayer extends Player {
     @Override
     public void drawCard(Card card) {
         this.hand.add(card);
+        isShout = false;
     }
     
     @Override
@@ -28,14 +29,33 @@ public class HumanPlayer extends Player {
     }
     
     @Override
-    public void shoutUno() {
-        if (hand.size() == 1) {
+    public String shoutUno() {
+        UNOController controller = UNOController.getInstance();
+        String errorMessage =  null;
+        if (this != controller.getCurrentPlayer() && this.getHand().size() > 1) {
+            errorMessage = "You have more than 1 card!";
+        } else if (this != controller.getCurrentPlayer() && this.getHand().size() == 1) {
             isShout = true;
             System.out.println(name + " shouts UNO!");
+        } else if (this.getIsShout()){
+            errorMessage = "You shouted UNO already!";
+        } else if (this.getHand().size() > 2) {
+            errorMessage = "You have more than 2 card!";
         } else {
-            //print error message
-            System.out.println(name + " CANNOT SHOUT UNO!");
+            boolean hasPlayableCard = false;
+            for (Card c : this.getHand()){
+                if(controller.canPlayCard(c)){
+                    hasPlayableCard = true;
+                }
+            }
+            if (!hasPlayableCard) {
+                errorMessage = "You have no playable card!";
+                return errorMessage;
+            }
+            isShout = true;
+            System.out.println(name + " shouts UNO!");
         }
+        return errorMessage;
     }
     
     @Override
