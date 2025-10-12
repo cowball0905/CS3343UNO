@@ -3,6 +3,8 @@ package model;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+
+import javax.swing.JPanel;
 import javax.swing.Timer;
 
 import controller.UNOController;
@@ -10,6 +12,7 @@ import controller.UNOController;
 public class CPUPlayer extends Player {
 
     private Random random;
+    private JPanel panel;
 
     public CPUPlayer(String name) {
         super(name);
@@ -43,7 +46,6 @@ public class CPUPlayer extends Player {
 
     @Override
     public String shoutUno() {
-        UNOController controller = UNOController.getInstance();
         if (!isShout && this.getHand().size() == 1) {
             isShout = true;
             System.out.println(name + " (CPU) shouts UNO!");
@@ -55,9 +57,13 @@ public class CPUPlayer extends Player {
 
     @Override
     public void catchForgotShout(Player targetPlayer) {
-        // CPU always catches human player forgetting UNO with high probability (90%)
         if (targetPlayer.getHand().size() == 1 && !targetPlayer.getIsShout()) {
-            System.out.println(name + " (CPU) catches " + targetPlayer.getName() + " for forgetting to shout UNO!");
+            System.out.println(name + " catches " + targetPlayer.getName() + " for forgetting to shout UNO!");
+            // Target player should draw 2 penalty cards
+            for(int i = 0; i < 2; i++){
+                targetPlayer.drawCard(controller.getCardFactory().giveCard(controller.getDeck(), false, (controller.getPlayerList().get(0) == targetPlayer)));
+            }
+            controller.getGamePanel().updateDisplay();
         }
     }
 

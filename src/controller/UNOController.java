@@ -46,6 +46,9 @@ public class UNOController {
                 players.add(new CPUPlayer("CPU"+(i)));
             }
         }
+        for (Player p : players) {
+            p.setController(this);
+        }
         
         menuPanel = new UNOMenuPanel(this);
         gamePanel = new UNOGamePanel(this);
@@ -169,6 +172,7 @@ public class UNOController {
     public void getCardFromDeck(){
         if(!isAction){
             isAction = true;
+            System.out.println(currentPlayer.getName()+ " draws a card from the deck.");
             currentPlayer.drawCard(cardFactory.giveCard(Deck,false, players.indexOf(currentPlayer)==0 ? true:false));
             Card card = currentPlayer.getHand().get(currentPlayer.getHand().size()-1);
             if(canPlayCard(card)){
@@ -218,6 +222,10 @@ public class UNOController {
     public void setPlayDirection(int direction) {
         this.playDirection = direction;
     } 
+
+    public UNOGamePanel getGamePanel() {
+        return gamePanel;
+    }
 
     public boolean isGameEnd(Card card) {
         if (currentPlayer.getHand().size() == 0 && canPlayCard(card)) {

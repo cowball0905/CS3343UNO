@@ -2,15 +2,21 @@ package model;
 
 import java.util.ArrayList;
 
+import controller.UNOController;
+
 public abstract class Player implements Drawable, Playable, Shoutable, Catchable, Challengeable {
     protected String name;
     protected ArrayList<Card> hand;
     protected boolean isShout; 
+    protected UNOController controller;
     
     public Player(String name) {
         this.name = name;
         this.hand = new ArrayList<>();
         this.isShout = false;
+    }
+    public void setController(UNOController controller) {
+        this.controller = controller;
     }
     
     public String getName() { return name; }

@@ -28,6 +28,9 @@ public class UNOGamePanel extends JPanel {
     private UNOController controller;
     private JButton menuButton;
     private JButton UnoButton;
+    private JButton catchcpu1Button;
+    private JButton catchcpu2Button;
+    private JButton catchcpu3Button;
     private boolean isGameEnd = false;
     
     public UNOGamePanel(UNOController controller) {
@@ -302,13 +305,37 @@ public class UNOGamePanel extends JPanel {
         
         // CPU1 標籤 (左側)
         graphic2D.drawString("CPU 1 (" + computer1Hand.size() + " cards)" + (controller.getPlayerList().get(1).getIsShout() ? " *UNO*" : ""), 105, 220);
-        
+        catchcpu1Button = new JButton();
+        catchcpu1Button.setBounds(105, 200, 250, 30); // Positioned where the old text was
+        catchcpu1Button.setBorderPainted(false);
+        catchcpu1Button.setContentAreaFilled(false);
+        catchcpu1Button.setFocusPainted(false);
+        catchcpu1Button.addActionListener(e -> {
+            controller.getPlayerList().get(0).catchForgotShout(controller.getPlayerList().get(1));
+        });
+        add(catchcpu1Button);
         // CPU2 標籤 (頂部居中)
         graphic2D.drawString("CPU 2 (" + computer2Hand.size() + " cards)" + (controller.getPlayerList().get(2).getIsShout() ? " *UNO*" : ""),420, 40);
-        
+        catchcpu2Button = new JButton();
+        catchcpu2Button.setBounds(420, 20, 250, 30); // Positioned where the old text was
+        catchcpu2Button.setBorderPainted(false);
+        catchcpu2Button.setContentAreaFilled(false);
+        catchcpu2Button.setFocusPainted(false);
+        catchcpu2Button.addActionListener(e -> {
+            controller.getPlayerList().get(0).catchForgotShout(controller.getPlayerList().get(2));
+        });
+        add(catchcpu2Button);
         // CPU3 標籤 (右側)
         graphic2D.drawString("CPU 3 (" + computer3Hand.size() + " cards)" + (controller.getPlayerList().get(3).getIsShout() ? " *UNO*" : ""), 745, 220);
-        
+        catchcpu3Button = new JButton();
+        catchcpu3Button.setBounds(745, 200, 250, 30); // Positioned where the old text was
+        catchcpu3Button.setBorderPainted(false);
+        catchcpu3Button.setContentAreaFilled(false);
+        catchcpu3Button.setFocusPainted(false);
+        catchcpu3Button.addActionListener(e -> {
+            controller.getPlayerList().get(0).catchForgotShout(controller.getPlayerList().get(3));
+        });
+        add(catchcpu3Button);
         // === 繼續第一層：繪製其他卡牌 ===
         // Draw player's cards (底層)
         for (Card card : playerHand) {
@@ -401,13 +428,6 @@ public class UNOGamePanel extends JPanel {
             graphic2D.drawString("Play this card?", 350, 230);
             controller.getDeckPlayCardViewer().drawWindow(g);  
         }
-        // for (Player p : controller.getPlayerList()) {
-        //     if (p.getIsShout()) {
-        //         graphic2D.setFont(new Font("Arial", 1, 28));
-        //         graphic2D.drawString("UNO", 350, 230);
-        //         controller.getDeckPlayCardViewer().drawWindow(g); 
-        //     }
-        // }
         if(isGameEnd) {
             graphic2D.setColor(Color.BLUE);
             graphic2D.setFont(new Font("Arial", 1, 100));

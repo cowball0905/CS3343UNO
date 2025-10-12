@@ -1,13 +1,21 @@
 package model;
 
 import java.util.ArrayList;
+import java.util.Random;
+
+import javax.swing.JPanel;
+import javax.swing.Timer;
 
 import controller.UNOController;
 
 public class HumanPlayer extends Player {
-    
+
+    private Random random;
+    private JPanel panel;
+
     public HumanPlayer(String name) {
         super(name);
+        this.random = new Random();
     }
     
     @Override
@@ -23,6 +31,12 @@ public class HumanPlayer extends Player {
             System.out.println(name + " plays " + card.getClass().getSimpleName());
 
             if (hand.size() == 1 && !isShout) {
+                int delay = random.nextInt(2001); // Random delay around 2 sec
+                Timer catchTimer = new Timer(delay, e -> {
+                    controller.getPlayerList().get(random.nextInt(3) + 1).catchForgotShout(this);
+                });
+                catchTimer.setRepeats(false);
+                catchTimer.start();
                 System.out.println(name + " should shout UNO!");
             }
         }
@@ -30,7 +44,7 @@ public class HumanPlayer extends Player {
     
     @Override
     public String shoutUno() {
-        UNOController controller = UNOController.getInstance();
+        
         String errorMessage =  null;
         if (this != controller.getCurrentPlayer() && this.getHand().size() > 1) {
             errorMessage = "You have more than 1 card!";
@@ -63,6 +77,10 @@ public class HumanPlayer extends Player {
         if (targetPlayer.getHand().size() == 1 && !targetPlayer.getIsShout()) {
             System.out.println(name + " catches " + targetPlayer.getName() + " for forgetting to shout UNO!");
             // Target player should draw 2 penalty cards
+            for(int i = 0; i < 2; i++){
+                targetPlayer.drawCard(controller.getCardFactory().giveCard(controller.getDeck(), false, false));
+            }
+            controller.getGamePanel().updateDisplay();
         }
     }
     
