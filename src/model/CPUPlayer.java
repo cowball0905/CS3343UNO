@@ -3,6 +3,7 @@ package model;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import javax.swing.Timer;
 
 import controller.UNOController;
 
@@ -27,7 +28,15 @@ public class CPUPlayer extends Player {
             hand.remove(card);
             System.out.println(name + " (CPU) plays " + card.getClass().getSimpleName());
             if (hand.size() == 1) {
-                shoutUno();
+                int delay = random.nextInt(2001); // Random delay around 2 sec
+                System.out.println(name + " (CPU) will shout UNO in " + delay + " ms if not caught.");
+                Timer shoutTimer = new Timer(delay, e -> {
+                    if (hand.size() == 1) { // Check again to make sure it hasn't been caught
+                        shoutUno();
+                    }
+                });
+                shoutTimer.setRepeats(false);
+                shoutTimer.start();
             }
         }
     }
@@ -35,7 +44,7 @@ public class CPUPlayer extends Player {
     @Override
     public String shoutUno() {
         UNOController controller = UNOController.getInstance();
-        if (!isShout && this == controller.getCurrentPlayer() && this.getHand().size() == 1) {
+        if (!isShout && this.getHand().size() == 1) {
             isShout = true;
             System.out.println(name + " (CPU) shouts UNO!");
         } else {
@@ -47,8 +56,7 @@ public class CPUPlayer extends Player {
     @Override
     public void catchForgotShout(Player targetPlayer) {
         // CPU always catches human player forgetting UNO with high probability (90%)
-        if (targetPlayer.getHand().size() == 1 && !targetPlayer.getIsShout() &&
-                random.nextDouble() < 0.9) {
+        if (targetPlayer.getHand().size() == 1 && !targetPlayer.getIsShout()) {
             System.out.println(name + " (CPU) catches " + targetPlayer.getName() + " for forgetting to shout UNO!");
         }
     }
