@@ -87,10 +87,8 @@ public class UNOController {
         challengeViewer.setController(this);
         challengeViewer.setPanel(gamePanel);
         
-        initializeGame();
+        //initializeGame();
         
-        // Show the window
-        showMenu();
         mainFrame.setVisible(true);
         
         System.out.println("UNO Game window created and should be visible!");
@@ -302,17 +300,6 @@ public class UNOController {
 
         // Only call eachRound() once, after everything is set up
         this.eachRound();
-    }
-
-    public void showMenu() {
-        if (mainFrame != null) {
-            mainFrame.getContentPane().removeAll();
-            if (menuPanel != null) {
-                mainFrame.add(menuPanel);
-            }
-            mainFrame.revalidate();
-            mainFrame.repaint();
-        }
     }
 
     public CardFactory getCardFactory() {
