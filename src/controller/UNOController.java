@@ -27,7 +27,7 @@ public class UNOController {
     private boolean isAction = false;
     private WildCardViewer wildCardViewer;
     private ChallengeViewer challengeViewer;
-    private final int INITCARDSIZE = 2;
+    private final int INITCARDSIZE = 7;
 
     private UNOController() {
         mainFrame = new JFrame("UNO Game");
@@ -71,7 +71,7 @@ public class UNOController {
                     int nextIndex = (currentIndex + (1 * playDirection) + players.size()) % players.size();
                     Player nextPlayer = players.get(nextIndex);
                     for(int i=0;i<4;i++){
-                        nextPlayer.drawCard(getCardFactory().giveCard(Deck, false, false));
+                        nextPlayer.drawCard(getCardFactory().giveCard(Deck, false, false, ""));
                     }
                 }else {
                     getCardFromDeck();
@@ -145,12 +145,12 @@ public class UNOController {
         // Reset other game state variables if needed
         isAction = false;
 
-        PlayedCard.add(cardFactory.giveCard(Deck,true, true)); // 已打出的牌顯示
+        PlayedCard.add(cardFactory.giveCard(Deck,true, true, "")); // 已打出的牌顯示
         
         for (int i = 0; i < INITCARDSIZE; i++) {
-            players.get(0).drawCard(cardFactory.giveCard(Deck,false, true)); // 玩家的牌顯示
+            players.get(0).drawCard(cardFactory.giveCard(Deck,false, true, "")); // 玩家的牌顯示
             for(int j = 1 ; j < 4 ; j++){
-                players.get(j).drawCard(cardFactory.giveCard(Deck,false, false)); // CPU的牌隱藏
+                players.get(j).drawCard(cardFactory.giveCard(Deck,false, false, "")); // CPU的牌隱藏
             }
         }
         currentPlayer = players.get(0);
@@ -162,7 +162,7 @@ public class UNOController {
         if(!isAction){
             isAction = true;
             System.out.println(currentPlayer.getName()+ " draws a card from the deck.");
-            currentPlayer.drawCard(cardFactory.giveCard(Deck,false, players.indexOf(currentPlayer)==0 ? true:false));
+            currentPlayer.drawCard(cardFactory.giveCard(Deck,false, players.indexOf(currentPlayer)==0 ? true:false, ""));
             passNextPlayer(1);
             eachRound();
             isAction = false;

@@ -8,14 +8,24 @@ public class ConcreteCardFactory extends CardFactory {
     private static final Random random = new Random();
 
     @Override
-    public Card createCard(ArrayList<String> Deck, Boolean isTop, boolean isRevealed) {
+    public Card createCard(ArrayList<String> Deck, Boolean isTop, boolean isRevealed, String cardString) {
         int Decklen = Deck.size();
         if(isTop){
             Decklen = 56;
         }
-        int index = random.nextInt(Decklen);
-        String card = Deck.get(index);
-        Deck.remove(index);
+        String card;
+        if (cardString != "" && Deck.indexOf(cardString) != -1) { // create specific card
+            card = cardString;
+            Deck.remove(Deck.indexOf(card));
+        } else {
+            if(cardString != ""){
+                System.out.println("Deck doesn't contain this card!!!");
+            }
+            int index = random.nextInt(Decklen);
+            card = Deck.get(index);
+            Deck.remove(index);
+        }
+        
         if (card.equals("WildCard")){
             return new WildCard(isRevealed);
         } else if (card.equals("WildDrawFour")){
