@@ -61,7 +61,7 @@ public class CPUPlayer extends Player {
             System.out.println(name + " catches " + targetPlayer.getName() + " for forgetting to shout UNO!");
             // Target player should draw 2 penalty cards
             for(int i = 0; i < 2; i++){
-                targetPlayer.drawCard(controller.getCardFactory().giveCard(controller.getDeck(), false, (controller.getPlayerList().get(0) == targetPlayer)));
+                targetPlayer.drawCard(controller.getCardFactory().giveCard(controller.getDeck(), false, (controller.getPlayerList().get(0) == targetPlayer), ""));
             }
             controller.getGamePanel().updateDisplay();
         }
@@ -87,7 +87,7 @@ public class CPUPlayer extends Player {
                 if(card.getType()!=Type.Wild && card.getType()!=Type.WildDrawFour){
                     System.out.println("Challenge Success!");
                     for(int i=0;i<4;i++){
-                        targetPlayer.drawCard(controller.getCardFactory().giveCard(controller.getDeck(), false, players.indexOf(currentPlayer)==0? true:false));
+                        targetPlayer.drawCard(controller.getCardFactory().giveCard(controller.getDeck(), false, players.indexOf(currentPlayer)==0? true:false, ""));
                     }
                     controller.passNextPlayer(1);
                     controller.eachRound();
@@ -97,14 +97,14 @@ public class CPUPlayer extends Player {
 
             System.out.println("Challenge Fail!");
             for(int i=0;i<6;i++){
-                drawCard(controller.getCardFactory().giveCard(controller.getDeck(), false, false));
+                drawCard(controller.getCardFactory().giveCard(controller.getDeck(), false, false, ""));
             }
             controller.passNextPlayer(1);
             controller.eachRound();
         }else{
             System.out.println(name + " (CPU) does not challenge " + targetPlayer.getName() + "'s Wild Draw Four card");
             for(int i=0;i<4;i++){
-                drawCard(controller.getCardFactory().giveCard(controller.getDeck(), false, false));
+                drawCard(controller.getCardFactory().giveCard(controller.getDeck(), false, false, ""));
             }  
             controller.passNextPlayer(2);
             controller.eachRound();
@@ -125,7 +125,7 @@ public class CPUPlayer extends Player {
 
         if (validCards.isEmpty()) {
             System.out.println(name + " (CPU) has no valid cards to play and must draw.");
-            this.drawCard(controller.getCardFactory().giveCard(controller.getDeck(),false, false));
+            this.drawCard(controller.getCardFactory().giveCard(controller.getDeck(),false, false, ""));
             controller.passNextPlayer(1);
             controller.eachRound();
             return;
