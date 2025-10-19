@@ -3,13 +3,19 @@ package test;
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
+import controller.UNOController;
+import model.Card;
 import model.CountDownTimer;
+import model.WildCard;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.lang.reflect.Field;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public class TestCountDownTimer {
     private CountDownTimer timer;
@@ -97,12 +103,12 @@ public class TestCountDownTimer {
     public void testTimerCompletion() throws Exception {
         // Create a new panel and callback for this test
         TestPanel testPanel = new TestPanel();
-        final boolean[] callbackInvoked = {false};
+        final AtomicBoolean callbackInvoked = new AtomicBoolean(false);
         final CountDownLatch latch = new CountDownLatch(1);
         
         // Create a new timer with a callback that sets our flag
         CountDownTimer testTimer = new CountDownTimer(testPanel, () -> {
-            callbackInvoked[0] = true;
+            callbackInvoked.set(true);
             latch.countDown();
         });
         
@@ -115,13 +121,56 @@ public class TestCountDownTimer {
             
             // Verify the callback was called
             assertTrue(completed, "Timer should complete within timeout");
-            assertTrue(callbackInvoked[0], "Callback should be called when timer completes");
+            assertTrue(callbackInvoked.get(), "Callback should be called when timer completes");
             
             // Verify timer state
             assertFalse(testTimer.isRunning(), "Timer should not be running after completion");
             assertEquals(0, testTimer.getRemainingSeconds(), "Remaining time should be 0 after completion");
         } finally {
             // Make sure to clean up
+            testTimer.stopTimer();
+        }
+    }
+    
+    @Test
+    public void testTimerCallbackExceptionHandling() {
+        // Create a timer with a callback that throws an exception
+        CountDownTimer testTimer = new CountDownTimer(panel, () -> {
+            throw new RuntimeException("Test exception");
+        });
+        
+        // This should not throw an exception
+        assertDoesNotThrow(() -> {
+            testTimer.startTimer(0);
+            // Give it a moment to process
+            Thread.sleep(100);
+        }, "Timer should handle exceptions in callback gracefully");
+    }
+    
+    @Test
+    public void testMultipleCallbacks() throws Exception {
+        final int[] callbackCount = {0};
+        final CountDownLatch latch = new CountDownLatch(3);
+        
+        // Create a timer with a callback that counts invocations
+        CountDownTimer testTimer = new CountDownTimer(panel, () -> {
+            callbackCount[0]++;
+            latch.countDown();
+        });
+        
+        try {
+            // Start the timer multiple times
+            testTimer.startTimer(0);
+            testTimer.startTimer(0);
+            testTimer.startTimer(0);
+            
+            // Wait for all callbacks to complete
+            boolean completed = latch.await(2, TimeUnit.SECONDS);
+            
+            // Verify all callbacks were called
+            assertTrue(completed, "All callbacks should complete within timeout");
+            assertEquals(3, callbackCount[0], "Callback should be called for each timer completion");
+        } finally {
             testTimer.stopTimer();
         }
     }
@@ -157,6 +206,8 @@ public class TestCountDownTimer {
         assertTrue(timerIsActive(timer), "Timer should be running after resume");
     }
     
+    
+    
     // Helper method to check if timer is active
     private boolean timerIsActive(CountDownTimer t) {
         try {
@@ -168,4 +219,6 @@ public class TestCountDownTimer {
             return false;
         }
     }
+    
+    
 }

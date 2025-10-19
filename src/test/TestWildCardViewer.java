@@ -84,6 +84,8 @@ class TestWildCardViewer {
         testPlayers.add(humanPlayer);
         testPlayers.add(new CPUPlayer("CPU 1"));
         testPlayers.add(new CPUPlayer("CPU 2"));
+        testPlayers.add(new CPUPlayer("CPU 3"));
+        testPlayers.add(new CPUPlayer("CPU 4"));
         
         // Initialize the controller with test players
         Field playersField = UNOController.class.getDeclaredField("players");
