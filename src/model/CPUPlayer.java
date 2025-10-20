@@ -31,6 +31,25 @@ public class CPUPlayer extends Player {
             hand.remove(card);
             System.out.println(name + " (CPU) plays " + card.getClass().getSimpleName());
             if (hand.size() == 1) {
+                double probability = 0.6; // 60% chance to shout UNO
+                if (Math.random() <= probability) {
+                    shoutUno();
+                } else {
+                    for (Player p : controller.getPlayerList()) {
+                    if (p != this && p instanceof CPUPlayer) {
+                        double catchProbability = 0.4; // 40% chance to catch
+                        if (Math.random() <= catchProbability) {
+                            int delay = random.nextInt(2001);
+                            new Timer(delay, e -> {
+                                if (this.hand.size() == 1 && !this.getIsShout()) {
+                                    p.catchForgotShout(this);
+                                }
+                            }).start();
+                        }
+                    }
+                }
+                }
+                /*
                 int delay = random.nextInt(2001); // Random delay around 2 sec
                 System.out.println(name + " (CPU) will shout UNO in " + delay + " ms if not caught.");
                 Timer shoutTimer = new Timer(delay, e -> {
@@ -40,6 +59,7 @@ public class CPUPlayer extends Player {
                 });
                 shoutTimer.setRepeats(false);
                 shoutTimer.start();
+                */
             }
         }
     }
@@ -134,7 +154,7 @@ public class CPUPlayer extends Player {
         Card chosenCard = randomChoose(validCards); //Use random function to choose a card
 
         playCard(chosenCard);
-        System.out.println(name + " (CPU) chose their Card!");
+        //System.out.println(name + " (CPU) chose their Card!");
         chosenCard.setRevealed(true);
         controller.playCard(chosenCard);
     }

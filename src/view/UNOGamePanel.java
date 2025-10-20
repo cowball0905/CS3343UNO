@@ -38,11 +38,6 @@ public class UNOGamePanel extends JPanel {
         setPreferredSize(new Dimension(WIDTH, HEIGHT));
         setBackground(new Color(255, 255, 255)); 
         setLayout(null);
-        
-        menuButton = new JButton("Back to Menu");
-        menuButton.setBounds(10, 10, 120, 30);
-        menuButton.addActionListener(e -> controller.showMenu());
-        add(menuButton);
     }
 
     public void setIsGameEnd(boolean isGameEnd) {
