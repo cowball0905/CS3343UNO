@@ -44,8 +44,5 @@ public class WildDrawFourCard extends Card {
         }
     }
 
-        @Override
-    public String toString() {
-        return "Wild Draw Four Card" + (getColor() != null ? " (" + getColor() + ")" : "");
-    }
+
 }
