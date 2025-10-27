@@ -9,9 +9,8 @@ public class SkipCard extends Card {
     }
 
     @Override
-    public void cardFunction() {
+    public void cardFunction(UNOController controller) {
         System.out.println("Skip card effect");
-        UNOController controller = UNOController.getInstance();
         controller.passNextPlayer(2);
         controller.eachRound();
     }

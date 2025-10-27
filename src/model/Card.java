@@ -161,5 +161,5 @@ public abstract class Card {
         }
     }
 
-    abstract public void cardFunction();
+    abstract public void cardFunction(controller.UNOController controller);
 }

@@ -16,8 +16,7 @@ public class NumberCard extends Card {
     }
     
     @Override
-    public void cardFunction() {
-        UNOController controller = UNOController.getInstance();
+    public void cardFunction(UNOController controller) {
         controller.passNextPlayer(1);
         controller.eachRound();
     }

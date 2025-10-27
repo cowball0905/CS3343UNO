@@ -11,10 +11,9 @@ public class DrawTwoCard extends Card {
     }
 
     @Override
-    public void cardFunction() {
+    public void cardFunction(UNOController controller) {
         System.out.println("Draw Two card played: next player draws 2 cards");
 
-        UNOController controller = UNOController.getInstance();
         Player currentPlayer = controller.getCurrentPlayer();
         ArrayList<Player> playerList = controller.getPlayerList();
         int playDirection = controller.getPlayDirection(); // 1 for clockwise, -1 for counter-clockwise

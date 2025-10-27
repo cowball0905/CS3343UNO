@@ -11,9 +11,8 @@ public class WildDrawFourCard extends Card {
     }
 
     @Override
-    public void cardFunction() {
+    public void cardFunction(UNOController controller) {
         System.out.println("Wild card played: change color");
-        UNOController controller = UNOController.getInstance();
         Player currentPlayer = controller.getCurrentPlayer();
         int playDirection = controller.getPlayDirection(); // 1 for clockwise, -1 for counter-clockwise
 
@@ -29,6 +28,7 @@ public class WildDrawFourCard extends Card {
             int currentIndex = controller.checkCurrentPlayer();
 
             // Calculate next player index (skip one player)
+            ArrayList<Player> playerList = controller.getPlayerList();
             int nextIndex = (currentIndex + (1 * playDirection) + playerList.size()) % playerList.size();
 
             // Get next player object

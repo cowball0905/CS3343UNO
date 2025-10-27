@@ -9,9 +9,8 @@ public class WildCard extends Card {
     }
 
     @Override
-    public void cardFunction() {
+    public void cardFunction(UNOController controller) {
         System.out.println("Wild card played: change color");
-        UNOController controller = UNOController.getInstance();
 
         if(controller.getPlayerList().indexOf(controller.getCurrentPlayer())==0){
             controller.getWildCardViewer().setWildCard(this);

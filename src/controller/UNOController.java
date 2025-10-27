@@ -199,7 +199,7 @@ public class UNOController {
         if(isGameEnd(card)) {
             return;
         }
-        card.cardFunction();
+        card.cardFunction(this);
         isAction = false;
     }
 
