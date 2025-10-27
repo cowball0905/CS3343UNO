@@ -172,7 +172,7 @@ public class WildCardViewer {
         Player currentPlayer = controller.getCurrentPlayer();
         int playDirection = controller.getPlayDirection(); // 1 for clockwise, -1 for counter-clockwise
         // Get current player index
-        int currentIndex = playerList.indexOf(currentPlayer);
+        int currentIndex = controller.checkCurrentPlayer();
 
         // Calculate next player index (skip one player)
         int nextIndex = (currentIndex + (1 * playDirection) + playerList.size()) % playerList.size();

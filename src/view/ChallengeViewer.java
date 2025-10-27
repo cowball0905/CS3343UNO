@@ -55,14 +55,12 @@ public class ChallengeViewer {
             timer.stopTimer();
             this.isChallenging = false;
             removeButtons();
-            Player currentPlayer = controller.getCurrentPlayer();
-            ArrayList<Player> playerList = controller.getPlayerList();
             int playDirection = controller.getPlayDirection();
-            int currentIndex = playerList.indexOf(currentPlayer);
+            int currentIndex = controller.checkCurrentPlayer();
             int nextIndex = (currentIndex + (1 * playDirection) + playerList.size()) % playerList.size();
             Player nextPlayer = playerList.get(nextIndex);
             for(int i=0;i<4;i++){
-                nextPlayer.drawCard(controller.getCardFactory().giveCard(controller.getDeck(), false, playerList.indexOf(nextPlayer)==0, ""));
+                nextPlayer.drawCard(controller.getCardFactory().giveCard(controller.getDeck(), false, checkPlayer(nextPlayer)==0, ""));
             }
             controller.passNextPlayer(2);
             controller.eachRound();
@@ -74,10 +72,8 @@ public class ChallengeViewer {
         greenButton.setOpaque(true);
         greenButton.setBounds(490, 250, 120, 60);
         greenButton.addActionListener(e -> {
-            Player currentPlayer = controller.getCurrentPlayer();
-            ArrayList<Player> playerList = controller.getPlayerList();
             int playDirection = controller.getPlayDirection();
-            int currentIndex = playerList.indexOf(currentPlayer);
+            int currentIndex = controller.checkCurrentPlayer();
             int nextIndex = (currentIndex + (1 * playDirection) + playerList.size()) % playerList.size();
             Player nextPlayer = playerList.get(nextIndex);
             timer.stopTimer();

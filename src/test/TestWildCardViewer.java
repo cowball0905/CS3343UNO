@@ -236,7 +236,7 @@ void testColorButtonActions() throws Exception {
             Player playerBefore = (Player) currentPlayerField.get(controller);
             
             // Make sure next player has cards
-            int currentIndex = players.indexOf(playerBefore);
+            int currentIndex = controller.checkPlayer(playerBefore);
             int nextIndex = (currentIndex + 1) % players.size();
             Player nextPlayer = players.get(nextIndex);
             if (nextPlayer.getHand().isEmpty()) {

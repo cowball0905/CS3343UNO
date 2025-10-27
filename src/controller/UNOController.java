@@ -67,7 +67,7 @@ public class UNOController {
                     }
                     eachRound();
                 }else if(challengeViewer.getIsChallenging()){
-                    int currentIndex = players.indexOf(currentPlayer);
+                    int currentIndex = checkCurrentPlayer();
                     int nextIndex = (currentIndex + (1 * playDirection) + players.size()) % players.size();
                     Player nextPlayer = players.get(nextIndex);
                     for(int i=0;i<4;i++){
@@ -160,7 +160,7 @@ public class UNOController {
         if(!isAction){
             isAction = true;
             System.out.println(currentPlayer.getName()+ " draws a card from the deck.");
-            currentPlayer.drawCard(cardFactory.giveCard(Deck,false, players.indexOf(currentPlayer)==0 ? true:false, ""));
+            currentPlayer.drawCard(cardFactory.giveCard(Deck,false, checkHuman() ? true:false, ""));
             passNextPlayer(1);
             eachRound();
             isAction = false;
@@ -204,7 +204,7 @@ public class UNOController {
     }
 
     public void passNextPlayer(int amount){
-        int currentIndex = players.indexOf(currentPlayer);
+        int currentIndex = checkCurrentPlayer();
         int nextIndex = (currentIndex + amount * playDirection + players.size()) % players.size();
         currentPlayer = players.get(nextIndex);
         gamePanel.updateDisplay();
@@ -316,5 +316,13 @@ public class UNOController {
 
     public UNOGamePanel getGamePanel() {
         return gamePanel;
+    }
+
+    public int checkCurrentPlayer(){
+        return players.indexOf(currentPlayer);
+    }
+
+    public int checkPlayer(Player p){
+        return players.indexOf(p);
     }
 }

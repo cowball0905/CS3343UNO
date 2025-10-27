@@ -22,7 +22,7 @@ public class DrawTwoCard extends Card {
         CardFactory cardFactory = controller.getCardFactory();
 
         // Get current player index
-        int currentIndex = playerList.indexOf(currentPlayer);
+        int currentIndex = controller.checkCurrentPlayer();
 
         // Calculate next player index (skip one player)
         int nextIndex = (currentIndex + (1 * playDirection) + playerList.size()) % playerList.size();
@@ -32,7 +32,7 @@ public class DrawTwoCard extends Card {
 
         // Make the next player draw 2 cards
         for (int i = 0; i < 2; i++) {
-            nextPlayer.drawCard(cardFactory.giveCard(controller.getDeck(),false, playerList.indexOf(nextPlayer)==0 ? true:false, ""));
+            nextPlayer.drawCard(cardFactory.giveCard(controller.getDeck(),false, controller.checkCurrentPlayer()==0 ? true:false, ""));
         }
 
         controller.passNextPlayer(2);

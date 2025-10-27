@@ -107,7 +107,7 @@ public class CPUPlayer extends Player {
                 if(card.getType()!=Type.Wild && card.getType()!=Type.WildDrawFour){
                     System.out.println("Challenge Success!");
                     for(int i=0;i<4;i++){
-                        targetPlayer.drawCard(controller.getCardFactory().giveCard(controller.getDeck(), false, players.indexOf(currentPlayer)==0? true:false, ""));
+                        targetPlayer.drawCard(controller.getCardFactory().giveCard(controller.getDeck(), false, controller.checkCurrentPlayer() == 0 ? true:false, ""));
                     }
                     controller.passNextPlayer(1);
                     controller.eachRound();
