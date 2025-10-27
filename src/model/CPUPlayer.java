@@ -89,7 +89,10 @@ public class CPUPlayer extends Player {
 
     @Override
     public void challengeDrawFour(Player targetPlayer) {
-        if (random.nextDouble() < 0.5) {
+        // 智能挑战策略：根据游戏状态决定是否挑战
+        boolean shouldChallenge = shouldChallengeDrawFour(targetPlayer);
+        
+        if (shouldChallenge) {
             System.out.println(name + " (CPU) challenges " + targetPlayer.getName() + "'s Wild Draw Four card!");
             ArrayList<Card> cards = targetPlayer.getHand();
             ArrayList<Card> validCards = new ArrayList<>();
@@ -127,6 +130,75 @@ public class CPUPlayer extends Player {
             controller.eachRound();
             return;
         }
+    }
+    
+    /**
+     * 决定是否应该挑战 Wild Draw Four 卡
+     * 基于以下因素：
+     * 1. 对手手牌数量（手牌少的玩家更可能作弊来快速获胜）
+     * 2. 顶牌颜色（某些颜色被打出的频率）
+     * 3. 自己的手牌状态（如果自己快赢了，更激进地挑战）
+     * 4. 风险评估（挑战失败的代价 vs 收益）
+     */
+    private boolean shouldChallengeDrawFour(Player targetPlayer) {
+        Card topCard = controller.getTopCard();
+        Color topColor = topCard.getColor();
+        int opponentHandSize = targetPlayer.getHand().size();
+        int myHandSize = this.getHand().size();
+        
+        // 策略 1: 对手手牌很少（2张以下）时，更可能在作弊
+        // 因为他们想快速获胜，可能冒险使用非法的 Wild Draw Four
+        if (opponentHandSize <= 2) {
+            System.out.println(name + " thinks " + targetPlayer.getName() + " might be cheating (low cards)");
+            return true; // 挑战！
+        }
+        
+        // 策略 2: 如果自己快赢了（3张以下），不要冒险挑战
+        // 挑战失败会抽 6 张牌，可能失去获胜机会
+        if (myHandSize <= 3) {
+            System.out.println(name + " won't risk challenging (close to winning)");
+            return false; // 不挑战，保守策略
+        }
+        
+        // 策略 3: 检查自己手中是否有很多相同颜色的牌
+        // 如果顶牌颜色很常见，对手更可能有该颜色的牌，作弊概率低
+        int sameColorCount = 0;
+        for (Card card : this.getHand()) {
+            if (card.getColor() == topColor) {
+                sameColorCount++;
+            }
+        }
+        
+        // 如果我手上有很多该颜色的牌（3张以上），说明这个颜色很常见
+        // 对手应该也有，打 Wild Draw Four 可能是作弊
+        if (sameColorCount >= 3) {
+            System.out.println(name + " thinks " + topColor + " is common, might challenge");
+            return true; // 挑战！
+        }
+        
+        // 策略 4: 如果我手上完全没有该颜色的牌
+        // 说明这个颜色可能稀有，对手可能真的没有
+        if (sameColorCount == 0) {
+            System.out.println(name + " has no " + topColor + " cards, won't challenge");
+            return false; // 不挑战
+        }
+        
+        // 策略 5: 对手手牌中等（3-5张）且我们有一些该颜色的牌
+        // 中等风险，采用保守策略：不挑战
+        if (opponentHandSize >= 3 && opponentHandSize <= 5) {
+            System.out.println(name + " uses conservative strategy, won't challenge");
+            return false;
+        }
+        
+        // 策略 6: 对手手牌很多（6张以上）
+        // 他们不太可能冒险作弊，因为还没到关键时刻
+        if (opponentHandSize >= 6) {
+            System.out.println(name + " thinks opponent is playing safe, won't challenge");
+            return false;
+        }
+        
+        // 默认：中等情况下不挑战（保守策略）
+        return false;
     }
 
     public void chooseCard() {
