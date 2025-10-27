@@ -22,6 +22,7 @@ public class UNOController {
     private int playDirection;
     private CountDownTimer turnTimer;
     private boolean isAction = false;
+    private boolean isFreezed = false;
     private WildCardViewer wildCardViewer;
     private ChallengeViewer challengeViewer;
     private final int INITCARDSIZE = 7;
@@ -168,14 +169,18 @@ public class UNOController {
     public void eachRound(){ 
         gamePanel.updateDisplay();
         if (currentPlayer == players.get(0)){
-            turnTimer.startTimer(30); 
+            if(!isFreezed){
+                turnTimer.startTimer(30); 
+            }
         } else {
             turnTimer.stopTimer();
             CPUPlayer cpuPlayer = (CPUPlayer) currentPlayer;
             
             Timer cpuTimer = new Timer(2000, e -> cpuPlayer.chooseCard());
             cpuTimer.setRepeats(false);  
-            cpuTimer.start();
+            if(!isFreezed){
+                cpuTimer.start();
+            }
         }
     }
 
@@ -318,5 +323,13 @@ public class UNOController {
 
     public int checkPlayer(Player p){
         return players.indexOf(p);
+    }
+
+    public void setIsFreezed(boolean freeze){
+        isFreezed = freeze;
+    }
+    
+    public boolean isFreezed() {
+        return isFreezed;
     }
 }

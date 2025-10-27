@@ -260,18 +260,33 @@ public class UNOGamePanel extends JPanel {
         super.paintComponent(g);
         Graphics2D graphic2D = (Graphics2D) g;
         
-        // Get current game state from controller
-        List<Card> playerHand = new ArrayList<>(controller.getHumanPlayedCard());
-        List<Card> computer1Hand = new ArrayList<>(controller.getCPUCard(0));
-        List<Card> computer2Hand = new ArrayList<>(controller.getCPUCard(1));
-        List<Card> computer3Hand = new ArrayList<>(controller.getCPUCard(2));
-        Card topCard = controller.getTopCard();
+        // Get current game state from controller with error handling
+        List<Card> playerHand;
+        List<Card> computer1Hand;
+        List<Card> computer2Hand;
+        List<Card> computer3Hand;
+        Card topCard;
+        
+        try {
+            playerHand = new ArrayList<>(controller.getHumanPlayedCard());
+            computer1Hand = new ArrayList<>(controller.getCPUCard(0));
+            computer2Hand = new ArrayList<>(controller.getCPUCard(1));
+            computer3Hand = new ArrayList<>(controller.getCPUCard(2));
+            topCard = controller.getTopCard();
+        } catch (Exception e) {
+            // 如果获取数据时出错，使用空列表
+            playerHand = new ArrayList<>();
+            computer1Hand = new ArrayList<>();
+            computer2Hand = new ArrayList<>();
+            computer3Hand = new ArrayList<>();
+            topCard = null;
+        }
         
         // Null safety checks
-        if (playerHand == null) playerHand = new java.util.ArrayList<>();
-        if (computer1Hand == null) computer1Hand = new java.util.ArrayList<>();
-        if (computer2Hand == null) computer2Hand = new java.util.ArrayList<>();
-        if (computer3Hand == null) computer3Hand = new java.util.ArrayList<>();
+        if (playerHand == null) playerHand = new ArrayList<>();
+        if (computer1Hand == null) computer1Hand = new ArrayList<>();
+        if (computer2Hand == null) computer2Hand = new ArrayList<>();
+        if (computer3Hand == null) computer3Hand = new ArrayList<>();
         
         // Draw background
         graphic2D.setColor(new Color(255,203,142));
