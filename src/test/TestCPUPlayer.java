@@ -1,14 +1,12 @@
+
 package test;
 
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import java.lang.reflect.Field;
-import java.util.List;
 import model.*;
 import controller.UNOController;
 import java.util.ArrayList;
-import java.util.Arrays;
 
 public class TestCPUPlayer {
     private CPUPlayer cpuPlayer;
@@ -17,24 +15,15 @@ public class TestCPUPlayer {
 
     @BeforeEach
     public void setUp() {
-        // Get the controller instance
         controller = UNOController.getInstance();
-        
-        // Initialize the game properly
-        controller.startGame();  // This will call initializeGame() and set up the deck
-        
-        // Get the player list
+        controller.startGame();
         players = controller.getPlayerList();
-        
-        // Set the first player as current
         controller.setCurrentPlayer(players.get(0));
         controller.setPlayDirection(1);
-        
-        // Play a starting card
+
         Card startingCard = new NumberCard(Color.Red, 5, true);
         controller.playCard(startingCard);
-        
-        // Get the CPU player (should be at index 1 since index 0 is human)
+
         cpuPlayer = (CPUPlayer) players.get(1);
     }
 
@@ -42,9 +31,9 @@ public class TestCPUPlayer {
     public void testDrawCard() {
         int initialHandSize = cpuPlayer.getHand().size();
         Card card = new NumberCard(Color.Red, 5, true);
-        
+
         cpuPlayer.drawCard(card);
-        
+
         assertEquals(initialHandSize + 1, cpuPlayer.getHand().size());
         assertTrue(cpuPlayer.getHand().contains(card));
         assertFalse(cpuPlayer.getIsShout());
@@ -52,44 +41,32 @@ public class TestCPUPlayer {
 
     @Test
     public void testPlayCard() {
-        // Add a card to CPU's hand
         Card card = new NumberCard(Color.Red, 5, true);
         cpuPlayer.drawCard(card);
-        
-        // Set up game state to allow playing the card
-        controller.playCard(new NumberCard(Color.Red, 3, true)); // Set current color to Red
-        
+        controller.playCard(new NumberCard(Color.Red, 3, true));
+
         cpuPlayer.playCard(card);
         assertFalse(cpuPlayer.getHand().contains(card));
-        
-        // Test else part of playCard (when hand size becomes 1 after playing a card)
-        // Add two cards, play one to trigger the else condition
+
         cpuPlayer.getHand().clear();
         Card card1 = new NumberCard(Color.Red, 5, true);
         Card card2 = new NumberCard(Color.Blue, 3, true);
         cpuPlayer.drawCard(card1);
         cpuPlayer.drawCard(card2);
-        
-     // Set up game state to allow playing card1
-        controller.playCard(new NumberCard(Color.Red, 3, true)); // Match color
 
-        // Play one card, leaving one in hand
+        controller.playCard(new NumberCard(Color.Red, 3, true));
         cpuPlayer.playCard(card1);
 
-        // Verify UNO shout was handled (either shouted or not, but hand size should be 1)
         assertEquals(1, cpuPlayer.getHand().size());
     }
 
     @Test
     public void testShoutUno() {
-        // Clear the hand to start fresh
         cpuPlayer.getHand().clear();
-        // Test successful UNO shout
         cpuPlayer.drawCard(new NumberCard(Color.Red, 5, true));
         cpuPlayer.shoutUno();
         assertTrue(cpuPlayer.getIsShout());
-        
-        // Test failed UNO shout (too many cards)
+
         cpuPlayer.drawCard(new NumberCard(Color.Blue, 3, true));
         cpuPlayer.setIsShout(false);
         cpuPlayer.shoutUno();
@@ -98,123 +75,91 @@ public class TestCPUPlayer {
 
     @Test
     public void testCatchForgotShout() {
-        Player targetPlayer = players.get(2); // Another CPU player
+        Player targetPlayer = players.get(2);
         targetPlayer.getHand().clear();
         targetPlayer.drawCard(new NumberCard(Color.Red, 5, true));
         int initialHandSize = targetPlayer.getHand().size();
-        
+
         cpuPlayer.catchForgotShout(targetPlayer);
         assertEquals(initialHandSize + 2, targetPlayer.getHand().size());
     }
 
 
+@Test
+public void testChallengeDrawFour_ChallengeSucceeds() {
+    // 挑战成功:上家有红色牌,却打了Draw4(作弊)
+    Player targetPlayer = players.get(0);
+    targetPlayer.getHand().clear();
+    cpuPlayer.getHand().clear();
+
+    // 上家有红色牌(证明他作弊了)
+    targetPlayer.drawCard(new NumberCard(Color.Red, 5, true));
+
+    // 设置当前颜色为红色
+    controller.playCard(new NumberCard(Color.Red, 2, true));
+
+    int initialTargetHandSize = targetPlayer.getHand().size();
+    cpuPlayer.challengeDrawFour(targetPlayer);
+
+    // 挑战成功:上家抽4张牌作为惩罚
+    assertEquals(initialTargetHandSize + 4, targetPlayer.getHand().size(),
+                 "Target should draw exactly 4 cards when challenge succeeds");
+}
 
 @Test
-public void testChallengeDrawFour() {
-    boolean challengeOccurred = false;
-    boolean noChallengeOccurred = false;
+public void testChallengeDrawFour_ChallengeFails() {
+    // 挑战失败:上家没有红色牌,合法打Draw4
+    Player targetPlayer = players.get(0);
+    targetPlayer.getHand().clear();
+    cpuPlayer.getHand().clear();
 
-    for (int i = 0; i < 100; i++) {
-        // Reset the entire game state
-        controller.startGame();
-        players = controller.getPlayerList();
-        cpuPlayer = (CPUPlayer) players.get(1);
-        Player targetPlayer = players.get(0);
+    // 上家只有蓝色牌(证明他没有作弊)
+    targetPlayer.drawCard(new NumberCard(Color.Blue, 5, true));
 
-        // Clear hands and set up test scenario
-        targetPlayer.getHand().clear();
-        targetPlayer.drawCard(new NumberCard(Color.Red, 5, true));
-        cpuPlayer.getHand().clear();
-        cpuPlayer.drawCard(new NumberCard(Color.Blue, 3, true));
+    // 设置当前颜色为红色
+    controller.playCard(new NumberCard(Color.Red, 2, true));
 
-        // Set up current color
-        controller.playCard(new NumberCard(Color.Red, 3, true));
+    int initialCpuHandSize = cpuPlayer.getHand().size();
+    cpuPlayer.challengeDrawFour(targetPlayer);
 
-        int initialTargetHandSize = targetPlayer.getHand().size();
-        int initialCpuHandSize = cpuPlayer.getHand().size();
-
-        cpuPlayer.challengeDrawFour(targetPlayer);
-
-        // Check outcomes
-        if (targetPlayer.getHand().size() >= initialTargetHandSize + 4) {
-            challengeOccurred = true;
-        }
-        if (cpuPlayer.getHand().size() == initialCpuHandSize + 4) {
-            noChallengeOccurred = true;
-        }
-
-        if (challengeOccurred && noChallengeOccurred) {
-            break;
-        }
-    }
-
-    assertTrue(challengeOccurred, "Challenge should occur sometimes");
-    assertTrue(noChallengeOccurred, "No challenge should occur sometimes");
+    // 挑战失败:CPU抽6张牌(4张原本+2张惩罚)
+    assertEquals(initialCpuHandSize + 6, cpuPlayer.getHand().size(),
+                 "CPU should draw exactly 6 cards when challenge fails");
 }
 
 
     @Test
-    public void testChooseCard() {
-        // Add playable and non-playable cards
+    public void testChooseCard_OnlyOnePlayableCard() {
+        cpuPlayer.getHand().clear();
         cpuPlayer.drawCard(new NumberCard(Color.Red, 5, true));
-        cpuPlayer.drawCard(new NumberCard(Color.Blue, 3, true));
-        
-        // Set current color to Red to make Red/5 playable
+        cpuPlayer.drawCard(new NumberCard(Color.Green, 3, true));
+
         controller.playCard(new NumberCard(Color.Red, 3, true));
-        
+
         int initialHandSize = cpuPlayer.getHand().size();
-        
-        // This should choose a valid card to play
         cpuPlayer.chooseCard();
-        
-        // Verify a card was played (hand size decreased by 1)
+
         assertEquals(initialHandSize - 1, cpuPlayer.getHand().size());
-        
-        // Verify the played card is no longer in hand
-        boolean redFiveStillInHand = cpuPlayer.getHand().stream()
-            .anyMatch(card -> card.getColor() == Color.Red && 
-                             card instanceof NumberCard && 
-                             ((NumberCard) card).getValue() == 5);
-        
-        // Either the red 5 was played, or it's still in hand and blue 3 was played
-        if (redFiveStillInHand) {
-            // Blue 3 should have been played
-            assertFalse(cpuPlayer.getHand().stream()
-                .anyMatch(card -> card.getColor() == Color.Blue && 
-                                 card instanceof NumberCard && 
-                                 ((NumberCard) card).getValue() == 3));
-        }
+
+        boolean greenThreeInHand = cpuPlayer.getHand().stream()
+            .anyMatch(card -> card.getColor() == Color.Green &&
+                             card.getType() == Type.Number &&
+                             ((NumberCard) card).getValue() == 3);
+
+        assertTrue(greenThreeInHand, "Green 3 should remain in hand");
+        assertEquals(1, cpuPlayer.getHand().size(), "Only one card should remain");
     }
 
     @Test
-    public void testChooseColor() {
-        // Add cards of different colors
+    public void testChooseColor_DominantColor() {
+        cpuPlayer.getHand().clear();
         cpuPlayer.drawCard(new NumberCard(Color.Red, 5, true));
         cpuPlayer.drawCard(new NumberCard(Color.Red, 3, true));
-        cpuPlayer.drawCard(new NumberCard(Color.Blue, 2, true));
-        
-        // Should choose Red as it's the most common
+        cpuPlayer.drawCard(new NumberCard(Color.Red, 2, true));
+        cpuPlayer.drawCard(new NumberCard(Color.Blue, 1, true));
+
         Color chosenColor = cpuPlayer.chooseColor();
-        assertEquals(Color.Red, chosenColor);
-    }
 
-
-    @Test
-    public void testPlayCard_UnoShoutProbability() {
-        // Test UNO shout probability when playing down to one card
-        CPUPlayer testPlayer = (CPUPlayer) players.get(2); // Use a different player
-        testPlayer.getHand().clear();
-        testPlayer.drawCard(new NumberCard(Color.Red, 5, true));
-        testPlayer.drawCard(new NumberCard(Color.Blue, 3, true));
-        
-        // Play one card, leaving one in hand
-        testPlayer.playCard(testPlayer.getHand().get(0));
-        
-        // Either the player should have shouted UNO or not
-        // We can't predict the random outcome, but we can verify hand size
-        assertEquals(1, testPlayer.getHand().size());
+        assertEquals(Color.Red, chosenColor, "Should choose the dominant color Red");
     }
-    
-    
-    
 }
