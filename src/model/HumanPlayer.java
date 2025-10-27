@@ -139,7 +139,6 @@ public class HumanPlayer extends Player {
     @Override
     public void challengeDrawFour(Player targetPlayer) {
         System.out.println(name + " challenges " + targetPlayer.getName() + "'s Wild Draw Four card!");
-        UNOController controller = UNOController.getInstance();
         ArrayList<Card> cards = targetPlayer.getHand();
         ArrayList<Card> validCards = new ArrayList<>();
 
