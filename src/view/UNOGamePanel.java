@@ -261,10 +261,10 @@ public class UNOGamePanel extends JPanel {
         Graphics2D graphic2D = (Graphics2D) g;
         
         // Get current game state from controller
-        List<Card> playerHand = controller.getHumanPlayedCard();
-        List<Card> computer1Hand = controller.getCPUCard(0);
-        List<Card> computer2Hand = controller.getCPUCard(1);
-        List<Card> computer3Hand = controller.getCPUCard(2);
+        List<Card> playerHand = new ArrayList<>(controller.getHumanPlayedCard());
+        List<Card> computer1Hand = new ArrayList<>(controller.getCPUCard(0));
+        List<Card> computer2Hand = new ArrayList<>(controller.getCPUCard(1));
+        List<Card> computer3Hand = new ArrayList<>(controller.getCPUCard(2));
         Card topCard = controller.getTopCard();
         
         // Null safety checks
