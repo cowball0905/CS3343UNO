@@ -201,6 +201,12 @@ public class UNOController {
     
     public boolean canPlayCard(Card playedCard) {
         Card topCard = getTopCard();
+        
+        // 如果没有顶牌（游戏刚开始或PlayedCard为空），允许任何牌
+        if (topCard == null) {
+            return true;
+        }
+        
         switch (playedCard.getType()) {
             case Wild:
             case WildDrawFour:
@@ -276,6 +282,9 @@ public class UNOController {
     }
 
     public Card getTopCard() {
+        if (PlayedCard == null || PlayedCard.isEmpty()) {
+            return null;
+        }
         return PlayedCard.get(PlayedCard.size() - 1);
     }
 
