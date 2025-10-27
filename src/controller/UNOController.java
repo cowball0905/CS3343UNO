@@ -3,7 +3,6 @@ package controller;
 import model.*;
 import view.ChallengeViewer;
 import view.UNOGamePanel;
-import view.UNOMenuPanel;
 import view.WildCardViewer;
 
 import java.util.*;
@@ -15,7 +14,6 @@ import javax.swing.SwingUtilities;
 public class UNOController {
     private static UNOController instance;
     private UNOGamePanel gamePanel;
-    private UNOMenuPanel menuPanel;
     private JFrame mainFrame;
     private ArrayList<String> Deck;
     private CardFactory cardFactory = new ConcreteCardFactory();
@@ -48,7 +46,6 @@ public class UNOController {
             p.setController(this);
         }
         
-        menuPanel = new UNOMenuPanel(this);
         gamePanel = new UNOGamePanel(this);
         wildCardViewer = new WildCardViewer();
         challengeViewer = new ChallengeViewer();
@@ -99,13 +96,6 @@ public class UNOController {
             instance = new UNOController();
         }
         return instance;
-    }
-
-    public void setMenuPanel(UNOMenuPanel menuPanel) {
-        this.menuPanel = menuPanel;
-        if (menuPanel != null && menuPanel.getParent() instanceof JFrame) {
-            this.mainFrame = (JFrame) menuPanel.getParent();
-        }
     }
 
     private void initializeGame() {
@@ -160,7 +150,7 @@ public class UNOController {
         if(!isAction){
             isAction = true;
             System.out.println(currentPlayer.getName()+ " draws a card from the deck.");
-            currentPlayer.drawCard(cardFactory.giveCard(Deck,false, checkHuman() ? true:false, ""));
+            currentPlayer.drawCard(cardFactory.giveCard(Deck,false, checkCurrentPlayer()==0 ? true:false, ""));
             passNextPlayer(1);
             eachRound();
             isAction = false;
@@ -240,10 +230,6 @@ public class UNOController {
     }
 
     public void startGame() {
-        if (mainFrame == null && menuPanel != null) {
-            mainFrame = (JFrame) SwingUtilities.getWindowAncestor(menuPanel);
-        }
-
         initializeGame();
         
         if (mainFrame != null) {
