@@ -70,15 +70,20 @@ public class TestCPUPlayer {
         cpuPlayer.drawCard(card1);
         cpuPlayer.drawCard(card2);
         
+     // Set up game state to allow playing card1
+        controller.playCard(new NumberCard(Color.Red, 3, true)); // Match color
+
         // Play one card, leaving one in hand
         cpuPlayer.playCard(card1);
-        
+
         // Verify UNO shout was handled (either shouted or not, but hand size should be 1)
         assertEquals(1, cpuPlayer.getHand().size());
     }
 
     @Test
     public void testShoutUno() {
+        // Clear the hand to start fresh
+        cpuPlayer.getHand().clear();
         // Test successful UNO shout
         cpuPlayer.drawCard(new NumberCard(Color.Red, 5, true));
         cpuPlayer.shoutUno();
@@ -102,59 +107,51 @@ public class TestCPUPlayer {
         assertEquals(initialHandSize + 2, targetPlayer.getHand().size());
     }
 
-    @Test
-    public void testChallengeDrawFour() {
-        Player targetPlayer = players.get(0); // Human player
+
+
+@Test
+public void testChallengeDrawFour() {
+    boolean challengeOccurred = false;
+    boolean noChallengeOccurred = false;
+
+    for (int i = 0; i < 100; i++) {
+        // Reset the entire game state
+        controller.startGame();
+        players = controller.getPlayerList();
+        cpuPlayer = (CPUPlayer) players.get(1);
+        Player targetPlayer = players.get(0);
+
+        // Clear hands and set up test scenario
         targetPlayer.getHand().clear();
-        
-        // Test if part (when challenge is successful)
-        // Add a playable card to target's hand
         targetPlayer.drawCard(new NumberCard(Color.Red, 5, true));
-        
-        // Mock the random to always return true for the challenge
-        try {
-            // Use reflection to set the random to a predictable value
-            Field randomField = CPUPlayer.class.getDeclaredField("random");
-            randomField.setAccessible(true);
-            java.util.Random mockRandom = new java.util.Random() {
-                @Override
-                public double nextDouble() {
-                    return 0.3; // Always < 0.5 to trigger challenge
-                }
-            };
-            randomField.set(cpuPlayer, mockRandom);
-            
-            // Set up current color to make the card playable
-            controller.playCard(new NumberCard(Color.Red, 3, true));
-            
-            // Test the challenge
-            int initialTargetHandSize = targetPlayer.getHand().size();
-            cpuPlayer.challengeDrawFour(targetPlayer);
-            
-            // Verify challenge was successful (target should have 4 more cards)
-            assertTrue(targetPlayer.getHand().size() >= initialTargetHandSize + 4, 
-                "Target should have at least 4 more cards after failed challenge");
-            
-            // Test else part (when challenge is not made)
-            // Reset random to not challenge
-            mockRandom = new java.util.Random() {
-                @Override
-                public double nextDouble() {
-                    return 0.6; // Always > 0.5 to skip challenge
-                }
-            };
-            randomField.set(cpuPlayer, mockRandom);
-            
-            int initialCpuHandSize = cpuPlayer.getHand().size();
-            cpuPlayer.challengeDrawFour(targetPlayer);
-            
-            // Verify no challenge was made (CPU should have 4 more cards)
-            assertEquals(initialCpuHandSize + 4, cpuPlayer.getHand().size());
-            
-        } catch (Exception e) {
-            fail("Test failed due to reflection error: " + e.getMessage());
+        cpuPlayer.getHand().clear();
+        cpuPlayer.drawCard(new NumberCard(Color.Blue, 3, true));
+
+        // Set up current color
+        controller.playCard(new NumberCard(Color.Red, 3, true));
+
+        int initialTargetHandSize = targetPlayer.getHand().size();
+        int initialCpuHandSize = cpuPlayer.getHand().size();
+
+        cpuPlayer.challengeDrawFour(targetPlayer);
+
+        // Check outcomes
+        if (targetPlayer.getHand().size() >= initialTargetHandSize + 4) {
+            challengeOccurred = true;
+        }
+        if (cpuPlayer.getHand().size() == initialCpuHandSize + 4) {
+            noChallengeOccurred = true;
+        }
+
+        if (challengeOccurred && noChallengeOccurred) {
+            break;
         }
     }
+
+    assertTrue(challengeOccurred, "Challenge should occur sometimes");
+    assertTrue(noChallengeOccurred, "No challenge should occur sometimes");
+}
+
 
     @Test
     public void testChooseCard() {

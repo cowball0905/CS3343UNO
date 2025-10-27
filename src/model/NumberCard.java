@@ -15,6 +15,10 @@ public class NumberCard extends Card {
         return value;
     }
     
+    public String toString() {
+    	return getColor().toString() + " " + value;
+    }
+    
     @Override
     public void cardFunction(UNOController controller) {
         controller.passNextPlayer(1);
