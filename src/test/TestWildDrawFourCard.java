@@ -70,7 +70,7 @@ public void testWildDrawFourCardFunction_challenge() {
     players.get(2).drawCard(wildDrawFourCard);
     
     // Play the Wild Draw Four card
-    wildDrawFourCard.cardFunction();
+    wildDrawFourCard.cardFunction(controller);
     
     // Verify color was set (CPU should choose a color)
     assertNotNull(wildDrawFourCard.getColor(), 
@@ -108,7 +108,7 @@ public void testWildDrawFourCardFunction_noChallenge() {
     cpuPlayer2.drawCard(wildDrawFourCard);
     
     // Play the Wild Draw Four card
-    wildDrawFourCard.cardFunction();
+    wildDrawFourCard.cardFunction(controller);
     
     // Verify the color was set (should be one of the colors in CPU2's hand)
     assertNotNull(wildDrawFourCard.getColor(), 
@@ -143,7 +143,7 @@ void testWildDrawFourCardFunctionWithPlayerIndex0() {
     humanPlayer.drawCard(wildDrawFourCard);
     
     // Play the card
-    wildDrawFourCard.cardFunction();
+    wildDrawFourCard.cardFunction(controller);
     
     // Verify the card is set in the controller's wild card viewer
     assertSame(wildDrawFourCard, controller.getWildCardViewer().getCard(),

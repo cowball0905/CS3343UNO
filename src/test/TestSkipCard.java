@@ -56,7 +56,7 @@ public class TestSkipCard {
         
         // Create and play the skip card
         SkipCard skipCard = new SkipCard(Color.Red, true);
-        skipCard.cardFunction();
+        skipCard.cardFunction(controller);
         
         // The next player should be the one after the next (skipping one player)
       Player expectedNextPlayer = controller.getPlayerList().get(2);  // Changed from get(1) to get(2)
@@ -74,7 +74,7 @@ public class TestSkipCard {
         
         // Create and play the skip card (should wrap around to the beginning)
         SkipCard skipCard = new SkipCard(Color.Red, true);
-        skipCard.cardFunction();
+        skipCard.cardFunction(controller);
         
         // Should skip the first player (index 0) and go to the second player (index 1)
         Player expectedNextPlayer = players.get(1);

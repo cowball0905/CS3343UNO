@@ -67,7 +67,7 @@ public class TestNumberCard {
         
         // Create and play a number card
         NumberCard numberCard = new NumberCard(Color.Red, 7, true);
-        numberCard.cardFunction();
+        numberCard.cardFunction(controller);
         
         // The next player should be the immediate next player (index 1)
         Player expectedNextPlayer = players.get(1);
@@ -86,7 +86,7 @@ public class TestNumberCard {
         
         // Create and play a number card (should wrap around to the beginning)
         NumberCard numberCard = new NumberCard(Color.Red, 3, true);
-        numberCard.cardFunction();
+        numberCard.cardFunction(controller);
         
         // Should wrap around to the first player (index 0)
         Player expectedNextPlayer = players.get(0);

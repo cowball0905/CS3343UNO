@@ -80,7 +80,7 @@ public class TestDrawTwoCard {
   
   // Create and play the draw two card
   DrawTwoCard drawTwoCard = new DrawTwoCard(Color.Red, true);
-  drawTwoCard.cardFunction();
+  drawTwoCard.cardFunction(controller);
   
   // Verify the current player is now the expected next player
   String expectedPlayerName = expectedNextPlayer.getName();

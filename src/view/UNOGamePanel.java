@@ -26,7 +26,6 @@ public class UNOGamePanel extends JPanel {
     private long errorMessageTimer = 0;
     
     private UNOController controller;
-    private JButton menuButton;
     private JButton UnoButton;
     private JButton catchcpu1Button;
     private JButton catchcpu2Button;

@@ -69,7 +69,7 @@ void testWildCardFunctionWithPlayerIndex0() {
     WildCard wildCard = new WildCard(true);
     
     // When played by human (index 0), it should open WildCardViewer
-    wildCard.cardFunction();
+    wildCard.cardFunction(controller);
     
     // Since it's a human player, the color should be set through the UI
     // We'll manually set a color for testing purposes
@@ -88,7 +88,7 @@ void testWildCardFunctionWithPlayerIndex0() {
     wildCard.setColor(Color.Red);
     
     // Play the card
-    cpuWildCard.cardFunction();
+    cpuWildCard.cardFunction(controller);
     
     // Verify the color was set by CPU
     assertNotNull(cpuWildCard.getColor(), 

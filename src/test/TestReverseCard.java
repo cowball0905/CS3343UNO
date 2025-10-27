@@ -55,7 +55,7 @@ public class TestReverseCard {
       
       // Create and test the card
       ReverseCard card = new ReverseCard(Color.Red, true);
-      card.cardFunction();
+      card.cardFunction(controller);
       
       // Verify the play direction is reversed
       assertEquals(-1, controller.getPlayDirection(), 

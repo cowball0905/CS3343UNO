@@ -155,7 +155,7 @@ public void testRotationPersistence() {
             }
 
             @Override
-            public void cardFunction() {
+            public void cardFunction(controller.UNOController controller) {
             	return;
                 // Empty implementation for the abstract method
             }
@@ -226,7 +226,7 @@ public void testRotationPersistence() {
         }
         
         // For other card types, test that the card function can be called without throwing exceptions
-        assertDoesNotThrow(card::cardFunction, 
+        assertDoesNotThrow(() -> card.cardFunction(controller), 
             expectedBehavior + " should execute without throwing exceptions");
     }
     
@@ -278,7 +278,7 @@ public void testRotationPersistence() {
         
         // Create and test the card
         ReverseCard card = new ReverseCard(Color.Red, true);
-        card.cardFunction();
+        card.cardFunction(controller);
         
         // Verify the play direction is reversed
         assertEquals(-1, controller.getPlayDirection(), 
@@ -340,7 +340,7 @@ public void testWildDrawFourCardFunction_CPUPlayer() {
     cpuPlayer2.drawCard(wildDrawFourCard);
     
     // Play the Wild Draw Four card
-    wildDrawFourCard.cardFunction();
+    wildDrawFourCard.cardFunction(controller);
     
     // Verify the color was set (should be one of the colors in CPU2's hand)
     assertNotNull(wildDrawFourCard.getColor(), 
@@ -477,12 +477,12 @@ public void testWildDrawFourCardFunction_CPUPlayer() {
         
         // Test with a WildCard
         WildCard wildCard = new WildCard(true);
-        assertDoesNotThrow(() -> wildCard.cardFunction(),
+        assertDoesNotThrow(() -> wildCard.cardFunction(controller),
             "Wild card function should execute without throwing exceptions");
             
         // Test with a WildDrawFourCard
         WildDrawFourCard wildDrawFourCard = new WildDrawFourCard(true);
-        assertDoesNotThrow(() -> wildDrawFourCard.cardFunction(),
+        assertDoesNotThrow(() -> wildDrawFourCard.cardFunction(controller),
             "Wild Draw Four card function should execute without throwing exceptions");
     }
 
@@ -521,7 +521,7 @@ public void testWildDrawFourCardFunction_CPUPlayer() {
         
         // Create and play the draw two card
         DrawTwoCard drawTwoCard = new DrawTwoCard(Color.Red, true);
-        drawTwoCard.cardFunction();
+        drawTwoCard.cardFunction(controller);
         
         // Verify the current player is now the expected next player
         String expectedPlayerName = expectedNextPlayer.getName();
@@ -547,7 +547,7 @@ public void testWildDrawFourCardFunction_CPUPlayer() {
         
         // Create and play the skip card
         SkipCard skipCard = new SkipCard(Color.Red, true);
-        skipCard.cardFunction();
+        skipCard.cardFunction(controller);
         
         // Verify the next player is the one after the next (skipping one player)
      // Verify the next player is the one after the next (skipping one player)
@@ -567,7 +567,7 @@ public void testWildDrawFourCardFunction_CPUPlayer() {
         WildCard wildCard = new WildCard(true);
         
         // When played by human (index 0), it should open WildCardViewer
-        wildCard.cardFunction();
+        wildCard.cardFunction(controller);
         
         // Since it's a human player, the color should be set through the UI
         // We'll manually set a color for testing purposes
@@ -593,7 +593,7 @@ public void testWildDrawFourCardFunction_CPUPlayer() {
         }
         
         // Play the card
-        cpuWildCard.cardFunction();
+        cpuWildCard.cardFunction(controller);
         
         // Verify the color was set by CPU
         assertNotNull(cpuWildCard.getColor(), 
@@ -613,7 +613,7 @@ public void testWildDrawFourCardFunction_CPUPlayer() {
         WildDrawFourCard wildDrawFourCard = new WildDrawFourCard(true);
         
         // When played by human (index 0), it should open WildCardViewer
-        wildDrawFourCard.cardFunction();
+        wildDrawFourCard.cardFunction(controller);
         
         // Since it's a human player, the color should be set through the UI
         // We'll manually set a color for testing purposes
@@ -658,7 +658,7 @@ public void testWildDrawFourCardFunction_CPUPlayer() {
         }
         
         // Execute the card function
-        cpuWildDrawFour.cardFunction();
+        cpuWildDrawFour.cardFunction(controller);
         
         // Verify the color was set by CPU
         assertNotNull(cpuWildDrawFour.getColor(), 
