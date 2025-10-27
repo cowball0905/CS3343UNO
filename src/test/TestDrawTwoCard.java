@@ -35,11 +35,22 @@ public class TestDrawTwoCard {
     @Test
     void testDrawTwoCardInitialization() {
         drawTwoCard = new DrawTwoCard(Color.Red, true);
-        assertNotNull(drawTwoCard, "DrawTwoCard should be initialized");
-        assertEquals(Color.Red, drawTwoCard.getColor(), "DrawTwoCard color should be set");
-        assertTrue(drawTwoCard.isRevealed(), "DrawTwoCard should be revealed");
-        assertEquals(Type.DrawTwo, drawTwoCard.getType(), 
-            "Card type should be DrawTwo");
+        //DrawTwoCard color should be set
+        assertEquals(Color.Red, drawTwoCard.getColor());
+    }
+
+    @Test
+    void testDrawTwoCardRevealed() {
+        drawTwoCard = new DrawTwoCard(Color.Red, true);
+        //DrawTwoCard should be revealed
+        assertTrue(drawTwoCard.isRevealed());
+    }
+
+    @Test
+    void testDrawTwoCardType() {
+        drawTwoCard = new DrawTwoCard(Color.Red, true);
+        //"Card type should be DrawTwo"
+        assertEquals(Type.DrawTwo, drawTwoCard.getType());
     }
     
     @Test

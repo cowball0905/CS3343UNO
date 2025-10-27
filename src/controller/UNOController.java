@@ -167,42 +167,6 @@ public class UNOController {
         }
     }
 
-    public ArrayList<Card> getHumanPlayedCard() {
-        return players.get(0).getHand();
-    }
-
-    public ArrayList<Card> getCPUCard(int index) {
-        return players.get(index+1).getHand();
-    }
-
-    public Card getTopCard() {
-        return PlayedCard.get(PlayedCard.size() - 1);
-    }
-
-    public Player getCurrentPlayer() {
-        return players.get(players.indexOf(currentPlayer));
-    }
-
-    public void setCurrentPlayer(Player player) {
-        this.currentPlayer = player;
-    }
-
-    public ArrayList<Player> getPlayerList(){
-        return players;
-    }
-
-    public int getPlayDirection() {
-        return playDirection;
-    }
-
-    public void setPlayDirection(int direction) {
-        this.playDirection = direction;
-    } 
-
-    public UNOGamePanel getGamePanel() {
-        return gamePanel;
-    }
-
     public boolean isGameEnd(Card card) {
         if (currentPlayer.getHand().size() == 0 && canPlayCard(card)) {
             System.out.println(currentPlayer.getName() + " win!");
@@ -316,5 +280,41 @@ public class UNOController {
 
     public WildCardViewer getWildCardViewer(){
         return wildCardViewer;
+    }
+
+    public ArrayList<Card> getHumanPlayedCard() {
+        return players.get(0).getHand();
+    }
+
+    public ArrayList<Card> getCPUCard(int index) {
+        return players.get(index+1).getHand();
+    }
+
+    public Card getTopCard() {
+        return PlayedCard.get(PlayedCard.size() - 1);
+    }
+
+    public Player getCurrentPlayer() {
+        return players.get(players.indexOf(currentPlayer));
+    }
+
+    public void setCurrentPlayer(Player player) {
+        this.currentPlayer = player;
+    }
+
+    public ArrayList<Player> getPlayerList(){
+        return players;
+    }
+
+    public int getPlayDirection() {
+        return playDirection;
+    }
+
+    public void setPlayDirection(int direction) {
+        this.playDirection = direction;
+    } 
+
+    public UNOGamePanel getGamePanel() {
+        return gamePanel;
     }
 }

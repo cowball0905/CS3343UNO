@@ -192,14 +192,16 @@ public class TestHumanPlayer {
         
         // Test successful catch
         humanPlayer.catchForgotShout(targetPlayer);
-        assertEquals(3, targetPlayer.getHand().size(), "Should have 3 cards after penalty (1 original + 2 penalty)");
+        //Should have 3 cards after penalty (1 original + 2 penalty)
+        assertEquals(3, targetPlayer.getHand().size());
         
         // Test failed catch (player already shouted)
         targetPlayer.getHand().clear();
         targetPlayer.getHand().add(new NumberCard(Color.Blue, 7, true));
         targetPlayer.setIsShout(true);
         humanPlayer.catchForgotShout(targetPlayer);
-        assertEquals(1, targetPlayer.getHand().size(), "Should not add penalty cards if player already shouted");
+        //Should not add penalty cards if player already shouted
+        assertEquals(1, targetPlayer.getHand().size());
         
         // Test with target having more than 1 card (should not be penalized)
         targetPlayer.getHand().clear();
@@ -207,7 +209,8 @@ public class TestHumanPlayer {
         targetPlayer.getHand().add(new NumberCard(Color.Green, 3, true));
         targetPlayer.setIsShout(false);
         humanPlayer.catchForgotShout(targetPlayer);
-        assertEquals(2, targetPlayer.getHand().size(), "Should not add penalty cards if target has more than 1 card");
+        //Should not add penalty cards if target has more than 1 card
+        assertEquals(2, targetPlayer.getHand().size());
         
         // Test with null target player should throw NullPointerException
         assertThrows(NullPointerException.class, 
