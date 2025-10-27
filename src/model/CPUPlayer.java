@@ -93,8 +93,6 @@ public class CPUPlayer extends Player {
             System.out.println(name + " (CPU) challenges " + targetPlayer.getName() + "'s Wild Draw Four card!");
             ArrayList<Card> cards = targetPlayer.getHand();
             ArrayList<Card> validCards = new ArrayList<>();
-            ArrayList<Player> players = controller.getPlayerList();
-            Player currentPlayer = controller.getCurrentPlayer();
 
             for(Card card:cards){
                 if(controller.canPlayCard(card)){

@@ -9,7 +9,6 @@ import java.util.*;
 import javax.swing.Timer;
 
 import javax.swing.JFrame;
-import javax.swing.SwingUtilities;
 
 public class UNOController {
     private static UNOController instance;
@@ -68,7 +67,7 @@ public class UNOController {
                     int nextIndex = (currentIndex + (1 * playDirection) + players.size()) % players.size();
                     Player nextPlayer = players.get(nextIndex);
                     for(int i=0;i<4;i++){
-                        nextPlayer.drawCard(getCardFactory().giveCard(Deck, false, false, ""));
+                        nextPlayer.drawCard(getCardFactory().giveCard(Deck, false, checkCurrentPlayer()==0? true: false, ""));
                     }
                 }else {
                     getCardFromDeck();

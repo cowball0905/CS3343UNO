@@ -14,7 +14,6 @@ public class DrawTwoCard extends Card {
     public void cardFunction(UNOController controller) {
         System.out.println("Draw Two card played: next player draws 2 cards");
 
-        Player currentPlayer = controller.getCurrentPlayer();
         ArrayList<Player> playerList = controller.getPlayerList();
         int playDirection = controller.getPlayDirection(); // 1 for clockwise, -1 for counter-clockwise
 
@@ -31,7 +30,7 @@ public class DrawTwoCard extends Card {
 
         // Make the next player draw 2 cards
         for (int i = 0; i < 2; i++) {
-            nextPlayer.drawCard(cardFactory.giveCard(controller.getDeck(),false, controller.checkCurrentPlayer()==0 ? true:false, ""));
+            nextPlayer.drawCard(cardFactory.giveCard(controller.getDeck(),false, controller.checkPlayer(nextPlayer) == 0 ? true:false, ""));
         }
 
         controller.passNextPlayer(2);
