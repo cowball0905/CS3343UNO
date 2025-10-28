@@ -139,6 +139,8 @@ public abstract class Card {
         this.rotationAngle = angle;
         if(angle!=0){
             this.isRotated = true;
+        }else {
+        	this.isRotated = false;
         }
     }
     
