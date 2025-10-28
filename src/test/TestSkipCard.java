@@ -27,7 +27,7 @@ public class TestSkipCard {
         // Add test players
         for (int i = 0; i < 4; i++) {
             CPUPlayer player = new CPUPlayer("Player" + (i + 1));
-            player.setController(controller);
+            player.setController();
             players.add(player);
         }
         

@@ -60,7 +60,7 @@ class TestChallengeViewer {
     @Test
     void testRedButtonAction() {
         // Setup
-        challengeViewer.setController(controller);
+        challengeViewer.setController();
         challengeViewer.setPanel(panel);
         challengeViewer.setTimer(timer);
         challengeViewer.setChallenge();
@@ -100,7 +100,7 @@ class TestChallengeViewer {
     @Test
     void testRedButtonAction_Player0() {
         // Setup
-        challengeViewer.setController(controller);
+        challengeViewer.setController();
         challengeViewer.setPanel(panel);
         challengeViewer.setTimer(timer);
         
@@ -146,7 +146,7 @@ class TestChallengeViewer {
     @Test
     void testGreenButtonAction() {
         // Setup
-        challengeViewer.setController(controller);
+        challengeViewer.setController();
         challengeViewer.setPanel(panel);
         challengeViewer.setTimer(timer);
         challengeViewer.setChallenge();
@@ -176,7 +176,7 @@ class TestChallengeViewer {
     @Test
     void testDrawWindowWhenNotChallenging() {
         // Setup
-        challengeViewer.setController(controller);
+        challengeViewer.setController();
         challengeViewer.setPanel(panel);
         
         // Don't call setChallenge()

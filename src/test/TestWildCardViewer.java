@@ -124,7 +124,7 @@ class TestWildCardViewer {
         wildCardViewer.setTimer(testTimer);
         
         // Set the controller
-        wildCardViewer.setController(controller);
+        wildCardViewer.setController();
         
         // Initialize test card
         testCard = new WildCard(true);

@@ -131,7 +131,7 @@ public class TestHumanPlayer {
     @Test
     public void testCatchForgotShout() {
         Player targetPlayer = new CPUPlayer("Target");
-        targetPlayer.setController(controller);
+        targetPlayer.setController();
         targetPlayer.getHand().clear();
         targetPlayer.getHand().add(new NumberCard(Color.Red, 5, true));
         targetPlayer.setIsShout(false);
