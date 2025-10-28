@@ -158,7 +158,7 @@ public class UNOController {
     }
 
     public boolean isGameEnd(Card card) {
-        if (currentPlayer.getHand().size() == 0 && canPlayCard(card)) {
+        if (currentPlayer.getHand().size() == 0 && canPlayCard(card,topCard)) {
             System.out.println(currentPlayer.getName() + " win!");
             gamePanel.setIsGameEnd(true);
             return true;
@@ -204,11 +204,9 @@ public class UNOController {
         gamePanel.updateDisplay();
     }
     
-    public boolean canPlayCard(Card playedCard) {
-        Card topCard = getTopCard();
-        
+    public boolean canPlayCard(Card playedCard,Card matchCard) {    
         // 如果没有顶牌（游戏刚开始或PlayedCard为空），允许任何牌
-        if (topCard == null) {
+        if (matchCard == null) {
             return true;
         }
         
@@ -219,14 +217,14 @@ public class UNOController {
             case Skip:
             case Reverse:
             case DrawTwo:
-                if (playedCard.getColor() == topCard.getColor() || playedCard.getType() == topCard.getType()) {
+                if (playedCard.getColor() == matchCard.getColor() || playedCard.getType() == matchCard.getType()) {
                     return true;
                 }
                 return false;
             case Number:
-                if(playedCard.getColor() == topCard.getColor()){
+                if(playedCard.getColor() == matchCard.getColor()){
                     return true;
-                }else if(topCard.getType()==Type.Number && ((NumberCard) playedCard).getValue() == ((NumberCard)topCard).getValue()){
+                }else if(matchCard.getType()==Type.Number && ((NumberCard) playedCard).getValue() == ((NumberCard)matchCard).getValue()){
                     return true;
                 }
                 return false;
@@ -286,11 +284,8 @@ public class UNOController {
         return players.get(index+1).getHand();
     }
 
-    public Card getTopCard() {
-        if (PlayedCard == null || PlayedCard.isEmpty()) {
-            return null;
-        }
-        return PlayedCard.get(PlayedCard.size() - 1);
+    public Card getTopCard(int index) {
+        return PlayedCard.get(PlayedCard.size() - index);
     }
 
     public Player getCurrentPlayer() {

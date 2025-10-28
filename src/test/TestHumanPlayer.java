@@ -63,7 +63,7 @@ public class TestHumanPlayer {
         CPUPlayer cpuPlayer = (CPUPlayer) controller.getPlayerList().get(1);
         
         // Clear the played cards and add a starting card
-        controller.getTopCard(); // This will initialize the first card
+        controller.getTopCard(1); // This will initialize the first card
         
         // Clear and set up the hand
         humanPlayer.getHand().clear();
@@ -227,7 +227,7 @@ public class TestHumanPlayer {
         // Test successful challenge (target has playable card)
         targetPlayer.getHand().clear();
         // Add a card that matches the current top card
-        Card topCard = controller.getTopCard();
+        Card topCard = controller.getTopCard(1);
         Card matchingCard = new NumberCard(topCard.getColor(), 5, true);
         targetPlayer.getHand().add(matchingCard);
         
@@ -275,7 +275,7 @@ public class TestHumanPlayer {
         humanPlayer.getHand().clear();
         humanPlayer.getHand().add(new NumberCard(Color.Red, 5, true));
         humanPlayer.getHand().add(new NumberCard(Color.Red, 6, true));
-        controller.getTopCard().setColor(Color.Blue); // Make sure cards don't match
+        controller.getTopCard(1).setColor(Color.Blue); // Make sure cards don't match
         result = humanPlayer.shoutUno();
         assertEquals("You have more than 1 card!", result,
             "Should return error when more than 1 card in hand");

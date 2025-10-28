@@ -98,7 +98,7 @@ public class CPUPlayer extends Player {
             ArrayList<Card> validCards = new ArrayList<>();
 
             for(Card card:cards){
-                if(controller.canPlayCard(card)){
+                if(controller.canPlayCard(card,controller.getTopCard(2))){
                     validCards.add(card);
                 }
             }
@@ -137,7 +137,7 @@ public class CPUPlayer extends Player {
         ArrayList<Card> validCards = new ArrayList<>();
 
         for (Card c : playerCards) {
-            if (controller.canPlayCard(c)) {
+            if (controller.canPlayCard(c,controller.getTopCard(1))) {
                 validCards.add(c);
             }
         }

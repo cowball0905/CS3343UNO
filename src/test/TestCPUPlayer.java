@@ -144,7 +144,7 @@ public class TestCPUPlayer {
 	                 "Hand size should decrease by 1 after playing a card");
 	
 	    // Check the top card is a valid playable card (Red 5 is the only playable card)
-	    Card topCard = controller.getTopCard();
+	    Card topCard = controller.getTopCard(1);
 	    assertTrue(
 	        (topCard.getColor() == Color.Red && topCard.getType() == Type.Number && ((NumberCard) topCard).getValue() == 5),
 	        "Top card should be Red 5 (the only playable card)"
