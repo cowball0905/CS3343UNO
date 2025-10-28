@@ -168,6 +168,33 @@ public class TestCPUPlayer {
 	                 "Target should draw exactly 4 cards when challenge succeeds");
 	}
 
+	@Test
+	public void testChallengeDrawFour_notChallenge() {
+		controller.setIsFreezed(false);
+	    Player targetPlayer = players.get(0);
+	    targetPlayer.getHand().clear();
+	    cpuPlayer.getHand().clear();
+	
+	    // 上家有1张红色牌(满足挑战条件 >=5 张,且有匹配颜色)
+		for (int i = 0; i < 1; i++) {
+			targetPlayer.drawCard(new NumberCard(Color.Red, 5, true));
+		}
+	    
+	    // 设置倒数第二张牌为红色
+	    controller.playCard(new NumberCard(Color.Red, 2, true));
+	    controller.setIsFreezed(true);
+	
+	    // 上家打出 Wild Draw Four(这是被挑战的牌)
+	    controller.playCard(new WildDrawFourCard(true));
+	
+	    controller.setCurrentPlayer(cpuPlayer);
+	
+	    int initialTargetHandSize = cpuPlayer.getHand().size();
+	    cpuPlayer.challengeDrawFour(targetPlayer);
+	
+	    // 挑战成功:上家抽4张牌
+	    assertEquals(initialTargetHandSize + 4, cpuPlayer.getHand().size());
+	}
 
 
     @Test
