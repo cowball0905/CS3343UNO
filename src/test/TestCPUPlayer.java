@@ -33,21 +33,7 @@ public class TestCPUPlayer {
     
     @AfterEach
     public void tearDown() {
-        cpuPlayer.getHand().clear();
-
-        // ✅ 清理所有玩家
-        for (Player player : players) {
-            player.getHand().clear();
-            player.setIsShout(false);
-        }
-
-        // ✅ 重置 controller 状态
-        controller.setIsFreezed(false);
-        controller.setCurrentPlayer(players.get(0));
-        controller.setPlayDirection(1);
-
-        ArrayList<Player> list = controller.getPlayerList();  // 假设有这个方法
-        list.forEach(p -> p.getHand().clear());
+        controller.resetInstance();
     }
     
 
@@ -197,7 +183,7 @@ public class TestCPUPlayer {
 	}
 
 
-    @Test
+    @Test                                                                                            
     public void testChooseCard_OnlyOnePlayableCard() {
         controller.setIsFreezed(true);
         cpuPlayer.getHand().clear();
