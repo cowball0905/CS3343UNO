@@ -324,7 +324,9 @@ public class UNOController {
         isFreezed = freeze;
     }
     
-    public boolean isFreezed() {
-        return isFreezed;
-    }
+	public static void resetInstance() {
+	    if (instance != null) {
+	        instance = null;
+	    }
+	}
 }

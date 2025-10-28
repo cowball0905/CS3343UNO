@@ -16,6 +16,7 @@ public class TestHumanPlayer {
     
     @BeforeEach
     public void setUp() {
+    	controller.resetInstance();
         controller = UNOController.getInstance();
         humanPlayer = new HumanPlayer("Player1");
         humanPlayer.setController(controller);
