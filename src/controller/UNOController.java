@@ -28,25 +28,24 @@ public class UNOController {
     private final int INITCARDSIZE = 7;
 
     private UNOController() {
+        System.out.println("UNO Game window created and should be visible!");
+    }
+
+    public static UNOController getInstance() {
+        if (instance == null) {
+            instance = new UNOController();
+        }
+        return instance;
+    }
+
+    private void setViewers() {
         mainFrame = new JFrame("UNO Game");
         mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         mainFrame.setSize(1000, 700);
         mainFrame.setLocationRelativeTo(null);
         mainFrame.setResizable(false);
         
-        players = new ArrayList<>();
-        for(int i=0;i<4;i++){
-            if(i==0){
-                players.add(new HumanPlayer("Player"));
-            }else{
-                players.add(new CPUPlayer("CPU"+(i)));
-            }
-        }
-        for (Player p : players) {
-            p.setController(this);
-        }
-        
-        gamePanel = new UNOGamePanel(this);
+        gamePanel = new UNOGamePanel();
         wildCardViewer = new WildCardViewer();
         challengeViewer = new ChallengeViewer();
 
@@ -77,25 +76,31 @@ public class UNOController {
         });
         
         wildCardViewer.setTimer(turnTimer);
-        wildCardViewer.setController(this);
+        wildCardViewer.setController();
         wildCardViewer.setPanel(gamePanel);
 
         challengeViewer.setTimer(turnTimer);
-        challengeViewer.setController(this);
+        challengeViewer.setController();
         challengeViewer.setPanel(gamePanel);
         
         //initializeGame();
         
         mainFrame.setVisible(true);
-        
-        System.out.println("UNO Game window created and should be visible!");
     }
 
-    public static UNOController getInstance() {
-        if (instance == null) {
-            instance = new UNOController();
+    private void setPlayers() {
+        players = new ArrayList<>();
+        for(int i=0;i<4;i++){
+            if(i==0){
+                players.add(new HumanPlayer("Player"));
+            }else{
+                players.add(new CPUPlayer("CPU"+(i)));
+            }
         }
-        return instance;
+        for (Player p : players) {
+            p.setController();
+        }
+        
     }
 
     private void initializeGame() {
@@ -239,13 +244,15 @@ public class UNOController {
     }
 
     public void startGame() {
+        setPlayers();
+        setViewers();
         initializeGame();
         
         if (mainFrame != null) {
             mainFrame.getContentPane().removeAll();
             
             if (gamePanel == null) {
-                gamePanel = new UNOGamePanel(this);
+                gamePanel = new UNOGamePanel();
             }
             
             mainFrame.add(gamePanel);

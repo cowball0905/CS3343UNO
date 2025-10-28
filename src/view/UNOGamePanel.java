@@ -32,8 +32,8 @@ public class UNOGamePanel extends JPanel {
     private JButton catchcpu3Button;
     private boolean isGameEnd = false;
     
-    public UNOGamePanel(UNOController controller) {
-        this.controller = controller;
+    public UNOGamePanel() {
+        this.controller = UNOController.getInstance();
         setPreferredSize(new Dimension(WIDTH, HEIGHT));
         setBackground(new Color(255, 255, 255)); 
         setLayout(null);

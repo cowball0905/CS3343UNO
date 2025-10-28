@@ -29,8 +29,8 @@ public class WildCardViewer {
         isHavingWild = false;
     }
 
-    public void setController(UNOController controller) {
-        this.controller = controller;
+    public void setController() {
+        this.controller = UNOController.getInstance();
     }
 
     public void setTimer(CountDownTimer timer) {

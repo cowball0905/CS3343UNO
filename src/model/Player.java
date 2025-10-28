@@ -15,8 +15,9 @@ public abstract class Player implements Drawable, Playable, Shoutable, Catchable
         this.hand = new ArrayList<>();
         this.isShout = false;
     }
-    public void setController(UNOController controller) {
-        this.controller = controller;
+    
+    public void setController() {
+        this.controller = UNOController.getInstance();
     }
     
     public String getName() { return name; }
