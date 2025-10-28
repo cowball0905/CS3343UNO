@@ -34,6 +34,8 @@ public class TestCard {
         
         // Set up controller with test players
         controller = UNOController.getInstance();
+        controller.setViewers();
+        controller.setPlayers();
         // Setup controller with test players
         for (int i = 0; i < 4; i++) {
             players.add(new CPUPlayer("Player" + (i + 1)));

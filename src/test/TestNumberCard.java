@@ -16,6 +16,8 @@ public class TestNumberCard {
     @BeforeEach
     void setUp() {
         controller = UNOController.getInstance();
+        controller.setViewers();
+        controller.setPlayers();
         players = controller.getPlayerList();
         players.clear();
         

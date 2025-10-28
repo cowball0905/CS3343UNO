@@ -19,6 +19,9 @@ public class TestSkipCard {
     public void setUp() {
         // Get the controller instance
         controller = UNOController.getInstance();
+
+        controller.setViewers();
+        controller.setPlayers();
         
         // Get the player list
         players = controller.getPlayerList();

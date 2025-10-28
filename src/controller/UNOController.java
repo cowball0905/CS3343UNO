@@ -38,7 +38,7 @@ public class UNOController {
         return instance;
     }
 
-    private void setViewers() {
+    public void setViewers() {
         mainFrame = new JFrame("UNO Game");
         mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         mainFrame.setSize(1000, 700);
@@ -48,6 +48,9 @@ public class UNOController {
         gamePanel = new UNOGamePanel();
         wildCardViewer = new WildCardViewer();
         challengeViewer = new ChallengeViewer();
+
+        wildCardViewer.setController();
+        challengeViewer.setController();
 
         turnTimer = new CountDownTimer(gamePanel, new CountDownTimer.TimerCallback() {
             @Override
@@ -76,11 +79,9 @@ public class UNOController {
         });
         
         wildCardViewer.setTimer(turnTimer);
-        wildCardViewer.setController();
         wildCardViewer.setPanel(gamePanel);
 
         challengeViewer.setTimer(turnTimer);
-        challengeViewer.setController();
         challengeViewer.setPanel(gamePanel);
         
         //initializeGame();
@@ -88,7 +89,7 @@ public class UNOController {
         mainFrame.setVisible(true);
     }
 
-    private void setPlayers() {
+    public void setPlayers() {
         players = new ArrayList<>();
         for(int i=0;i<4;i++){
             if(i==0){
