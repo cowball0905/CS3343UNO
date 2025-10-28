@@ -2,6 +2,8 @@
 package test;
 
 import static org.junit.jupiter.api.Assertions.*;
+
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import model.*;
@@ -15,6 +17,7 @@ public class TestCPUPlayer {
 
     @BeforeEach
     public void setUp() {
+        controller.resetInstance();
         controller = UNOController.getInstance();
         controller.startGame();
         players = controller.getPlayerList();
@@ -25,8 +28,28 @@ public class TestCPUPlayer {
         controller.playCard(startingCard);
 
         cpuPlayer = (CPUPlayer) players.get(1);
-        controller.setIsFreezed(false);
+        controller.setIsFreezed(true);
     }
+    
+    @AfterEach
+    public void tearDown() {
+        cpuPlayer.getHand().clear();
+
+        // ✅ 清理所有玩家
+        for (Player player : players) {
+            player.getHand().clear();
+            player.setIsShout(false);
+        }
+
+        // ✅ 重置 controller 状态
+        controller.setIsFreezed(false);
+        controller.setCurrentPlayer(players.get(0));
+        controller.setPlayDirection(1);
+
+        ArrayList<Player> list = controller.getPlayerList();  // 假设有这个方法
+        list.forEach(p -> p.getHand().clear());
+    }
+    
 
     @Test
     public void testDrawCard() {
@@ -60,10 +83,8 @@ public class TestCPUPlayer {
         controller.setCurrentPlayer(cpuPlayer);
         cpuPlayer.getHand().clear();
         cpuPlayer.drawCard(new NumberCard(Color.Red, 5, true));
-
         cpuPlayer.shoutUno();
-
-        assertTrue(cpuPlayer.getIsShout(), "Should always shout UNO with 1 card");
+        assertTrue(cpuPlayer.getIsShout());
     }
 
     @Test
@@ -92,6 +113,7 @@ public class TestCPUPlayer {
 
 	@Test
 	public void testChallengeDrawFour_ChallengeFails() {
+	    controller.setIsFreezed(true);
 	    Player targetPlayer = players.get(0);
 	    targetPlayer.getHand().clear();
 	    cpuPlayer.getHand().clear();
@@ -106,7 +128,6 @@ public class TestCPUPlayer {
 	    controller.playCard(new WildDrawFourCard(true));
 	
 	    controller.setCurrentPlayer(cpuPlayer);
-	    controller.setIsFreezed(true);
 	
 	    int initialCpuHandSize = cpuPlayer.getHand().size();
 	    cpuPlayer.challengeDrawFour(targetPlayer);
@@ -118,16 +139,17 @@ public class TestCPUPlayer {
 	
 	@Test
 	public void testChallengeDrawFour_ChallengeSucceeds() {
-	    controller.setIsFreezed(true);
+		controller.setIsFreezed(false);
 	    Player targetPlayer = players.get(0);
 	    targetPlayer.getHand().clear();
 	    cpuPlayer.getHand().clear();
 	
 	    // 上家有1张红色牌(满足挑战条件 <= 2张,且有匹配颜色)
 	    targetPlayer.drawCard(new NumberCard(Color.Red, 5, true));
-	
+	    
 	    // 设置倒数第二张牌为红色
 	    controller.playCard(new NumberCard(Color.Red, 2, true));
+	    controller.setIsFreezed(true);
 	
 	    // 上家打出 Wild Draw Four(这是被挑战的牌)
 	    controller.playCard(new WildDrawFourCard(true));

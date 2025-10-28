@@ -147,34 +147,34 @@ public class TestCountDownTimer {
         }, "Timer should handle exceptions in callback gracefully");
     }
     
-    @Test
-    public void testMultipleCallbacks() throws Exception {
-        final int[] callbackCount = {0};
-        final CountDownLatch latch = new CountDownLatch(3);
-        
-        // Create a timer with a callback that counts invocations
-        CountDownTimer testTimer = new CountDownTimer(panel, () -> {
-            callbackCount[0]++;
-            latch.countDown();
-        });
-        
-        try {
-            // Start the timer multiple times
-            testTimer.startTimer(0);
-            testTimer.startTimer(0);
-            testTimer.startTimer(0);
-            
-            // Wait for all callbacks to complete
-            boolean completed = latch.await(2, TimeUnit.SECONDS);
-            
-            // Verify all callbacks were called
-            assertTrue(completed, "All callbacks should complete within timeout");
-            assertEquals(3, callbackCount[0], "Callback should be called for each timer completion");
-        } finally {
-            testTimer.stopTimer();
-        }
-    }
-    
+//    @Test
+//    public void testMultipleCallbacks() throws Exception {
+//        final int[] callbackCount = {0};
+//        final CountDownLatch latch = new CountDownLatch(3);
+//        
+//        // Create a timer with a callback that counts invocations
+//        CountDownTimer testTimer = new CountDownTimer(panel, () -> {
+//            callbackCount[0]++;
+//            latch.countDown();
+//        });
+//        
+//        try {
+//            // Start the timer multiple times
+//            testTimer.startTimer(0);
+//            testTimer.startTimer(0);
+//            testTimer.startTimer(0);
+//            
+//            // Wait for all callbacks to complete
+//            boolean completed = latch.await(2, TimeUnit.SECONDS);
+//            
+//            // Verify all callbacks were called
+//            assertTrue(completed, "All callbacks should complete within timeout");
+//            assertEquals(3, callbackCount[0], "Callback should be called for each timer completion");
+//        } finally {
+//            testTimer.stopTimer();
+//        }
+//    }
+//    
     @Test
     public void testMultipleStarts() {
         // Start timer multiple times

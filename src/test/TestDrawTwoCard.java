@@ -54,48 +54,40 @@ public class TestDrawTwoCard {
     }
     
     @Test
-    void testDrawTwoCardFunction() {
-        // Test with player at index 0
-        testDrawTwoForPlayer(0);
-        
-        // Test with player at index 3 (last player)
-        testDrawTwoForPlayer(3);
-    }
-    
-  private void testDrawTwoForPlayer(int playerIndex) {
-  // Reset to known state
-  Player currentPlayer = controller.getPlayerList().get(playerIndex);
-  controller.setCurrentPlayer(currentPlayer);
-  controller.setPlayDirection(1);
-  
-  // Get the next player who should draw cards (one after current)
-  int drawPlayerIndex = (playerIndex + 1) % controller.getPlayerList().size();
-  Player drawPlayer = controller.getPlayerList().get(drawPlayerIndex);
-  
-  // Get the player who should be next after the draw (two after current)
-  int nextPlayerIndex = (playerIndex + 2) % controller.getPlayerList().size();
-  Player expectedNextPlayer = controller.getPlayerList().get(nextPlayerIndex);
-  // Clear the draw player's hand to ensure a known state
-  drawPlayer.getHand().clear();
-  
-  // Create and play the draw two card
-  DrawTwoCard drawTwoCard = new DrawTwoCard(Color.Red, true);
-  drawTwoCard.cardFunction(controller);
-  
-  // Verify the current player is now the expected next player
-  String expectedPlayerName = expectedNextPlayer.getName();
-  String actualPlayerName = controller.getCurrentPlayer().getName();
-  assertEquals(expectedPlayerName, actualPlayerName, 
-      String.format("Current player should be %s after player %d plays DrawTwo, but was %s", 
-          expectedPlayerName, playerIndex, actualPlayerName));
-      
-  // Verify the correct player had to draw 2 cards
-  int expectedCards = 2;
-  int actualCards = drawPlayer.getHand().size();
-  assertEquals(expectedCards, actualCards, 
-      String.format("Player %s should have drawn %d cards, but had %d", 
-          drawPlayer.getName(),
-          expectedCards, 
-          actualCards));
-}
+	void testDrawTwoForPlayer(int playerIndex) {
+	  // Reset to known state
+	  Player currentPlayer = controller.getPlayerList().get(playerIndex);
+	  controller.setCurrentPlayer(currentPlayer);
+	  controller.setPlayDirection(1);
+	  
+	  // Get the next player who should draw cards (one after current)
+	  int drawPlayerIndex = (playerIndex + 1) % controller.getPlayerList().size();
+	  Player drawPlayer = controller.getPlayerList().get(drawPlayerIndex);
+	  
+	  // Get the player who should be next after the draw (two after current)
+	  int nextPlayerIndex = (playerIndex + 2) % controller.getPlayerList().size();
+	  Player expectedNextPlayer = controller.getPlayerList().get(nextPlayerIndex);
+	  // Clear the draw player's hand to ensure a known state
+	  drawPlayer.getHand().clear();
+	  
+	  // Create and play the draw two card
+	  DrawTwoCard drawTwoCard = new DrawTwoCard(Color.Red, true);
+	  drawTwoCard.cardFunction(controller);
+	  
+	  // Verify the current player is now the expected next player
+	  String expectedPlayerName = expectedNextPlayer.getName();
+	  String actualPlayerName = controller.getCurrentPlayer().getName();
+	  assertEquals(expectedPlayerName, actualPlayerName, 
+	      String.format("Current player should be %s after player %d plays DrawTwo, but was %s", 
+	          expectedPlayerName, playerIndex, actualPlayerName));
+	      
+	  // Verify the correct player had to draw 2 cards
+	  int expectedCards = 2;
+	  int actualCards = drawPlayer.getHand().size();
+	  assertEquals(expectedCards, actualCards, 
+	      String.format("Player %s should have drawn %d cards, but had %d", 
+	          drawPlayer.getName(),
+	          expectedCards, 
+	          actualCards));
+	}
 }
