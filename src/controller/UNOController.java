@@ -158,7 +158,7 @@ public class UNOController {
     }
 
     public boolean isGameEnd(Card card) {
-        if (currentPlayer.getHand().size() == 0 && canPlayCard(card,topCard)) {
+        if (currentPlayer.getHand().size() == 0 && canPlayCard(card, PlayedCard.get(PlayedCard.size() - 1))) {
             System.out.println(currentPlayer.getName() + " win!");
             gamePanel.setIsGameEnd(true);
             return true;

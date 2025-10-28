@@ -25,6 +25,7 @@ public class TestCPUPlayer {
         controller.playCard(startingCard);
 
         cpuPlayer = (CPUPlayer) players.get(1);
+        controller.setIsFreezed(false);
     }
 
     @Test
@@ -42,29 +43,35 @@ public class TestCPUPlayer {
     @Test
     public void testPlayCard() {
         controller.setCurrentPlayer(cpuPlayer);
+        controller.setIsFreezed(false);
         cpuPlayer.getHand().clear();
         Card card = new NumberCard(Color.Red, 5, true);
         cpuPlayer.drawCard(card);
 
         controller.playCard(new NumberCard(Color.Red, 3, true));
         cpuPlayer.playCard(card);
-        
+
         assertFalse(cpuPlayer.getHand().contains(card));
     }
 
     @Test
     public void testShoutUnoTrue() {
+    	controller.setIsFreezed(true);
         controller.setCurrentPlayer(cpuPlayer);
         cpuPlayer.getHand().clear();
         cpuPlayer.drawCard(new NumberCard(Color.Red, 5, true));
+
         cpuPlayer.shoutUno();
-        assertTrue(cpuPlayer.getIsShout());
+
+        assertTrue(cpuPlayer.getIsShout(), "Should always shout UNO with 1 card");
     }
-    
+
     @Test
     public void testShoutUnoFalse() {
         controller.setCurrentPlayer(cpuPlayer);
+        cpuPlayer.getHand().clear();
         cpuPlayer.drawCard(new NumberCard(Color.Blue, 3, true));
+        cpuPlayer.drawCard(new NumberCard(Color.Red, 5, true));
         cpuPlayer.setIsShout(false);
         cpuPlayer.shoutUno();
         assertFalse(cpuPlayer.getIsShout());
@@ -76,7 +83,7 @@ public class TestCPUPlayer {
         targetPlayer.getHand().clear();
         targetPlayer.drawCard(new NumberCard(Color.Red, 5, true));
         int initialHandSize = targetPlayer.getHand().size();
-        
+
         targetPlayer.setIsShout(false);
         cpuPlayer.catchForgotShout(targetPlayer);
         assertEquals(initialHandSize + 2, targetPlayer.getHand().size());
@@ -84,76 +91,88 @@ public class TestCPUPlayer {
 
 
 	@Test
-	public void testChallengeDrawFour_ChallengeSucceeds() {
-	    // 挑战成功:上家有红色牌,却打了Draw4(作弊)
-	    Player targetPlayer = players.get(0);
-	    targetPlayer.getHand().clear();
-	    cpuPlayer.getHand().clear();
-	
-	    // 上家有红色牌(证明他作弊了)
-	    targetPlayer.drawCard(new NumberCard(Color.Red, 5, true));
-	
-	    // 设置当前颜色为红色
-	    controller.playCard(new NumberCard(Color.Red, 2, true));
-	
-	    int initialTargetHandSize = targetPlayer.getHand().size();
-	    cpuPlayer.challengeDrawFour(targetPlayer);
-	
-	    // 挑战成功:上家抽4张牌作为惩罚
-	    assertEquals(initialTargetHandSize + 4, targetPlayer.getHand().size(),"Target should draw exactly 4 cards when challenge succeeds");
-	}
-
-
-	@Test
 	public void testChallengeDrawFour_ChallengeFails() {
-	    // 挑战失败:上家没有红色牌,合法打Draw4
 	    Player targetPlayer = players.get(0);
 	    targetPlayer.getHand().clear();
 	    cpuPlayer.getHand().clear();
 	
-	    // 上家只有蓝色牌(证明他没有作弊)
+	    // 上家只有1张蓝色牌(满足挑战条件 <= 2张,且没有红色牌)
 	    targetPlayer.drawCard(new NumberCard(Color.Blue, 5, true));
 	
-	    // 设置当前颜色为红色
+	    // 设置倒数第二张牌为红色(用于挑战判断)
 	    controller.playCard(new NumberCard(Color.Red, 2, true));
+	
+	    // 上家打出 Wild Draw Four(这是被挑战的牌)
+	    controller.playCard(new WildDrawFourCard(true));
+	
 	    controller.setCurrentPlayer(cpuPlayer);
+	    controller.setIsFreezed(true);
 	
 	    int initialCpuHandSize = cpuPlayer.getHand().size();
 	    cpuPlayer.challengeDrawFour(targetPlayer);
 	
-	    // 挑战失败:CPU抽6张牌(4张原本+2张惩罚)
+	    // 挑战失败:CPU抽6张牌
 	    assertEquals(initialCpuHandSize + 6, cpuPlayer.getHand().size(),
 	                 "CPU should draw exactly 6 cards when challenge fails");
 	}
 	
-	
 	@Test
-	public void testChooseCard_OnlyOnePlayableCard() {
+	public void testChallengeDrawFour_ChallengeSucceeds() {
+	    controller.setIsFreezed(true);
+	    Player targetPlayer = players.get(0);
+	    targetPlayer.getHand().clear();
 	    cpuPlayer.getHand().clear();
-	    cpuPlayer.drawCard(new NumberCard(Color.Red, 5, true));
-	    cpuPlayer.drawCard(new NumberCard(Color.Green, 3, true));
 	
-	    controller.playCard(new NumberCard(Color.Red, 3, true));
+	    // 上家有1张红色牌(满足挑战条件 <= 2张,且有匹配颜色)
+	    targetPlayer.drawCard(new NumberCard(Color.Red, 5, true));
+	
+	    // 设置倒数第二张牌为红色
+	    controller.playCard(new NumberCard(Color.Red, 2, true));
+	
+	    // 上家打出 Wild Draw Four(这是被挑战的牌)
+	    controller.playCard(new WildDrawFourCard(true));
+	
 	    controller.setCurrentPlayer(cpuPlayer);
 	
-	    int initialHandSize = cpuPlayer.getHand().size();
-	    cpuPlayer.chooseCard();
+	    int initialTargetHandSize = targetPlayer.getHand().size();
+	    cpuPlayer.challengeDrawFour(targetPlayer);
 	
-	    // Check hand size decreased by 1
-	    assertEquals(initialHandSize - 1, cpuPlayer.getHand().size(),
-	                 "Hand size should decrease by 1 after playing a card");
-	
-	    // Check the top card is a valid playable card (Red 5 is the only playable card)
-	    Card topCard = controller.getTopCard(1);
-	    assertTrue(
-	        (topCard.getColor() == Color.Red && topCard.getType() == Type.Number && ((NumberCard) topCard).getValue() == 5),
-	        "Top card should be Red 5 (the only playable card)"
-	    );
+	    // 挑战成功:上家抽4张牌
+	    assertEquals(initialTargetHandSize + 4, targetPlayer.getHand().size(),
+	                 "Target should draw exactly 4 cards when challenge succeeds");
 	}
-	
+
+
+
+    @Test
+    public void testChooseCard_OnlyOnePlayableCard() {
+        controller.setIsFreezed(true);
+        cpuPlayer.getHand().clear();
+        cpuPlayer.drawCard(new NumberCard(Color.Red, 5, true));
+        cpuPlayer.drawCard(new NumberCard(Color.Green, 3, true));
+
+        controller.playCard(new NumberCard(Color.Red, 2, true));
+        controller.setCurrentPlayer(cpuPlayer);
+
+        int initialHandSize = cpuPlayer.getHand().size();
+        cpuPlayer.chooseCard();
+
+        assertEquals(initialHandSize - 1, cpuPlayer.getHand().size(),
+                     "Hand size should decrease by 1 after playing a card");
+        
+        System.out.println("------------------");
+        System.out.println(cpuPlayer.getHand().get(0));
+        System.out.println("------------------");
+        
+        assertTrue(
+            (cpuPlayer.getHand().get(0).getColor() != Color.Red && cpuPlayer.getHand().get(0).getType() == Type.Number && ((NumberCard) cpuPlayer.getHand().get(0)).getValue() != 5),
+            "Top card should be Red 5 (the only playable card)"
+        );
+    }
 
     @Test
     public void testChooseColor_DominantColor() {
+    	controller.setIsFreezed(true);
         cpuPlayer.getHand().clear();
         cpuPlayer.drawCard(new NumberCard(Color.Red, 5, true));
         cpuPlayer.drawCard(new NumberCard(Color.Red, 3, true));
