@@ -1,6 +1,8 @@
 package test;
 
 import static org.junit.jupiter.api.Assertions.*;
+
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import model.*;
@@ -27,10 +29,24 @@ public class TestDrawTwoCard {
         controller.setCurrentPlayer(players.get(0));
         controller.setPlayDirection(1);
         
+        controller.setIsFreezed(true);
+        
         // Play a starting card
         Card startingCard = new NumberCard(Color.Red, 5, true);
         controller.playCard(startingCard);
     }
+    
+    @AfterEach
+    public void tearsDown() {
+    	controller.resetInstance();
+    }
+    
+    @Test
+	void testToString() {
+		drawTwoCard = new DrawTwoCard(Color.Blue, true);
+		// DrawTwoCard toString should return correct format
+		assertEquals("Blue Draw Two", drawTwoCard.toString());
+	}
     
     @Test
     void testDrawTwoCardInitialization() {

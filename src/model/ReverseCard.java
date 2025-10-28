@@ -16,4 +16,8 @@ public class ReverseCard extends Card {
         controller.passNextPlayer(1);
         controller.eachRound();
     }
+    
+    public String toString() {
+    	return getColor().toString() + " Reverse";
+    }
 }

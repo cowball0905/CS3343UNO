@@ -36,4 +36,8 @@ public class DrawTwoCard extends Card {
         controller.passNextPlayer(2);
         controller.eachRound();
     }
+    
+    public String toString() {
+    	return getColor().toString() + " Draw Two";
+    }
 }

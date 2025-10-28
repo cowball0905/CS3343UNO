@@ -24,5 +24,7 @@ public class WildCard extends Card {
         }
     }
 
-
+	public String toString() {
+		return "Wild Card";
+	}
 }

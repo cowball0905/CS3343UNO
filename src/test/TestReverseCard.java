@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.ArrayList;
 
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -39,26 +40,30 @@ public class TestReverseCard {
         controller.playCard(startingCard);
     }
     
+    @AfterEach
+    void tearsDown() {
+    	controller.resetInstance();
+    }
+    
     @Test
     void testReverseCardInitialization() {
         ReverseCard reverseCard = new ReverseCard(Color.Yellow, true);
         
         assertNotNull(reverseCard, "ReverseCard should be initialized");
-        assertEquals(Color.Yellow, reverseCard.getColor(), "Card color should be Yellow");
-        assertEquals(Type.Reverse, reverseCard.getType(), "Card type should be Reverse");
+        assertEquals(Color.Yellow, reverseCard.getColor());
+        assertEquals(Type.Reverse, reverseCard.getType());
     }
     
-  @Test
-  void testReverseCardFunction() {
-      // Set initial play direction (1 = clockwise)
-      controller.setPlayDirection(1);
-      
-      // Create and test the card
-      ReverseCard card = new ReverseCard(Color.Red, true);
-      card.cardFunction(controller);
-      
-      // Verify the play direction is reversed
-      assertEquals(-1, controller.getPlayDirection(), 
-          "Play direction should be reversed after playing ReverseCard");
-  }
+	@Test
+	void testReverseCardFunction() {
+	    // Set initial play direction (1 = clockwise)
+	    controller.setPlayDirection(1);
+	      
+	    // Create and test the card
+	    ReverseCard card = new ReverseCard(Color.Red, true);
+	    card.cardFunction(controller);
+	      
+	    // Verify the play direction is reversed
+	    assertEquals(-1, controller.getPlayDirection());
+	}
 }

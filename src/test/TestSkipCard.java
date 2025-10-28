@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.ArrayList;
 
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -39,6 +40,17 @@ public class TestSkipCard {
         controller.playCard(startingCard);
     }
     
+    @AfterEach
+	public void tearDown() {
+    	controller.resetInstance();
+	}
+    
+    @Test
+	void testSkipCardToString() {
+		SkipCard skipCard = new SkipCard(Color.Green, true);
+		assertEquals("Green Skip", skipCard.toString());
+	}
+    
     @Test
     void testSkipCardInitialization() {
         SkipCard skipCard = new SkipCard(Color.Blue, true);
@@ -59,11 +71,9 @@ public class TestSkipCard {
         skipCard.cardFunction(controller);
         
         // The next player should be the one after the next (skipping one player)
-      Player expectedNextPlayer = controller.getPlayerList().get(2);  // Changed from get(1) to get(2)
+      Player expectedNextPlayer = controller.getPlayerList().get(2);
       Player actualNextPlayer = controller.getCurrentPlayer();
-      assertEquals(expectedNextPlayer.getName(), actualNextPlayer.getName(), 
-          String.format("Expected next player to be %s but was %s", 
-              expectedNextPlayer.getName(), actualNextPlayer.getName()));
+      assertEquals(expectedNextPlayer, actualNextPlayer);
     }
     
     @Test
@@ -80,7 +90,6 @@ public class TestSkipCard {
         Player expectedNextPlayer = players.get(1);
         Player actualNextPlayer = controller.getCurrentPlayer();
         
-        assertEquals(expectedNextPlayer.getName(), actualNextPlayer.getName(),
-            "Should wrap around to the beginning of the player list and skip the first player");
+        assertEquals(expectedNextPlayer, actualNextPlayer);
     }
 }

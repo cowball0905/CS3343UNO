@@ -119,7 +119,9 @@ public class TestCPUPlayer {
 	    cpuPlayer.getHand().clear();
 	
 	    // 上家只有1张蓝色牌(满足挑战条件 <= 2张,且没有红色牌)
-	    targetPlayer.drawCard(new NumberCard(Color.Blue, 5, true));
+	    for(int i=0;i<5;i++) {
+		    targetPlayer.drawCard(new NumberCard(Color.Blue, 5, true));
+	    }
 	
 	    // 设置倒数第二张牌为红色(用于挑战判断)
 	    controller.playCard(new NumberCard(Color.Red, 2, true));
@@ -144,8 +146,10 @@ public class TestCPUPlayer {
 	    targetPlayer.getHand().clear();
 	    cpuPlayer.getHand().clear();
 	
-	    // 上家有1张红色牌(满足挑战条件 <= 2张,且有匹配颜色)
-	    targetPlayer.drawCard(new NumberCard(Color.Red, 5, true));
+	    // 上家有1张红色牌(满足挑战条件 >=5 张,且有匹配颜色)
+		for (int i = 0; i < 5; i++) {
+			targetPlayer.drawCard(new NumberCard(Color.Red, 5, true));
+		}
 	    
 	    // 设置倒数第二张牌为红色
 	    controller.playCard(new NumberCard(Color.Red, 2, true));

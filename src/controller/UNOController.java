@@ -161,6 +161,7 @@ public class UNOController {
         if (currentPlayer.getHand().size() == 0 && canPlayCard(card, PlayedCard.get(PlayedCard.size() - 1))) {
             System.out.println(currentPlayer.getName() + " win!");
             gamePanel.setIsGameEnd(true);
+            turnTimer.stopTimer();
             return true;
         }
         return false;

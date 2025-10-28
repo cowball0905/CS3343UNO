@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.ArrayList;
 
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import model.*;
@@ -39,6 +40,11 @@ public class TestWildCard {
         controller.playCard(startingCard);
     }
     
+    @AfterEach
+	void tearsDown() {
+		controller.resetInstance();
+	}
+    
     @Test
     void testWildCardInitialization() {
         WildCard wildCard = new WildCard(true);
@@ -48,55 +54,61 @@ public class TestWildCard {
         assertEquals(Type.Wild, wildCard.getType(), "Card type should be Wild");
     }
     
-  @Test
-  void testWildCardFunction() {
-      WildCard wildCard = new WildCard(true);
-      
-      // Test color setting
-      wildCard.setColor(Color.Red);
-      assertEquals(Color.Red, wildCard.getColor(), 
-          "Wild card color should be settable");
-      
-
-  }
-  
-@Test
-void testWildCardFunctionWithPlayerIndex0() {
-    // Set current player to index 0 (human player)
-    controller.setCurrentPlayer(controller.getPlayerList().get(0));
+    @Test 
+	void testWildCardToString() {
+		WildCard wildCard = new WildCard(true);
+		assertEquals("Wild Card", wildCard.toString());
+	}
     
-    // Create the wild card
-    WildCard wildCard = new WildCard(true);
-    
-    // When played by human (index 0), it should open WildCardViewer
-    wildCard.cardFunction(controller);
-    
-    // Since it's a human player, the color should be set through the UI
-    // We'll manually set a color for testing purposes
-    wildCard.setColor(Color.Red);
-    
-    // Verify the color was set
-    assertNotNull(wildCard.getColor(), 
-        "Wild card should have a color after being set");
-        
-    // Now test with CPU player (index 1)
-    controller.setCurrentPlayer(controller.getPlayerList().get(1));
-    
-    // Create a new wild card for CPU
-    WildCard cpuWildCard = new WildCard(true);
-    
-    wildCard.setColor(Color.Red);
-    
-    // Play the card
-    cpuWildCard.cardFunction(controller);
-    
-    // Verify the color was set by CPU
-    assertNotNull(cpuWildCard.getColor(), 
-        "CPU should set a color when playing wild card");
-        
-    // Verify the next player is set correctly (should be player at index 2)
-    assertEquals(controller.getPlayerList().get(2), controller.getCurrentPlayer(),
-        "Current player should be the next player after CPU plays wild card");
-}
+	@Test
+	void testWildCardFunction() {
+	    WildCard wildCard = new WildCard(true);
+	      
+	    // Test color setting
+	    wildCard.setColor(Color.Red);
+	    assertEquals(Color.Red, wildCard.getColor(), 
+	          "Wild card color should be settable");
+	      
+	
+	}
+	  
+	@Test
+	void testWildCardFunctionWithPlayerIndex0() {
+	    // Set current player to index 0 (human player)
+	    controller.setCurrentPlayer(controller.getPlayerList().get(0));
+	    
+	    // Create the wild card
+	    WildCard wildCard = new WildCard(true);
+	    
+	    // When played by human (index 0), it should open WildCardViewer
+	    wildCard.cardFunction(controller);
+	    
+	    // Since it's a human player, the color should be set through the UI
+	    // We'll manually set a color for testing purposes
+	    wildCard.setColor(Color.Red);
+	    
+	    // Verify the color was set
+	    assertNotNull(wildCard.getColor(), 
+	        "Wild card should have a color after being set");
+	        
+	    // Now test with CPU player (index 1)
+	    controller.setCurrentPlayer(controller.getPlayerList().get(1));
+	    
+	    // Create a new wild card for CPU
+	    WildCard cpuWildCard = new WildCard(true);
+	    
+	    wildCard.setColor(Color.Red);
+	    
+	    // Play the card
+	    cpuWildCard.cardFunction(controller);
+	    
+	    // Verify the color was set by CPU
+	    assertNotNull(cpuWildCard.getColor(), 
+	        "CPU should set a color when playing wild card");
+	        
+	    // Verify the next player is set correctly (should be player at index 2)
+	    assertEquals(controller.getPlayerList().get(2), controller.getCurrentPlayer(),
+	        "Current player should be the next player after CPU plays wild card");
+	}
 
 }

@@ -29,7 +29,7 @@ public class CPUPlayer extends Player {
     public void playCard(Card card) {
         if (hand.contains(card)) {
             hand.remove(card);
-            System.out.println(name + " (CPU) plays " + card.getClass().getSimpleName());
+            System.out.println(name + " (CPU) plays " + card.toString());
             if (hand.size() == 1) {
                 double probability = 0.6; // 60% chance to shout UNO
                 if (Math.random() <= probability) {
@@ -90,7 +90,7 @@ public class CPUPlayer extends Player {
     @Override
     public void challengeDrawFour(Player targetPlayer) {
         //challenge only when opponent has 2 or fewer cards (likely trying to win)
-        boolean shouldChallenge = targetPlayer.getHand().size() <= 2;
+        boolean shouldChallenge = targetPlayer.getHand().size() >=5;
         
         if (shouldChallenge) {
             System.out.println(name + " (CPU) challenges " + targetPlayer.getName() + "'s Wild Draw Four card!");

@@ -42,6 +42,8 @@ public class WildDrawFourCard extends Card {
             }
         }
     }
-
-
+    
+	public String toString() {
+		return "Wild Draw Four";
+	}
 }

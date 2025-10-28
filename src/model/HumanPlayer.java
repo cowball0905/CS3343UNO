@@ -28,7 +28,7 @@ public class HumanPlayer extends Player {
     public void playCard(Card card) {
         if (hand.contains(card)) {
             hand.remove(card);
-            System.out.println(name + " plays " + card.getClass().getSimpleName());
+            System.out.println(name + " plays " + card.toString());
 
             if (hand.size() == 1 && !isShout) {
                 int delay = random.nextInt(2001); // Random delay around 2 sec
