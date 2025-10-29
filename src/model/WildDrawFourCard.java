@@ -22,7 +22,7 @@ public class WildDrawFourCard extends Card {
         }else{
             Color chooseColor = ((CPUPlayer) controller.getCurrentPlayer()).chooseColor();
             this.setColor(chooseColor);
-            loadImage("/asset/uno-card-images-master/Wild_Card_Draw_"+chooseColor.toString()+"_4.jpg");
+            loadImage("/asset/uno-card-images-master/Wild_Card_Draw_4_"+chooseColor.toString()+".jpg");
             System.out.println(chooseColor.toString());
 
             // Get current player index

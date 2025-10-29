@@ -18,6 +18,7 @@ public class WildCard extends Card {
         }else{
             Color chooseColor = ((CPUPlayer) controller.getCurrentPlayer()).chooseColor();
             this.setColor(chooseColor);
+            this.loadImage("/asset/uno-card-images-master/Wild_Card_Change_Colour_"+chooseColor.toString()+".jpg");
             System.out.println(chooseColor.toString());
             controller.passNextPlayer(1);
             controller.eachRound();
