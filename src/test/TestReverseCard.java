@@ -2,8 +2,6 @@ package test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import java.util.ArrayList;
-
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -13,58 +11,76 @@ import model.*;
 
 public class TestReverseCard {
     private UNOController controller;
-    private ArrayList<Player> players;
-	
+    
     @BeforeEach
-    void setUp() {
-        // Get the controller instance
+    public void setUp() {
+        UNOController.resetInstance();
         controller = UNOController.getInstance();
-        controller.setViewers();
         controller.setPlayers();
-        // Get the player list
-        players = controller.getPlayerList();
-        players.clear();
-        
-        // Add test players
-        for (int i = 0; i < 4; i++) {
-            CPUPlayer player = new CPUPlayer("Player" + (i + 1));
-            player.setController();
-            players.add(player);
-        }
-        
-        // Set the first player as current
-        controller.setCurrentPlayer(players.get(0));
-        controller.setPlayDirection(1);
-        
-        // Play a starting card
-        Card startingCard = new NumberCard(Color.Red, 5, true);
-        controller.playCard(startingCard);
+        controller.setViewers();
     }
     
     @AfterEach
-    void tearsDown() {
-    	controller.resetInstance();
+    public void tearDown() {
+        UNOController.resetInstance();
     }
     
     @Test
-    void testReverseCardInitialization() {
-        ReverseCard reverseCard = new ReverseCard(Color.Yellow, true);
+    public void testReverseCardNotNull() {
+        ReverseCard card = new ReverseCard(Color.Yellow, true);
         
-        assertNotNull(reverseCard, "ReverseCard should be initialized");
-        assertEquals(Color.Yellow, reverseCard.getColor());
-        assertEquals(Type.Reverse, reverseCard.getType());
+        assertNotNull(card);
     }
     
-	@Test
-	void testReverseCardFunction() {
-	    // Set initial play direction (1 = clockwise)
-	    controller.setPlayDirection(1);
-	      
-	    // Create and test the card
-	    ReverseCard card = new ReverseCard(Color.Red, true);
-	    card.cardFunction(controller);
-	      
-	    // Verify the play direction is reversed
-	    assertEquals(-1, controller.getPlayDirection());
-	}
+    @Test
+    public void testReverseCardColor() {
+        ReverseCard card = new ReverseCard(Color.Yellow, true);
+        
+        assertEquals(Color.Yellow, card.getColor());
+    }
+    
+    @Test
+    public void testReverseCardType() {
+        ReverseCard card = new ReverseCard(Color.Yellow, true);
+        
+        assertEquals(Type.Reverse, card.getType());
+    }
+    
+    @Test
+    public void testReverseCardValue() {
+        ReverseCard card = new ReverseCard(Color.Yellow, true);
+        
+        assertEquals(20, card.getValue());
+    }
+    
+    @Test
+    public void testReverseCardToString() {
+        ReverseCard card = new ReverseCard(Color.Green, true);
+        
+        assertEquals("Green Reverse", card.toString());
+    }
+    
+    @Test
+    public void testReverseCardFunctionReversesDirection() {
+        controller.startGame();
+        controller.setIsFreezed(true);
+        controller.setPlayDirection(1);
+        
+        ReverseCard card = new ReverseCard(Color.Red, true);
+        card.cardFunction(controller);
+        
+        assertEquals(-1, controller.getPlayDirection());
+    }
+    
+    @Test
+    public void testReverseCardFunctionReversesFromNegative() {
+        controller.startGame();
+        controller.setIsFreezed(true);
+        controller.setPlayDirection(-1);
+        
+        ReverseCard card = new ReverseCard(Color.Red, true);
+        card.cardFunction(controller);
+        
+        assertEquals(1, controller.getPlayDirection());
+    }
 }
