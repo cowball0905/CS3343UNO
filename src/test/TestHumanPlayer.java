@@ -55,52 +55,81 @@ public class TestHumanPlayer {
 
     @Test
     public void testShoutUno() {
+    	Card newTopCard = new NumberCard(Color.Red, 3, true);
+        controller.playCard(newTopCard);
+    	
         humanPlayer.getHand().clear();
         humanPlayer.getHand().add(new NumberCard(Color.Red, 5, true));
-        humanPlayer.setIsShout(false);
+        
+        controller.setCurrentPlayer(humanPlayer);
+       
+        String result = humanPlayer.shoutUno();
+        
+        assertNull(result, "Should return null when shout UNO is successful");
+        assertTrue(humanPlayer.getIsShout());
+    }
+    
+    @Test
+    void testSHoutUNOMoreThanTwoCard() {
+		humanPlayer.getHand().clear();
+        humanPlayer.getHand().add(new NumberCard(Color.Green, 2, true));
+        humanPlayer.getHand().add(new NumberCard(Color.Yellow, 4, true));
+        humanPlayer.getHand().add(new NumberCard(Color.Yellow, 4, true));
+        
+        controller.setCurrentPlayer(humanPlayer);
+        
+        String result = humanPlayer.shoutUno();
+        assertEquals("You have more than 2 card!", result,
+            "Should return error when more than one card");}
+    
+    @Test
+    void testSHoutUNOWithNoCard() {
+        humanPlayer.getHand().clear();
 
         controller.setCurrentPlayer(cpuPlayer);
 
         String result = humanPlayer.shoutUno();
-        assertNull(result, "Should return null for non-current player with one card");
-        assertTrue(humanPlayer.getIsShout(), "isShout should be true after shouting UNO");
-
-        humanPlayer.getHand().add(new NumberCard(Color.Green, 2, true));
-        humanPlayer.setIsShout(false);
-        result = humanPlayer.shoutUno();
-        assertEquals("You have more than 1 card!", result,
-            "Should return error when more than one card");
-
+        assertEquals(result, "It's not your turn!");
+        }
+    
+    @Test
+    void testSHoutUNONotPlayerTurn() {
         humanPlayer.getHand().clear();
-        humanPlayer.setIsShout(false);
+        humanPlayer.getHand().add(new NumberCard(Color.Red, 5, true));
 
+        controller.setCurrentPlayer(cpuPlayer);
+
+        String result = humanPlayer.shoutUno();
+        assertEquals(result, "It's not your turn!",
+			"Should return error when no cards in hand");
+        }
+    
+    @Test
+    void testSHoutUNOTwice() {
+    	humanPlayer.getHand().clear();
+        humanPlayer.getHand().add(new NumberCard(Color.Red, 5, true));
+        humanPlayer.setIsShout(true);
+        
         controller.setCurrentPlayer(humanPlayer);
-        humanPlayer.getHand().clear();
-
-        Card topCard = new NumberCard(Color.Red, 5, true);
-        controller.playCard(topCard);
-
-        Card playableCard = new NumberCard(Color.Red, 7, true);
-        humanPlayer.getHand().add(playableCard);
-
-        result = humanPlayer.shoutUno();
-        assertNull(result, "Should return null for current player with one playable card");
-        assertTrue(humanPlayer.getIsShout(), "isShout should be true after shouting UNO");
-
-        result = humanPlayer.shoutUno();
-        assertEquals("You shouted UNO already!", result,
-            "Should return error message when already shouted");
-
-        humanPlayer.setIsShout(false);
-        humanPlayer.getHand().clear();
+        
+        
+        controller.setCurrentPlayer(humanPlayer);
+        
+        String result = humanPlayer.shoutUno();
+        assertEquals(result,"You shouted UNO already!");}
+    
+    
+    @Test
+    void testSHoutUNONoPlayableCard() {
 
         Card newTopCard = new NumberCard(Color.Blue, 3, true);
         controller.playCard(newTopCard);
 
         humanPlayer.getHand().clear();
         humanPlayer.getHand().add(new NumberCard(Color.Red, 5, true));
+        controller.setCurrentPlayer(humanPlayer);
 
-        result = humanPlayer.shoutUno();
+        String result = humanPlayer.shoutUno();
         assertEquals("You have no playable card!", result,
             "Should return error when no playable cards");
     }

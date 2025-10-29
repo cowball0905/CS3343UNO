@@ -69,7 +69,7 @@ public class WildCardViewer {
             timer.stopTimer();
             removeButtons();
             if(this.wild.getType()==Type.WildDrawFour){
-                ((Card)wild).loadImage("/asset/uno-card-images-master/Wild_Draw_4_Red.jpg");
+                ((Card)wild).loadImage("/asset/uno-card-images-master/Wild_Card_Draw_4_Red.jpg");
                 this.callChallenge();
                 return;
             }
@@ -90,7 +90,7 @@ public class WildCardViewer {
             timer.stopTimer();
             removeButtons();
             if(this.wild.getType()==Type.WildDrawFour){
-                ((Card)wild).loadImage("/asset/uno-card-images-master/Wild_Draw_4_Blue.jpg");
+                ((Card)wild).loadImage("/asset/uno-card-images-master/Wild_Card_Draw_4_Blue.jpg");
                 this.callChallenge();
                 return;
             }
@@ -111,7 +111,7 @@ public class WildCardViewer {
             timer.stopTimer();
             removeButtons();
             if(this.wild.getType()==Type.WildDrawFour){
-                ((Card)wild).loadImage("/asset/uno-card-images-master/Wild_Draw_4_Yellow.jpg");
+                ((Card)wild).loadImage("/asset/uno-card-images-master/Wild_Card_Draw_4_Yellow.jpg");
                 this.callChallenge();
                 return;
             }
@@ -132,7 +132,7 @@ public class WildCardViewer {
             timer.stopTimer();
             removeButtons();
             if(this.wild.getType()==Type.WildDrawFour){
-                ((Card)wild).loadImage("/asset/uno-card-images-master/Wild_Draw_4_Green.jpg");
+                ((Card)wild).loadImage("/asset/uno-card-images-master/Wild_Card_Draw_4_Green.jpg");
                 this.callChallenge();
                 return;
             }
