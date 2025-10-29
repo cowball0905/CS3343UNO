@@ -2,6 +2,7 @@ package controller;
 
 import model.*;
 import view.ChallengeViewer;
+import view.DeckPlayCardViewer;
 import view.UNOGamePanel;
 import view.WildCardViewer;
 
@@ -25,6 +26,7 @@ public class UNOController {
     private boolean isFreezed = false;
     private WildCardViewer wildCardViewer;
     private ChallengeViewer challengeViewer;
+    private DeckPlayCardViewer deckPlayCardViewer;
     private final int INITCARDSIZE = 7;
 
     private UNOController() {
@@ -48,9 +50,11 @@ public class UNOController {
         gamePanel = new UNOGamePanel();
         wildCardViewer = new WildCardViewer();
         challengeViewer = new ChallengeViewer();
+        deckPlayCardViewer = new DeckPlayCardViewer();
 
         wildCardViewer.setController();
         challengeViewer.setController();
+        deckPlayCardViewer.setController();
 
         turnTimer = new CountDownTimer(gamePanel, new CountDownTimer.TimerCallback() {
             @Override
@@ -72,6 +76,11 @@ public class UNOController {
                     for(int i=0;i<4;i++){
                         nextPlayer.drawCard(getCardFactory().giveCard(Deck, false, checkCurrentPlayer()==0? true: false, ""));
                     }
+				} else if (deckPlayCardViewer.getIsDeciding()) {
+					deckPlayCardViewer.endDeckCardViewer();
+					passNextPlayer(1);
+					eachRound();
+					isAction = false;
                 }else {
                     getCardFromDeck();
                 }
@@ -83,6 +92,9 @@ public class UNOController {
 
         challengeViewer.setTimer(turnTimer);
         challengeViewer.setPanel(gamePanel);
+        
+        deckPlayCardViewer.setTimer(turnTimer);
+        deckPlayCardViewer.setPanel(gamePanel);
         
         //initializeGame();
         
@@ -157,9 +169,20 @@ public class UNOController {
             isAction = true;
             System.out.println(currentPlayer.getName()+ " draws a card from the deck.");
             currentPlayer.drawCard(cardFactory.giveCard(Deck,false, checkCurrentPlayer()==0 ? true:false, ""));
-            passNextPlayer(1);
-            eachRound();
-            isAction = false;
+            Card card = currentPlayer.getHand().get(currentPlayer.getHand().size()-1);
+            if(canPlayCard(card,getTopCard(1))){
+                if(players.indexOf(currentPlayer)==0){
+                    deckPlayCardViewer.setIsDeciding(card);
+                    turnTimer.startTimer(10);
+                }else{
+                    System.out.println(currentPlayer.getName()+ " got a matching card! they choose to play the card");
+                    currentPlayer.playCard(card);
+                }
+            }else{
+                passNextPlayer(1);
+                eachRound();
+                isAction = false;
+            }
         }
     }
 
@@ -205,6 +228,7 @@ public class UNOController {
     }
 
     public void passNextPlayer(int amount){
+    	isAction = false;
         int currentIndex = checkCurrentPlayer();
         int nextIndex = (currentIndex + amount * playDirection + players.size()) % players.size();
         currentPlayer = players.get(nextIndex);
@@ -284,6 +308,10 @@ public class UNOController {
     public WildCardViewer getWildCardViewer(){
         return wildCardViewer;
     }
+    
+	public DeckPlayCardViewer getDeckPlayCardViewer() {
+		return deckPlayCardViewer;
+	}
 
     public ArrayList<Card> getHumanPlayedCard() {
         return players.get(0).getHand();
