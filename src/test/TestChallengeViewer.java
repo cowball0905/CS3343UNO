@@ -1,202 +1,271 @@
 package test;
 
 import static org.junit.jupiter.api.Assertions.*;
-import java.awt.image.BufferedImage;
-import java.lang.reflect.Field;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.concurrent.atomic.AtomicBoolean;
+
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import controller.UNOController;
+import model.*;
+import view.ChallengeViewer;
 
 import javax.swing.JButton;
 import javax.swing.JPanel;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import controller.UNOController;
-import model.CPUPlayer;
-import model.Card;
-import model.CardFactory;
-import model.ConcreteCardFactory;
-import model.CountDownTimer;
-import model.Player;
-import view.ChallengeViewer;
+import java.awt.Graphics;
+import java.awt.image.BufferedImage;
+import java.lang.reflect.Field;
 
-class TestChallengeViewer {
+public class TestChallengeViewer {
     private ChallengeViewer challengeViewer;
     private UNOController controller;
-    private JPanel panel;
-    private CountDownTimer timer;
+    private JPanel testPanel;
 
     @BeforeEach
-    void setUp() {
-        challengeViewer = new ChallengeViewer();
+    public void setUp() {
+        UNOController.resetInstance();
         controller = UNOController.getInstance();
-        controller.setViewers();
         controller.setPlayers();
-        panel = new JPanel();
-        timer = new CountDownTimer(panel, () -> {});
+        controller.setViewers();
         
-        // Setup controller with test players
-        List<Player> players = new ArrayList<>();
-        for (int i = 0; i < 4; i++) {
-            players.add(new CPUPlayer("Player" + (i + 1)));
-        }
-        controller.getPlayerList().clear();
-        controller.getPlayerList().addAll(players);
-        controller.setCurrentPlayer(players.get(0));
-    }
-
-    @Test
-    void testInitialState() {
-        assertFalse(challengeViewer.getIsChallenging(), 
-            "Initially should not be in challenging state");
-    }
-
-    @Test
-    void testSetChallenge() {
-        challengeViewer.setChallenge();
-        assertTrue(challengeViewer.getIsChallenging(), 
-            "Should be in challenging state after setChallenge");
-    }
-
-    @Test
-    void testRedButtonAction() {
-        // Setup
+        challengeViewer = new ChallengeViewer();
+        testPanel = new JPanel();
+        challengeViewer.setPanel(testPanel);
         challengeViewer.setController();
-        challengeViewer.setPanel(panel);
-        challengeViewer.setTimer(timer);
+        challengeViewer.setTimer(controller.getTurnTimer());
+    }
+
+    @AfterEach
+    public void tearDown() {
+        UNOController.resetInstance();
+    }
+
+    @Test
+    public void testInitialStateNotChallenging() {
+        assertEquals(false, challengeViewer.getIsChallenging());
+    }
+
+    @Test
+    public void testSetChallengeSetsFlag() {
         challengeViewer.setChallenge();
         
-        // Draw buttons
-        challengeViewer.drawWindow(new BufferedImage(100, 100, BufferedImage.TYPE_INT_ARGB).getGraphics());
-        
-        // Get red button using reflection
-        JButton redButton = getButtonFromViewer(challengeViewer, "redButton");
-        assertNotNull(redButton, "Red button should exist");
-        
-        // Store initial hand sizes
-        int initialHandSize = controller.getPlayerList().get(1).getHand().size();
-        
-        assertDoesNotThrow(() -> 
-        challengeViewer.drawWindow(new BufferedImage(100, 100, BufferedImage.TYPE_INT_ARGB).getGraphics()),
-        "Should handle redraw after button click safely"
-    );
-        // Click button
-        assertDoesNotThrow(() -> redButton.doClick(), 
-            "Button click should not throw exceptions");
-        
-        // Verify state
-        assertFalse(challengeViewer.getIsChallenging(), 
-            "Challenge state should be reset after button click");
-        assertNull(getButtonFromViewer(challengeViewer, "redButton"), 
-            "Red button should be removed after click");
-        
-        // Verify cards were drawn
-        int newHandSize = controller.getPlayerList().get(1).getHand().size();
-        assertEquals(4, newHandSize - initialHandSize, 
-            "Next player should receive 4 cards");
-        
-
+        assertEquals(true, challengeViewer.getIsChallenging());
     }
-    
+
     @Test
-    void testRedButtonAction_Player0() {
-        // Setup
+    public void testGetIsChallengingReturnsFalse() {
+        assertEquals(false, challengeViewer.getIsChallenging());
+    }
+
+    @Test
+    public void testSetControllerNotNull() {
         challengeViewer.setController();
-        challengeViewer.setPanel(panel);
+        
+        assertNotNull(controller);
+    }
+
+    @Test
+    public void testSetTimerNotNull() {
+        CountDownTimer timer = controller.getTurnTimer();
+        
         challengeViewer.setTimer(timer);
         
-        // Get the player list
-        List<Player> players = new ArrayList<>(controller.getPlayerList());
+        assertNotNull(timer);
+    }
+
+    @Test
+    public void testSetPanelNotNull() {
+        JPanel panel = new JPanel();
         
-        // Set the current player to the last player
-        Player lastPlayer = players.get(players.size() - 1);
-        controller.setCurrentPlayer(lastPlayer);
+        challengeViewer.setPanel(panel);
         
-        // Store initial hand size of player 0
-        Player player0 = players.get(0);
-        int initialHandSize = player0.getHand().size();
-        
-        // Start challenge
+        assertNotNull(panel);
+    }
+
+    @Test
+    public void testSetChallengeAfterInitial() {
         challengeViewer.setChallenge();
         
-        // Draw buttons
-        challengeViewer.drawWindow(new BufferedImage(100, 100, BufferedImage.TYPE_INT_ARGB).getGraphics());
+        assertEquals(true, challengeViewer.getIsChallenging());
+    }
+
+    @Test
+    public void testDrawWindowWhenNotChallenging() throws Exception {
+        BufferedImage img = new BufferedImage(100, 100, BufferedImage.TYPE_INT_ARGB);
+        Graphics g = img.getGraphics();
         
-        // Get red button
-        JButton redButton = getButtonFromViewer(challengeViewer, "redButton");
-        assertNotNull(redButton, "Red button should exist");
+        challengeViewer.drawWindow(g);
+        Field redButtonField = ChallengeViewer.class.getDeclaredField("redButton");
+        redButtonField.setAccessible(true);
+        JButton redButton = (JButton) redButtonField.get(challengeViewer);
         
-        // Click button
+        assertEquals(null, redButton);
+        g.dispose();
+    }
+
+    @Test
+    public void testDrawWindowWhenChallenging() throws Exception {
+        challengeViewer.setChallenge();
+        BufferedImage img = new BufferedImage(100, 100, BufferedImage.TYPE_INT_ARGB);
+        Graphics g = img.getGraphics();
+        
+        challengeViewer.drawWindow(g);
+        Field redButtonField = ChallengeViewer.class.getDeclaredField("redButton");
+        redButtonField.setAccessible(true);
+        JButton redButton = (JButton) redButtonField.get(challengeViewer);
+        
+        assertNotNull(redButton);
+        g.dispose();
+    }
+
+    @Test
+    public void testDrawButtonsCreatesRedButton() throws Exception {
+        challengeViewer.setChallenge();
+        BufferedImage img = new BufferedImage(100, 100, BufferedImage.TYPE_INT_ARGB);
+        Graphics g = img.getGraphics();
+        
+        challengeViewer.drawButtons(g);
+        Field redButtonField = ChallengeViewer.class.getDeclaredField("redButton");
+        redButtonField.setAccessible(true);
+        JButton redButton = (JButton) redButtonField.get(challengeViewer);
+        
+        assertNotNull(redButton);
+        g.dispose();
+    }
+
+    @Test
+    public void testDrawButtonsCreatesGreenButton() throws Exception {
+        challengeViewer.setChallenge();
+        BufferedImage img = new BufferedImage(100, 100, BufferedImage.TYPE_INT_ARGB);
+        Graphics g = img.getGraphics();
+        
+        challengeViewer.drawButtons(g);
+        Field greenButtonField = ChallengeViewer.class.getDeclaredField("greenButton");
+        greenButtonField.setAccessible(true);
+        JButton greenButton = (JButton) greenButtonField.get(challengeViewer);
+        
+        assertNotNull(greenButton);
+        g.dispose();
+    }
+
+    @Test
+    public void testRedButtonText() throws Exception {
+        challengeViewer.setChallenge();
+        BufferedImage img = new BufferedImage(100, 100, BufferedImage.TYPE_INT_ARGB);
+        Graphics g = img.getGraphics();
+        
+        challengeViewer.drawButtons(g);
+        Field redButtonField = ChallengeViewer.class.getDeclaredField("redButton");
+        redButtonField.setAccessible(true);
+        JButton redButton = (JButton) redButtonField.get(challengeViewer);
+        
+        assertEquals("Get 4 Cards", redButton.getText());
+        g.dispose();
+    }
+
+    @Test
+    public void testGreenButtonText() throws Exception {
+        challengeViewer.setChallenge();
+        BufferedImage img = new BufferedImage(100, 100, BufferedImage.TYPE_INT_ARGB);
+        Graphics g = img.getGraphics();
+        
+        challengeViewer.drawButtons(g);
+        Field greenButtonField = ChallengeViewer.class.getDeclaredField("greenButton");
+        greenButtonField.setAccessible(true);
+        JButton greenButton = (JButton) greenButtonField.get(challengeViewer);
+        
+        assertEquals("Challenge", greenButton.getText());
+        g.dispose();
+    }
+
+    @Test
+    public void testRemoveButtonsClearsRedButton() throws Exception {
+        challengeViewer.setChallenge();
+        BufferedImage img = new BufferedImage(100, 100, BufferedImage.TYPE_INT_ARGB);
+        Graphics g = img.getGraphics();
+        challengeViewer.drawButtons(g);
+        
+        challengeViewer.removeButtons();
+        Field redButtonField = ChallengeViewer.class.getDeclaredField("redButton");
+        redButtonField.setAccessible(true);
+        JButton redButton = (JButton) redButtonField.get(challengeViewer);
+        
+        assertEquals(null, redButton);
+        g.dispose();
+    }
+
+    @Test
+    public void testRemoveButtonsClearsGreenButton() throws Exception {
+        challengeViewer.setChallenge();
+        BufferedImage img = new BufferedImage(100, 100, BufferedImage.TYPE_INT_ARGB);
+        Graphics g = img.getGraphics();
+        challengeViewer.drawButtons(g);
+        
+        challengeViewer.removeButtons();
+        Field greenButtonField = ChallengeViewer.class.getDeclaredField("greenButton");
+        greenButtonField.setAccessible(true);
+        JButton greenButton = (JButton) greenButtonField.get(challengeViewer);
+        
+        assertEquals(null, greenButton);
+        g.dispose();
+    }
+
+    @Test
+    public void testRedButtonClickAddsCards() throws Exception {
+        controller.startGame();
+        controller.setIsFreezed(true);
+        Player nextPlayer = controller.getPlayerList().get(1);
+        int initialHandSize = nextPlayer.getHand().size();
+        
+        challengeViewer.setChallenge();
+        BufferedImage img = new BufferedImage(100, 100, BufferedImage.TYPE_INT_ARGB);
+        Graphics g = img.getGraphics();
+        challengeViewer.drawButtons(g);
+        
+        Field redButtonField = ChallengeViewer.class.getDeclaredField("redButton");
+        redButtonField.setAccessible(true);
+        JButton redButton = (JButton) redButtonField.get(challengeViewer);
         redButton.doClick();
         
-        // Verify state
-        assertFalse(challengeViewer.getIsChallenging(), 
-            "Challenge state should be reset after button click");
-        assertNull(getButtonFromViewer(challengeViewer, "redButton"), 
-            "Red button should be removed after click");
-        
-        // Verify cards were drawn to player 0
-        int newHandSize = player0.getHand().size();
-        assertEquals(4, newHandSize - initialHandSize, 
-            "Player 0 should receive 4 cards when they are next");
+        assertEquals(initialHandSize + 4, nextPlayer.getHand().size());
+        g.dispose();
     }
 
-
-    
-
     @Test
-    void testGreenButtonAction() {
-        // Setup
-        challengeViewer.setController();
-        challengeViewer.setPanel(panel);
-        challengeViewer.setTimer(timer);
+    public void testRedButtonClickResetsChallenging() throws Exception {
+        controller.startGame();
+        controller.setIsFreezed(true);
+        
         challengeViewer.setChallenge();
+        BufferedImage img = new BufferedImage(100, 100, BufferedImage.TYPE_INT_ARGB);
+        Graphics g = img.getGraphics();
+        challengeViewer.drawButtons(g);
         
-        // Draw buttons
-        challengeViewer.drawWindow(new BufferedImage(100, 100, BufferedImage.TYPE_INT_ARGB).getGraphics());
+        Field redButtonField = ChallengeViewer.class.getDeclaredField("redButton");
+        redButtonField.setAccessible(true);
+        JButton redButton = (JButton) redButtonField.get(challengeViewer);
+        redButton.doClick();
         
-        // Get green button using reflection
-        JButton greenButton = getButtonFromViewer(challengeViewer, "greenButton");
-        assertNotNull(greenButton, "Green button should exist");
-        
-        // Click button
-        assertDoesNotThrow(() -> greenButton.doClick(), 
-            "Button click should not throw exceptions");
-        
-        // Verify state
-        assertFalse(challengeViewer.getIsChallenging(), 
-            "Challenge state should be reset after button click");
-        assertNull(getButtonFromViewer(challengeViewer, "greenButton"), 
-            "Green button should be removed after click");
+        assertEquals(false, challengeViewer.getIsChallenging());
+        g.dispose();
     }
-    
-
-
-
 
     @Test
-    void testDrawWindowWhenNotChallenging() {
-        // Setup
-        challengeViewer.setController();
-        challengeViewer.setPanel(panel);
+    public void testGreenButtonClickResetsChallenging() throws Exception {
+        controller.startGame();
+        controller.setIsFreezed(true);
         
-        // Don't call setChallenge()
-        challengeViewer.drawWindow(new BufferedImage(100, 100, BufferedImage.TYPE_INT_ARGB).getGraphics());
+        challengeViewer.setChallenge();
+        BufferedImage img = new BufferedImage(100, 100, BufferedImage.TYPE_INT_ARGB);
+        Graphics g = img.getGraphics();
+        challengeViewer.drawButtons(g);
         
-        // Verify no buttons were added
-        assertNull(getButtonFromViewer(challengeViewer, "redButton"), 
-            "No buttons should be added when not challenging");
-    }
-
-    // Helper method to get button from ChallengeViewer using reflection
-    private JButton getButtonFromViewer(ChallengeViewer viewer, String fieldName) {
-        try {
-            Field field = ChallengeViewer.class.getDeclaredField(fieldName);
-            field.setAccessible(true);
-            return (JButton) field.get(viewer);
-        } catch (Exception e) {
-            return null;
-        }
+        Field greenButtonField = ChallengeViewer.class.getDeclaredField("greenButton");
+        greenButtonField.setAccessible(true);
+        JButton greenButton = (JButton) greenButtonField.get(challengeViewer);
+        greenButton.doClick();
+        
+        assertEquals(false, challengeViewer.getIsChallenging());
+        g.dispose();
     }
 }

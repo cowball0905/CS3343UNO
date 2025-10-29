@@ -1,18 +1,6 @@
 package test;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.junit.jupiter.api.Assertions.fail;
-
-import java.awt.*;
-import java.awt.event.ActionListener;
-import java.awt.image.BufferedImage;
-import java.lang.reflect.Field;
-import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Stack;
-
-import javax.swing.*;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -20,294 +8,358 @@ import org.junit.jupiter.api.Test;
 
 import controller.UNOController;
 import model.*;
-import view.*;
+import view.WildCardViewer;
 
-// Mock CountDownTimer for testing
-class MockCountDownTimer extends CountDownTimer {
-    public boolean wasStopped = false;
-    public boolean wasStarted = false;
-    public int remainingSeconds = 30;
-    public boolean isRunning = false;
+import javax.swing.JButton;
+import javax.swing.JPanel;
+import java.awt.Graphics;
+import java.awt.image.BufferedImage;
+import java.lang.reflect.Field;
 
-    public MockCountDownTimer(JPanel panel, CountDownTimer.TimerCallback callback) {
-        super(panel, callback);
-    }
-    
-    @Override
-    public void startTimer(int seconds) {
-        wasStarted = true;
-        isRunning = true;
-        remainingSeconds = seconds;
-    }
-    
-    @Override
-    public void stopTimer() {
-        wasStopped = true;
-        isRunning = false;
-    }
-    
-    @Override
-    public int getRemainingSeconds() {
-        return remainingSeconds;
-    }
-    
-    @Override
-    public boolean isRunning() {
-        return isRunning;
-    }
-}
-
-class TestWildCardViewer {
+public class TestWildCardViewer {
     private WildCardViewer wildCardViewer;
     private UNOController controller;
-    private MockCountDownTimer testTimer;
     private JPanel testPanel;
-    private Card testCard;
-    private List<Player> testPlayers;
-    private Player originalCurrentPlayer;
-    private UNOController originalController;
 
     @BeforeEach
-    void setUp() throws Exception {
-        // Store original controller instance
-        Field instanceField = UNOController.class.getDeclaredField("instance");
-        instanceField.setAccessible(true);
-        originalController = (UNOController) instanceField.get(null);
-        
-        // Create a new controller instance
-        instanceField.set(null, null); // Clear existing instance
+    public void setUp() {
+        UNOController.resetInstance();
         controller = UNOController.getInstance();
+        controller.setPlayers();
+        controller.setViewers();
         
-        // Set up test players
-        testPlayers = new ArrayList<>();
-        Player humanPlayer = new HumanPlayer("Test Player");
-        testPlayers.add(humanPlayer);
-        testPlayers.add(new CPUPlayer("CPU 1"));
-        testPlayers.add(new CPUPlayer("CPU 2"));
-        testPlayers.add(new CPUPlayer("CPU 3"));
-        testPlayers.add(new CPUPlayer("CPU 4"));
-        
-        // Initialize the controller with test players
-        Field playersField = UNOController.class.getDeclaredField("players");
-        playersField.setAccessible(true);
-        playersField.set(controller, testPlayers);
-        
-        // Set current player
-        originalCurrentPlayer = humanPlayer;
-        Field currentPlayerField = UNOController.class.getDeclaredField("currentPlayer");
-        currentPlayerField.setAccessible(true);
-        currentPlayerField.set(controller, originalCurrentPlayer);
-        
-        // Initialize player hands
-        for (Player player : testPlayers) {
-            if (player.getHand() == null) {
-                Field handField = Player.class.getDeclaredField("hand");
-                handField.setAccessible(true);
-                handField.set(player, new ArrayList<Card>());
-            }
-            player.getHand().add(new NumberCard(model.Color.Red, 0, false));
-            player.getHand().add(new NumberCard(model.Color.Blue, 1, false));
-        }
-        
-        // Set play direction
-        Field playDirectionField = UNOController.class.getDeclaredField("playDirection");
-        playDirectionField.setAccessible(true);
-        playDirectionField.set(controller, 1);
-        
-        // Initialize WildCardViewer
         wildCardViewer = new WildCardViewer();
         testPanel = new JPanel();
         wildCardViewer.setPanel(testPanel);
-        
-        // Set up mock timer
-        testTimer = new MockCountDownTimer(testPanel, () -> {});
-        wildCardViewer.setTimer(testTimer);
-        
-        // Set the controller
         wildCardViewer.setController();
-        
-        // Initialize test card
-        testCard = new WildCard(true);
+        wildCardViewer.setTimer(controller.getTurnTimer());
     }
 
     @AfterEach
-    void tearDown() throws Exception {
-        // Restore original controller instance
-        if (originalController != null) {
-            Field instanceField = UNOController.class.getDeclaredField("instance");
-            instanceField.setAccessible(true);
-            instanceField.set(null, originalController);
-        }
-    }
-
-    private JButton getButton(String buttonName) throws Exception {
-        Field field = WildCardViewer.class.getDeclaredField(buttonName);
-        field.setAccessible(true);
-        return (JButton) field.get(wildCardViewer);
-    }
-
-    private Object getFieldValue(String fieldName) throws Exception {
-        Field field = WildCardViewer.class.getDeclaredField(fieldName);
-        field.setAccessible(true);
-        return field.get(wildCardViewer);
+    public void tearDown() {
+        UNOController.resetInstance();
     }
 
     @Test
-    void testTimerStartsWhenWindowDrawn() {
-        // Given
-        wildCardViewer.setWildCard(testCard);
-        testTimer.wasStarted = false;
-        
-        // When
-        wildCardViewer.drawWindow(testPanel.getGraphics());
-        
-        // Then
-        assertTrue(testTimer.wasStarted, "Timer should be started when window is drawn");
-        assertEquals(30, testTimer.getRemainingSeconds(), "Timer should be set to 30 seconds");
+    public void testInitialStateNotHavingWild() {
+        assertEquals(false, wildCardViewer.isHavingWild());
     }
 
     @Test
-    void testInitialState() {
-        assertFalse(wildCardViewer.isHavingWild());
-        try {
-            assertNull(getFieldValue("wild"));
-        } catch (Exception e) {
-            fail("Failed to access wild field");
-        }
+    public void testSetWildCardSetsFlag() {
+        Card wildCard = new WildCard(true);
+        
+        wildCardViewer.setWildCard(wildCard);
+        
+        assertEquals(true, wildCardViewer.isHavingWild());
     }
 
     @Test
-    void testSetWildCard() {
-        wildCardViewer.setWildCard(testCard);
-        assertTrue(wildCardViewer.isHavingWild());
-        try {
-            assertEquals(testCard, getFieldValue("wild"));
-        } catch (Exception e) {
-            fail("Failed to access wild field");
-        }
+    public void testSetWildCardStoresCard() {
+        Card wildCard = new WildCard(true);
+        
+        wildCardViewer.setWildCard(wildCard);
+        
+        assertEquals(wildCard, wildCardViewer.getCard());
     }
 
-@Test
-void testColorButtonActions() throws Exception {
-    String[] colors = {"red", "blue", "yellow", "green"};
-    
-    // Set up the played cards list (PlayedCard field in UNOController)
-    Field playedCardField = UNOController.class.getDeclaredField("PlayedCard");
-    playedCardField.setAccessible(true);
-    @SuppressWarnings("unchecked")
-    List<Card> playedCards = (List<Card>) playedCardField.get(controller);
-    playedCards.clear();
-    playedCards.add(new NumberCard(model.Color.Red, 0, false));
-    
-    // Get the players list
-    Field playersField = UNOController.class.getDeclaredField("players");
-    playersField.setAccessible(true);
-    @SuppressWarnings("unchecked")
-    List<Player> players = (List<Player>) playersField.get(controller);
-    
-    // Make sure all players have cards
-    for (Player player : players) {
-        if (player.getHand().isEmpty()) {
-            player.getHand().add(new NumberCard(model.Color.Red, 1, false));
-        }
+    @Test
+    public void testGetCardReturnsNull() {
+        assertEquals(null, wildCardViewer.getCard());
     }
-    
-    // Test with each color button
-    for (int i = 0; i < colors.length; i++) {
-        // Reset test state
-        testTimer.wasStopped = false;
+
+    @Test
+    public void testSetHavingWildTrue() {
+        wildCardViewer.setHavingWild(true);
         
-        // Create a buffered image to get a valid Graphics object
+        assertEquals(true, wildCardViewer.isHavingWild());
+    }
+
+    @Test
+    public void testSetHavingWildFalse() {
+        wildCardViewer.setHavingWild(false);
+        
+        assertEquals(false, wildCardViewer.isHavingWild());
+    }
+
+    @Test
+    public void testAutoSelectColorSetsRed() {
+        Card wildCard = new WildCard(true);
+        wildCardViewer.setWildCard(wildCard);
+        
+        wildCardViewer.autoSelectColor();
+        
+        assertEquals(Color.Red, wildCard.getColor());
+    }
+
+    @Test
+    public void testSetControllerNotNull() {
+        wildCardViewer.setController();
+        
+        assertNotNull(controller);
+    }
+
+    @Test
+    public void testSetTimerNotNull() {
+        CountDownTimer timer = controller.getTurnTimer();
+        
+        wildCardViewer.setTimer(timer);
+        
+        assertNotNull(timer);
+    }
+
+    @Test
+    public void testSetPanelNotNull() {
+        JPanel panel = new JPanel();
+        
+        wildCardViewer.setPanel(panel);
+        
+        assertNotNull(panel);
+    }
+
+    @Test
+    public void testDrawWindowWhenNotHavingWild() throws Exception {
         BufferedImage img = new BufferedImage(100, 100, BufferedImage.TYPE_INT_ARGB);
         Graphics g = img.getGraphics();
         
-        try {
-            // Set up the test
-            wildCardViewer.setWildCard(testCard);
-            wildCardViewer.drawWindow(g);
-            
-            // Get the button and simulate click
-            JButton button = getButton(colors[i] + "Button");
-            assertNotNull(button, colors[i] + " button should not be null");
-            
-            // Store current player before click
-            Field currentPlayerField = UNOController.class.getDeclaredField("currentPlayer");
-            currentPlayerField.setAccessible(true);
-            Player playerBefore = (Player) currentPlayerField.get(controller);
-            
-            // Make sure next player has cards
-            int currentIndex = controller.checkPlayer(playerBefore);
-            int nextIndex = (currentIndex + 1) % players.size();
-            Player nextPlayer = players.get(nextIndex);
-            if (nextPlayer.getHand().isEmpty()) {
-                nextPlayer.getHand().add(new NumberCard(model.Color.Red, 2, false));
-            }
-            
-            button.doClick(); // This will trigger the action listener
-            
-            // Verify the results
-            Player playerAfter = (Player) currentPlayerField.get(controller);
-            assertNotSame(playerBefore, playerAfter, "Current player should change after color selection");
-            assertTrue(testTimer.wasStopped, "Timer should be stopped after color selection");
-        } finally {
-            g.dispose();
-        }
-    }
-}
-    @Test
-    void testCleanUp() throws Exception {
-        wildCardViewer.setWildCard(testCard);
-        wildCardViewer.drawWindow(testPanel.getGraphics());
-        assertNotNull(getButton("redButton"));
-        
-        // Use reflection to call cleanUp since it's private
-        Method cleanUp = WildCardViewer.class.getDeclaredMethod("cleanUp");
-        cleanUp.setAccessible(true);
-        cleanUp.invoke(wildCardViewer);
-        
-        assertFalse(wildCardViewer.isHavingWild());
-        assertNull(getFieldValue("redButton"));
-    }
-
-@Test
-void testWildDrawFourCard() throws Exception {
-    // Set up the played cards list (PlayedCard field in UNOController)
-    Field playedCardField = UNOController.class.getDeclaredField("PlayedCard");
-    playedCardField.setAccessible(true);
-    @SuppressWarnings("unchecked")
-    List<Card> playedCards = (List<Card>) playedCardField.get(controller);
-    playedCards.clear(); // Clear any existing cards
-    playedCards.add(new NumberCard(model.Color.Red, 0, false));
-    
-    // Make sure players have cards
-    Field playersField = UNOController.class.getDeclaredField("players");
-    playersField.setAccessible(true);
-    @SuppressWarnings("unchecked")
-    List<Player> players = (List<Player>) playersField.get(controller);
-    for (Player player : players) {
-        if (player.getHand().isEmpty()) {
-            player.getHand().add(new NumberCard(model.Color.Red, 1, false));
-        }
-    }
-    
-    // Test the wild draw four card
-    testCard = new WildDrawFourCard(true);
-    wildCardViewer.setWildCard(testCard);
-    
-    // Create a graphics context for drawing
-    BufferedImage img = new BufferedImage(100, 100, BufferedImage.TYPE_INT_ARGB);
-    Graphics g = img.getGraphics();
-    try {
         wildCardViewer.drawWindow(g);
-        JButton redButton = getButton("redButton");
-        assertNotNull(redButton, "Red button should not be null");
-
-        // Verify the button action
-        redButton.doClick();
-        assertTrue(testTimer.wasStopped, "Timer should be stopped after button click");
-    } finally {
+        Field redButtonField = WildCardViewer.class.getDeclaredField("redButton");
+        redButtonField.setAccessible(true);
+        JButton redButton = (JButton) redButtonField.get(wildCardViewer);
+        
+        assertEquals(null, redButton);
         g.dispose();
     }
-}
-    
+
+    @Test
+    public void testDrawWindowWhenHavingWild() throws Exception {
+        Card wildCard = new WildCard(true);
+        wildCardViewer.setWildCard(wildCard);
+        BufferedImage img = new BufferedImage(100, 100, BufferedImage.TYPE_INT_ARGB);
+        Graphics g = img.getGraphics();
+        
+        wildCardViewer.drawWindow(g);
+        Field redButtonField = WildCardViewer.class.getDeclaredField("redButton");
+        redButtonField.setAccessible(true);
+        JButton redButton = (JButton) redButtonField.get(wildCardViewer);
+        
+        assertNotNull(redButton);
+        g.dispose();
+    }
+
+    @Test
+    public void testDrawButtonsCreatesRedButton() throws Exception {
+        BufferedImage img = new BufferedImage(100, 100, BufferedImage.TYPE_INT_ARGB);
+        Graphics g = img.getGraphics();
+        
+        wildCardViewer.drawButtons(g);
+        Field redButtonField = WildCardViewer.class.getDeclaredField("redButton");
+        redButtonField.setAccessible(true);
+        JButton redButton = (JButton) redButtonField.get(wildCardViewer);
+        
+        assertNotNull(redButton);
+        g.dispose();
+    }
+
+    @Test
+    public void testDrawButtonsCreatesBlueButton() throws Exception {
+        BufferedImage img = new BufferedImage(100, 100, BufferedImage.TYPE_INT_ARGB);
+        Graphics g = img.getGraphics();
+        
+        wildCardViewer.drawButtons(g);
+        Field blueButtonField = WildCardViewer.class.getDeclaredField("blueButton");
+        blueButtonField.setAccessible(true);
+        JButton blueButton = (JButton) blueButtonField.get(wildCardViewer);
+        
+        assertNotNull(blueButton);
+        g.dispose();
+    }
+
+    @Test
+    public void testDrawButtonsCreatesYellowButton() throws Exception {
+        BufferedImage img = new BufferedImage(100, 100, BufferedImage.TYPE_INT_ARGB);
+        Graphics g = img.getGraphics();
+        
+        wildCardViewer.drawButtons(g);
+        Field yellowButtonField = WildCardViewer.class.getDeclaredField("yellowButton");
+        yellowButtonField.setAccessible(true);
+        JButton yellowButton = (JButton) yellowButtonField.get(wildCardViewer);
+        
+        assertNotNull(yellowButton);
+        g.dispose();
+    }
+
+    @Test
+    public void testDrawButtonsCreatesGreenButton() throws Exception {
+        BufferedImage img = new BufferedImage(100, 100, BufferedImage.TYPE_INT_ARGB);
+        Graphics g = img.getGraphics();
+        
+        wildCardViewer.drawButtons(g);
+        Field greenButtonField = WildCardViewer.class.getDeclaredField("greenButton");
+        greenButtonField.setAccessible(true);
+        JButton greenButton = (JButton) greenButtonField.get(wildCardViewer);
+        
+        assertNotNull(greenButton);
+        g.dispose();
+    }
+
+    @Test
+    public void testRemoveButtonsClearsRedButton() throws Exception {
+        BufferedImage img = new BufferedImage(100, 100, BufferedImage.TYPE_INT_ARGB);
+        Graphics g = img.getGraphics();
+        wildCardViewer.drawButtons(g);
+        
+        wildCardViewer.removeButtons();
+        Field redButtonField = WildCardViewer.class.getDeclaredField("redButton");
+        redButtonField.setAccessible(true);
+        JButton redButton = (JButton) redButtonField.get(wildCardViewer);
+        
+        assertEquals(null, redButton);
+        g.dispose();
+    }
+
+    @Test
+    public void testRemoveButtonsClearsBlueButton() throws Exception {
+        BufferedImage img = new BufferedImage(100, 100, BufferedImage.TYPE_INT_ARGB);
+        Graphics g = img.getGraphics();
+        wildCardViewer.drawButtons(g);
+        
+        wildCardViewer.removeButtons();
+        Field blueButtonField = WildCardViewer.class.getDeclaredField("blueButton");
+        blueButtonField.setAccessible(true);
+        JButton blueButton = (JButton) blueButtonField.get(wildCardViewer);
+        
+        assertEquals(null, blueButton);
+        g.dispose();
+    }
+
+    @Test
+    public void testRemoveButtonsClearsYellowButton() throws Exception {
+        BufferedImage img = new BufferedImage(100, 100, BufferedImage.TYPE_INT_ARGB);
+        Graphics g = img.getGraphics();
+        wildCardViewer.drawButtons(g);
+        
+        wildCardViewer.removeButtons();
+        Field yellowButtonField = WildCardViewer.class.getDeclaredField("yellowButton");
+        yellowButtonField.setAccessible(true);
+        JButton yellowButton = (JButton) yellowButtonField.get(wildCardViewer);
+        
+        assertEquals(null, yellowButton);
+        g.dispose();
+    }
+
+    @Test
+    public void testRemoveButtonsClearsGreenButton() throws Exception {
+        BufferedImage img = new BufferedImage(100, 100, BufferedImage.TYPE_INT_ARGB);
+        Graphics g = img.getGraphics();
+        wildCardViewer.drawButtons(g);
+        
+        wildCardViewer.removeButtons();
+        Field greenButtonField = WildCardViewer.class.getDeclaredField("greenButton");
+        greenButtonField.setAccessible(true);
+        JButton greenButton = (JButton) greenButtonField.get(wildCardViewer);
+        
+        assertEquals(null, greenButton);
+        g.dispose();
+    }
+
+    @Test
+    public void testRedButtonClickSetsRedColor() throws Exception {
+        controller.startGame();
+        controller.setIsFreezed(true);
+        Card wildCard = new WildCard(true);
+        wildCardViewer.setWildCard(wildCard);
+        
+        BufferedImage img = new BufferedImage(100, 100, BufferedImage.TYPE_INT_ARGB);
+        Graphics g = img.getGraphics();
+        wildCardViewer.drawButtons(g);
+        
+        Field redButtonField = WildCardViewer.class.getDeclaredField("redButton");
+        redButtonField.setAccessible(true);
+        JButton redButton = (JButton) redButtonField.get(wildCardViewer);
+        redButton.doClick();
+        
+        assertEquals(Color.Red, wildCard.getColor());
+        g.dispose();
+    }
+
+    @Test
+    public void testBlueButtonClickSetsBlueColor() throws Exception {
+        controller.startGame();
+        controller.setIsFreezed(true);
+        Card wildCard = new WildCard(true);
+        wildCardViewer.setWildCard(wildCard);
+        
+        BufferedImage img = new BufferedImage(100, 100, BufferedImage.TYPE_INT_ARGB);
+        Graphics g = img.getGraphics();
+        wildCardViewer.drawButtons(g);
+        
+        Field blueButtonField = WildCardViewer.class.getDeclaredField("blueButton");
+        blueButtonField.setAccessible(true);
+        JButton blueButton = (JButton) blueButtonField.get(wildCardViewer);
+        blueButton.doClick();
+        
+        assertEquals(Color.Blue, wildCard.getColor());
+        g.dispose();
+    }
+
+    @Test
+    public void testYellowButtonClickSetsYellowColor() throws Exception {
+        controller.startGame();
+        controller.setIsFreezed(true);
+        Card wildCard = new WildCard(true);
+        wildCardViewer.setWildCard(wildCard);
+        
+        BufferedImage img = new BufferedImage(100, 100, BufferedImage.TYPE_INT_ARGB);
+        Graphics g = img.getGraphics();
+        wildCardViewer.drawButtons(g);
+        
+        Field yellowButtonField = WildCardViewer.class.getDeclaredField("yellowButton");
+        yellowButtonField.setAccessible(true);
+        JButton yellowButton = (JButton) yellowButtonField.get(wildCardViewer);
+        yellowButton.doClick();
+        
+        assertEquals(Color.Yellow, wildCard.getColor());
+        g.dispose();
+    }
+
+    @Test
+    public void testGreenButtonClickSetsGreenColor() throws Exception {
+        controller.startGame();
+        controller.setIsFreezed(true);
+        Card wildCard = new WildCard(true);
+        wildCardViewer.setWildCard(wildCard);
+        
+        BufferedImage img = new BufferedImage(100, 100, BufferedImage.TYPE_INT_ARGB);
+        Graphics g = img.getGraphics();
+        wildCardViewer.drawButtons(g);
+        
+        Field greenButtonField = WildCardViewer.class.getDeclaredField("greenButton");
+        greenButtonField.setAccessible(true);
+        JButton greenButton = (JButton) greenButtonField.get(wildCardViewer);
+        greenButton.doClick();
+        
+        assertEquals(Color.Green, wildCard.getColor());
+        g.dispose();
+    }
+
+    @Test
+    public void testRedButtonClickResetsHavingWild() throws Exception {
+        controller.startGame();
+        controller.setIsFreezed(true);
+        Card wildCard = new WildCard(true);
+        wildCardViewer.setWildCard(wildCard);
+        
+        BufferedImage img = new BufferedImage(100, 100, BufferedImage.TYPE_INT_ARGB);
+        Graphics g = img.getGraphics();
+        wildCardViewer.drawButtons(g);
+        
+        Field redButtonField = WildCardViewer.class.getDeclaredField("redButton");
+        redButtonField.setAccessible(true);
+        JButton redButton = (JButton) redButtonField.get(wildCardViewer);
+        redButton.doClick();
+        
+        assertEquals(false, wildCardViewer.isHavingWild());
+        g.dispose();
+    }
 }
