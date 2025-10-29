@@ -1,20 +1,24 @@
 package test;
 
-import static org.junit.Assert.*;
-import org.junit.Before;
-import org.junit.Test;
+import static org.junit.jupiter.api.Assertions.*;
+
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
 import java.util.ArrayList;
 import model.*;
+import controller.UNOController;
 
 public class TestConcreteCardFactory {
     private ConcreteCardFactory factory;
     private ArrayList<String> testDeck;
     
-    @Before
+    @BeforeEach
     public void setUp() {
+        UNOController.resetInstance();
         factory = new ConcreteCardFactory();
         testDeck = new ArrayList<>();
-        // Add test cards to the deck
         testDeck.add("r0");
         testDeck.add("bSkip");
         testDeck.add("yReverse");
@@ -23,108 +27,287 @@ public class TestConcreteCardFactory {
         testDeck.add("WildDrawFour");
     }
     
+    @AfterEach
+    public void tearDown() {
+        UNOController.resetInstance();
+    }
+    
     @Test
-    public void testCreateWildCard() {
+    public void testCreateWildCardNotNull() {
         ArrayList<String> wildDeck = new ArrayList<>();
         wildDeck.add("WildCard");
-        Card card = factory.createCard(wildDeck, false, true, null);
-        assertNotNull("Should create a WildCard", card);
-        assertEquals("Card should be of type Wild", Type.Wild, card.getType());
+        
+        Card card = factory.createCard(wildDeck, false, true, "");
+        
+        assertNotNull(card);
     }
     
     @Test
-    public void testCreateNumberCard() {
+    public void testCreateWildCardType() {
+        ArrayList<String> wildDeck = new ArrayList<>();
+        wildDeck.add("WildCard");
+        
+        Card card = factory.createCard(wildDeck, false, true, "");
+        
+        assertEquals(Type.Wild, card.getType());
+    }
+    
+    @Test
+    public void testCreateNumberCardNotNull() {
         ArrayList<String> numberDeck = new ArrayList<>();
         numberDeck.add("r5");
-        Card card = factory.createCard(numberDeck, false, true, null);
-        assertNotNull("Should create a NumberCard", card);
-        assertEquals("Card should be of type Number", Type.Number, card.getType());
-        assertEquals("Card color should be Red", Color.Red, card.getColor());
+        
+        Card card = factory.createCard(numberDeck, false, true, "");
+        
+        assertNotNull(card);
     }
     
     @Test
-    public void testCreateSkipCard() {
+    public void testCreateNumberCardType() {
+        ArrayList<String> numberDeck = new ArrayList<>();
+        numberDeck.add("r5");
+        
+        Card card = factory.createCard(numberDeck, false, true, "");
+        
+        assertEquals(Type.Number, card.getType());
+    }
+    
+    @Test
+    public void testCreateNumberCardColor() {
+        ArrayList<String> numberDeck = new ArrayList<>();
+        numberDeck.add("r5");
+        
+        Card card = factory.createCard(numberDeck, false, true, "");
+        
+        assertEquals(Color.Red, card.getColor());
+    }
+    
+    @Test
+    public void testCreateSkipCardNotNull() {
         ArrayList<String> skipDeck = new ArrayList<>();
         skipDeck.add("bSkip");
-        Card card = factory.createCard(skipDeck, false, true, null);
-        assertNotNull("Should create a SkipCard", card);
-        assertEquals("Card should be of type Skip", Type.Skip, card.getType());
-        assertEquals("Card color should be Blue", Color.Blue, card.getColor());
+        
+        Card card = factory.createCard(skipDeck, false, true, "");
+        
+        assertNotNull(card);
     }
     
     @Test
-    public void testCreateReverseCard() {
+    public void testCreateSkipCardType() {
+        ArrayList<String> skipDeck = new ArrayList<>();
+        skipDeck.add("bSkip");
+        
+        Card card = factory.createCard(skipDeck, false, true, "");
+        
+        assertEquals(Type.Skip, card.getType());
+    }
+    
+    @Test
+    public void testCreateSkipCardColor() {
+        ArrayList<String> skipDeck = new ArrayList<>();
+        skipDeck.add("bSkip");
+        
+        Card card = factory.createCard(skipDeck, false, true, "");
+        
+        assertEquals(Color.Blue, card.getColor());
+    }
+    
+    @Test
+    public void testCreateReverseCardNotNull() {
         ArrayList<String> reverseDeck = new ArrayList<>();
         reverseDeck.add("yReverse");
-        Card card = factory.createCard(reverseDeck, false, true, null);
-        assertNotNull("Should create a ReverseCard", card);
-        assertEquals("Card should be of type Reverse", Type.Reverse, card.getType());
-        assertEquals("Card color should be Yellow", Color.Yellow, card.getColor());
+        
+        Card card = factory.createCard(reverseDeck, false, true, "");
+        
+        assertNotNull(card);
     }
     
     @Test
-    public void testCreateDrawTwoCard() {
+    public void testCreateReverseCardType() {
+        ArrayList<String> reverseDeck = new ArrayList<>();
+        reverseDeck.add("yReverse");
+        
+        Card card = factory.createCard(reverseDeck, false, true, "");
+        
+        assertEquals(Type.Reverse, card.getType());
+    }
+    
+    @Test
+    public void testCreateReverseCardColor() {
+        ArrayList<String> reverseDeck = new ArrayList<>();
+        reverseDeck.add("yReverse");
+        
+        Card card = factory.createCard(reverseDeck, false, true, "");
+        
+        assertEquals(Color.Yellow, card.getColor());
+    }
+    
+    @Test
+    public void testCreateDrawTwoCardNotNull() {
         ArrayList<String> drawTwoDeck = new ArrayList<>();
         drawTwoDeck.add("gDrawTwo");
-        Card card = factory.createCard(drawTwoDeck, false, true, null);
-        assertNotNull("Should create a DrawTwoCard", card);
-        assertEquals("Card should be of type DrawTwo", Type.DrawTwo, card.getType());
-        assertEquals("Card color should be Green", Color.Green, card.getColor());
+        
+        Card card = factory.createCard(drawTwoDeck, false, true, "");
+        
+        assertNotNull(card);
     }
     
     @Test
-    public void testCreateWildDrawFourCard() {
+    public void testCreateDrawTwoCardType() {
+        ArrayList<String> drawTwoDeck = new ArrayList<>();
+        drawTwoDeck.add("gDrawTwo");
+        
+        Card card = factory.createCard(drawTwoDeck, false, true, "");
+        
+        assertEquals(Type.DrawTwo, card.getType());
+    }
+    
+    @Test
+    public void testCreateDrawTwoCardColor() {
+        ArrayList<String> drawTwoDeck = new ArrayList<>();
+        drawTwoDeck.add("gDrawTwo");
+        
+        Card card = factory.createCard(drawTwoDeck, false, true, "");
+        
+        assertEquals(Color.Green, card.getColor());
+    }
+    
+    @Test
+    public void testCreateWildDrawFourCardNotNull() {
         ArrayList<String> wildDrawFourDeck = new ArrayList<>();
         wildDrawFourDeck.add("WildDrawFour");
-        Card card = factory.createCard(wildDrawFourDeck, false, true, null);
-        assertNotNull("Should create a WildDrawFourCard", card);
-        assertEquals("Card should be of type WildDrawFour", Type.WildDrawFour, card.getType());
+        
+        Card card = factory.createCard(wildDrawFourDeck, false, true, "");
+        
+        assertNotNull(card);
     }
     
     @Test
-    public void testCreateSpecificCard() {
-        // Setup test deck with specific cards
+    public void testCreateWildDrawFourCardType() {
+        ArrayList<String> wildDrawFourDeck = new ArrayList<>();
+        wildDrawFourDeck.add("WildDrawFour");
+        
+        Card card = factory.createCard(wildDrawFourDeck, false, true, "");
+        
+        assertEquals(Type.WildDrawFour, card.getType());
+    }
+    
+    @Test
+    public void testCreateSpecificCardNotNull() {
         ArrayList<String> testDeck = new ArrayList<>();
-        testDeck.add("r5");  // Red 5
-        testDeck.add("bSkip"); // Blue Skip
+        testDeck.add("r5");
+        testDeck.add("bSkip");
         testDeck.add("WildCard");
         
-        // Test creating a specific card that exists in the deck
         Card card = factory.createCard(testDeck, false, true, "bSkip");
         
-        // Verify the correct card was created
-        assertNotNull("Should create a card", card);
-        assertEquals("Card should be of type Skip", Type.Skip, card.getType());
-        assertEquals("Card color should be Blue", Color.Blue, card.getColor());
+        assertNotNull(card);
+    }
+    
+    @Test
+    public void testCreateSpecificCardType() {
+        ArrayList<String> testDeck = new ArrayList<>();
+        testDeck.add("r5");
+        testDeck.add("bSkip");
+        testDeck.add("WildCard");
         
-        // Verify the card was removed from the deck
-        assertEquals("Deck size should be reduced by 1", 2, testDeck.size());
-        assertFalse("Card should be removed from deck", testDeck.contains("bSkip"));
+        Card card = factory.createCard(testDeck, false, true, "bSkip");
+        
+        assertEquals(Type.Skip, card.getType());
     }
     
-@Test
-public void testCreateCardWithIsTop() {
-    // Setup test deck with enough cards
-    ArrayList<String> testDeck = new ArrayList<>();
-    // Add enough cards to test the isTop condition
-    for (int i = 0; i < 60; i++) {
-        testDeck.add("r" + (i % 10)); // Add cards with values 0-9
+    @Test
+    public void testCreateSpecificCardColor() {
+        ArrayList<String> testDeck = new ArrayList<>();
+        testDeck.add("r5");
+        testDeck.add("bSkip");
+        testDeck.add("WildCard");
+        
+        Card card = factory.createCard(testDeck, false, true, "bSkip");
+        
+        assertEquals(Color.Blue, card.getColor());
     }
     
-    // Get the initial deck size
-    int initialSize = testDeck.size();
+    @Test
+    public void testCreateSpecificCardRemovesFromDeck() {
+        ArrayList<String> testDeck = new ArrayList<>();
+        testDeck.add("r5");
+        testDeck.add("bSkip");
+        testDeck.add("WildCard");
+        
+        factory.createCard(testDeck, false, true, "bSkip");
+        
+        assertEquals(2, testDeck.size());
+    }
     
-    // Create a card with isTop = true
-    Card card = factory.createCard(testDeck, true, true, null);
+    @Test
+    public void testCreateSpecificCardNotInDeck() {
+        ArrayList<String> testDeck = new ArrayList<>();
+        testDeck.add("r5");
+        testDeck.add("bSkip");
+        testDeck.add("WildCard");
+        
+        factory.createCard(testDeck, false, true, "bSkip");
+        
+        assertEquals(false, testDeck.contains("bSkip"));
+    }
     
-    // Verify the card was created
-    assertNotNull("Should create a card", card);
+    @Test
+    public void testCreateCardWithIsTopNotNull() {
+        ArrayList<String> testDeck = new ArrayList<>();
+        for (int i = 0; i < 60; i++) {
+            testDeck.add("r" + (i % 10));
+        }
+        
+        Card card = factory.createCard(testDeck, true, true, "");
+        
+        assertNotNull(card);
+    }
     
-    // Verify the deck size is reduced by 1
-    assertEquals("Deck size should be reduced by 1", initialSize - 1, testDeck.size());
+    @Test
+    public void testCreateCardWithIsTopReducesDeckSize() {
+        ArrayList<String> testDeck = new ArrayList<>();
+        for (int i = 0; i < 60; i++) {
+            testDeck.add("r" + (i % 10));
+        }
+        int initialSize = testDeck.size();
+        
+        factory.createCard(testDeck, true, true, "");
+        
+        assertEquals(initialSize - 1, testDeck.size());
+    }
     
-    // Verify the card is of a valid type
-    assertNotNull("Card type should not be null", card.getType());
-}
-
+    @Test
+    public void testCreateCardWithIsTopHasType() {
+        ArrayList<String> testDeck = new ArrayList<>();
+        for (int i = 0; i < 60; i++) {
+            testDeck.add("r" + (i % 10));
+        }
+        
+        Card card = factory.createCard(testDeck, true, true, "");
+        
+        assertNotNull(card.getType());
+    }
+    
+    @Test
+    public void testGiveCardNotNull() {
+        ArrayList<String> testDeck = new ArrayList<>();
+        testDeck.add("r5");
+        
+        Card card = factory.giveCard(testDeck, false, true, "");
+        
+        assertNotNull(card);
+    }
+    
+    @Test
+    public void testGiveCardReducesDeckSize() {
+        ArrayList<String> testDeck = new ArrayList<>();
+        testDeck.add("r5");
+        testDeck.add("b3");
+        int initialSize = testDeck.size();
+        
+        factory.giveCard(testDeck, false, true, "");
+        
+        assertEquals(initialSize - 1, testDeck.size());
+    }
 }
