@@ -11,6 +11,7 @@ public class NumberCard extends Card {
         loadImage("/asset/uno-card-images-master/"+color.toString()+"_"+value+".png");
     }
     
+    @Override
     public int getValue() {
         return value;
     }

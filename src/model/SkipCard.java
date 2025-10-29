@@ -9,6 +9,11 @@ public class SkipCard extends Card {
     }
 
     @Override
+    public int getValue() {
+        return 20;
+    }
+
+    @Override
     public void cardFunction(UNOController controller) {
         System.out.println("Skip card effect");
         controller.passNextPlayer(2);
