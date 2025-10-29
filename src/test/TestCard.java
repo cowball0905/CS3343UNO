@@ -5,22 +5,12 @@ import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.Arguments;
-import org.junit.jupiter.params.provider.MethodSource;
-import org.junit.jupiter.api.DisplayName;
 
 import model.*;
 import controller.UNOController;
 
 import java.awt.image.BufferedImage;
-import java.io.IOException;
 import java.awt.Graphics2D;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Stream;
-
-import javax.swing.JPanel;
 
 public class TestCard {
     private Card testCard;
@@ -28,254 +18,324 @@ public class TestCard {
     
     @BeforeEach
     public void setUp() {
-        // Using NumberCard as a concrete implementation for testing common Card methods
+        UNOController.resetInstance();
         testCard = new NumberCard(Color.Red, 5, true);
-        ArrayList<Player> players = new ArrayList<>();
-        
-        // Set up controller with test players
         controller = UNOController.getInstance();
-        controller.setViewers();
         controller.setPlayers();
-        // Setup controller with test players
-        for (int i = 0; i < 4; i++) {
-            players.add(new CPUPlayer("Player" + (i + 1)));
-        }
-        controller.getPlayerList().clear();
-        controller.getPlayerList().addAll(players);
-        controller.setCurrentPlayer(players.get(0));
+        controller.setViewers();
     }
     
     @AfterEach
-	public void tearDown() {
-		UNOController.resetInstance();
-	}
+    public void tearDown() {
+        UNOController.resetInstance();
+    }
     
     @Test
-    public void testSetAndGetPosition() {
+    public void testSetPositionX() {
         testCard.setPosition(100, 200);
-        assertEquals(100, testCard.getX(), "X position should be set correctly");
-        assertEquals(200, testCard.getY(), "Y position should be set correctly");
+        
+        assertEquals(100, testCard.getX());
     }
     
     @Test
-    public void testSetAndGetSize() {
+    public void testSetPositionY() {
+        testCard.setPosition(100, 200);
+        
+        assertEquals(200, testCard.getY());
+    }
+    
+    @Test
+    public void testSetSizeWidth() {
         testCard.setSize(100, 150);
-        assertEquals(100, testCard.getWidth(), "Width should be set correctly");
-        assertEquals(150, testCard.getHeight(), "Height should be set correctly");
+        
+        assertEquals(100, testCard.getWidth());
     }
     
     @Test
-    public void testCardSelection() {
+    public void testSetSizeHeight() {
+        testCard.setSize(100, 150);
+        
+        assertEquals(150, testCard.getHeight());
+    }
+    
+    @Test
+    public void testSetCardSelectedTrue() {
         testCard.setCardSelected(true);
-        assertTrue(testCard.isCardSelected(), "Card should be selected after setCardSelected(true)");
         
-        // Verify Y position changed to 410 when selected
-        assertEquals(410, testCard.getY(), "Y position should be 410 when selected");
+        assertEquals(true, testCard.isCardSelected());
+    }
+    
+    @Test
+    public void testSetCardSelectedTrueChangesY() {
+        testCard.setCardSelected(true);
         
-        // Deselect the card
+        assertEquals(410, testCard.getY());
+    }
+    
+    @Test
+    public void testSetCardSelectedFalse() {
+        testCard.setCardSelected(true);
         testCard.setCardSelected(false);
-        assertFalse(testCard.isCardSelected(), "Card should not be selected after deselecting");
         
-        // Verify Y position changed back to 450 when deselected
-        assertEquals(450, testCard.getY(), "Y position should be 450 when not selected");
+        assertEquals(false, testCard.isCardSelected());
     }
     
-	@Test
-	public void testSetRotation() {
-	    // Test setting rotation to 90 degrees
-	    testCard.setRotation(90);
-	    assertEquals(90, testCard.getRotationAngle());
-	    
-	    // Test setting rotation to 180 degrees
-	    testCard.setRotation(180);
-	    assertEquals(180, testCard.getRotationAngle());
-	    
-	    // Test setting rotation to 270 degrees
-	    testCard.setRotation(270);
-	    assertEquals(270, testCard.getRotationAngle());
-	    
-	}
+    @Test
+    public void testSetCardSelectedFalseChangesY() {
+        testCard.setCardSelected(true);
+        testCard.setCardSelected(false);
+        
+        assertEquals(450, testCard.getY());
+    }
+    
+    @Test
+    public void testSetRotation90() {
+        testCard.setRotation(90);
+        
+        assertEquals(90.0, testCard.getRotationAngle());
+    }
+    
+    @Test
+    public void testSetRotation180() {
+        testCard.setRotation(180);
+        
+        assertEquals(180.0, testCard.getRotationAngle());
+    }
+    
+    @Test
+    public void testSetRotation270() {
+        testCard.setRotation(270);
+        
+        assertEquals(270.0, testCard.getRotationAngle());
+    }
 
-	@Test
-	public void testRotationBoundaries() {
-	    // Test minimum boundary
-	    testCard.setRotation(0);
-	    assertEquals(0, testCard.getRotationAngle(), 0.01, "Rotation should handle 0 degrees");
-	    
-	}
+    @Test
+    public void testSetRotation0() {
+        testCard.setRotation(0);
+        
+        assertEquals(0.0, testCard.getRotationAngle());
+    }
 
-	@Test
-	public void testRotationPersistence() {
-	    // Test rotation to 90 degrees
-	    testCard.setRotation(90);
-	    assertEquals(90, testCard.getRotationAngle(), 0.01, "Rotation should be set to 90 degrees");
-	    assertTrue(testCard.isRotated(), "Card should be marked as rotated at 90 degrees");
-	
-	    // Test rotation to 180 degrees
-	    testCard.setRotation(180);
-	    assertEquals(180, testCard.getRotationAngle(), 0.01, "Rotation should be set to 180 degrees");
-	    assertTrue(testCard.isRotated(), "Card should not be marked as rotated at 180 degrees");
-	
-	    // Test rotation to 270 degrees
-	    testCard.setRotation(270);
-	    assertEquals(270, testCard.getRotationAngle(), 0.01, "Rotation should be set to 270 degrees");
-	    assertTrue(testCard.isRotated(), "Card should be marked as rotated at 270 degrees");
-	
-	    // Test rotation to 0 degrees
-	    testCard.setRotation(0);
-	    assertEquals(0, testCard.getRotationAngle(), 0.01, "Rotation should be set to 0 degrees");
-	    assertFalse(testCard.isRotated(), "Card should not be marked as rotated at 0 degrees");
-	}
+    @Test
+    public void testRotation90IsRotated() {
+        testCard.setRotation(90);
+        
+        assertEquals(true, testCard.isRotated());
+    }
+    
+    @Test
+    public void testRotation180IsRotated() {
+        testCard.setRotation(180);
+        
+        assertEquals(true, testCard.isRotated());
+    }
+    
+    @Test
+    public void testRotation270IsRotated() {
+        testCard.setRotation(270);
+        
+        assertEquals(true, testCard.isRotated());
+    }
+    
+    @Test
+    public void testRotation0NotRotated() {
+        testCard.setRotation(90);
+        testCard.setRotation(0);
+        
+        assertEquals(false, testCard.isRotated());
+    }
 	
     @Test
-    public void testRevealedState() {
-        // Initial state (set to revealed in constructor)
-        assertTrue(testCard.isRevealed(), "Card should be revealed initially");
-        
-        // Set to not revealed
+    public void testInitialRevealedState() {
+        assertEquals(true, testCard.isRevealed());
+    }
+    
+    @Test
+    public void testSetRevealedFalse() {
         testCard.setRevealed(false);
-        assertFalse(testCard.isRevealed(), "Card should not be revealed after setting to false");
+        
+        assertEquals(false, testCard.isRevealed());
     }
     
     @Test
-    public void testGetImage() {
-        // The image might be loaded in the constructor or when first accessed
-        // So we can't assume it's null
-        // Just verify the method doesn't throw an exception
-        assertDoesNotThrow(() -> testCard.getImage(), "getImage() should not throw an exception");
+    public void testGetImageNotNull() {
+        assertNotNull(testCard.getImage());
     }
-    
 
     @Test
     public void testGetType() {
-        assertEquals(Type.Number, testCard.getType(), "Card type should be Number");
+        assertEquals(Type.Number, testCard.getType());
     }
     
     @Test
-    @DisplayName("Test card image loading through constructor")
-    public void testCardImageLoading() {
-        // Test that the card loads its image in the constructor
+    public void testCardImageNotNull() {
         NumberCard card = new NumberCard(Color.Red, 5, true);
         
-        // The card should have loaded its image in the constructor
-        assertNotNull(card.getImage(), "Card image should be loaded through constructor");
-        
-        // Verify the image has the expected dimensions after scaling
-        assertEquals(80, card.getImage().getWidth(), "Image width should be scaled to 80");
-        assertEquals(120, card.getImage().getHeight(), "Image height should be scaled to 120");
+        assertNotNull(card.getImage());
     }
     
     @Test
-    @DisplayName("Test card with revealed state false")
-    public void testCardWithHiddenState() {
-        // Create a card with isRevealed = false
+    public void testCardImageWidth() {
+        NumberCard card = new NumberCard(Color.Red, 5, true);
+        
+        assertEquals(80, card.getImage().getWidth());
+    }
+    
+    @Test
+    public void testCardImageHeight() {
+        NumberCard card = new NumberCard(Color.Red, 5, true);
+        
+        assertEquals(120, card.getImage().getHeight());
+    }
+    
+    @Test
+    public void testHiddenCardHasImage() {
         NumberCard card = new NumberCard(Color.Red, 5, false);
         
-        // The card should still have an image (the back of the card)
-        assertNotNull(card.getImage(), "Card should have a back image when not revealed");
+        assertNotNull(card.getImage());
     }
     
     @Test
-    @DisplayName("Test card image changes with reveal state")
-    public void testCardImageChangesWithRevealState() {
-        // Create a card with isRevealed = false
+    public void testCardImageChangesWhenRevealed() {
         NumberCard card = new NumberCard(Color.Red, 5, false);
         BufferedImage backImage = card.getImage();
         
-        // Change to revealed state
         card.setRevealed(true);
         
-        // The image should now be different (front of the card)
-        assertNotEquals(backImage, card.getImage(), "Card image should change when revealed state changes");
+        assertNotEquals(backImage, card.getImage());
     }
     
     @Test
-    @DisplayName("Test drawing a card at specific position")
-    public void testDrawCardAtPosition() {
-        // Create a test card
+    public void testDrawUpdatesX() {
         NumberCard card = new NumberCard(Color.Red, 5, true);
-        
-        // Create a test image to draw on
         BufferedImage testImage = new BufferedImage(200, 200, BufferedImage.TYPE_INT_ARGB);
         Graphics2D g2d = testImage.createGraphics();
         
-        // Draw the card at position (50, 50)
-        int x = 50;
-        int y = 50;
-        card.draw(g2d, x, y);
+        card.draw(g2d, 50, 50);
         
-        // Verify the card's position was updated
-        assertEquals(x, card.getX(), "Card's x position should be updated");
-        assertEquals(y, card.getY(), "Card's y position should be updated");
-        
-        // Test drawing with negative coordinates (should still work)
-        card.draw(g2d, -10, -20);
-        assertEquals(-10, card.getX(), "Card's x position should handle negative values");
-        assertEquals(-20, card.getY(), "Card's y position should handle negative values");
-        
+        assertEquals(50, card.getX());
         g2d.dispose();
     }
     
     @Test
-    @DisplayName("Test drawing with null graphics throws NullPointerException")
+    public void testDrawUpdatesY() {
+        NumberCard card = new NumberCard(Color.Red, 5, true);
+        BufferedImage testImage = new BufferedImage(200, 200, BufferedImage.TYPE_INT_ARGB);
+        Graphics2D g2d = testImage.createGraphics();
+        
+        card.draw(g2d, 50, 50);
+        
+        assertEquals(50, card.getY());
+        g2d.dispose();
+    }
+    
+    @Test
+    public void testDrawWithNegativeX() {
+        NumberCard card = new NumberCard(Color.Red, 5, true);
+        BufferedImage testImage = new BufferedImage(200, 200, BufferedImage.TYPE_INT_ARGB);
+        Graphics2D g2d = testImage.createGraphics();
+        
+        card.draw(g2d, -10, -20);
+        
+        assertEquals(-10, card.getX());
+        g2d.dispose();
+    }
+    
+    @Test
+    public void testDrawWithNegativeY() {
+        NumberCard card = new NumberCard(Color.Red, 5, true);
+        BufferedImage testImage = new BufferedImage(200, 200, BufferedImage.TYPE_INT_ARGB);
+        Graphics2D g2d = testImage.createGraphics();
+        
+        card.draw(g2d, -10, -20);
+        
+        assertEquals(-20, card.getY());
+        g2d.dispose();
+    }
+    
+    @Test
     public void testDrawWithNullGraphics() {
         NumberCard card = new NumberCard(Color.Red, 5, true);
-        assertThrows(NullPointerException.class, 
-            () -> card.draw(null, 0, 0), 
-            "Drawing with null graphics should throw NullPointerException");
+        
+        assertThrows(NullPointerException.class, () -> card.draw(null, 0, 0));
     }
     
     @Test
-    @DisplayName("Test card revealed state and image loading")
-    public void testCardRevealedState() {
-        // Create a face-down card
+    public void testCardInitiallyFaceDown() {
         NumberCard card = new NumberCard(Color.Red, 5, false);
         
-        // Initially, the card should show the back image
-        assertFalse(card.isRevealed(), "Card should be face down initially");
+        assertEquals(false, card.isRevealed());
+    }
+    
+    @Test
+    public void testSetRevealedTrue() {
+        NumberCard card = new NumberCard(Color.Red, 5, false);
         
-        // Reveal the card
         card.setRevealed(true);
-        assertTrue(card.isRevealed(), "Card should be revealed after setRevealed(true)");
         
-        // The card should now show the front image
-        assertNotNull(card.getImage(), "Card should have an image after being revealed");
+        assertEquals(true, card.isRevealed());
+    }
+    
+    @Test
+    public void testRevealedCardHasImage() {
+        NumberCard card = new NumberCard(Color.Red, 5, false);
         
-        // Hide the card again
+        card.setRevealed(true);
+        
+        assertNotNull(card.getImage());
+    }
+    
+    @Test
+    public void testSetRevealedFalseAfterTrue() {
+        NumberCard card = new NumberCard(Color.Red, 5, false);
+        card.setRevealed(true);
+        
         card.setRevealed(false);
-        assertFalse(card.isRevealed(), "Card should be hidden after setRevealed(false)");
+        
+        assertEquals(false, card.isRevealed());
     }
     
     @Test
-    @DisplayName("Test image loading with different reveal states")
-    public void testImageLoadingWithRevealStates() {
-        // Test with revealed card
+    public void testRevealedCardHasImageLoaded() {
         NumberCard revealedCard = new NumberCard(Color.Blue, 3, true);
-        assertNotNull(revealedCard.getImage(), "Revealed card should have an image");
         
-        // Test with hidden card
-        NumberCard hiddenCard = new NumberCard(Color.Blue, 3, false);
-        assertNotNull(hiddenCard.getImage(), "Hidden card should have a back image");
-        
-        // The images should be different
-        assertNotEquals(revealedCard.getImage(), hiddenCard.getImage(),
-                       "Revealed and hidden cards should have different images");
+        assertNotNull(revealedCard.getImage());
     }
     
     @Test
-    void testCardFunctionalityWithController() {
-        // This is a basic test - you might need to mock the controller
-        // or set up a test environment for more complex scenarios
-        UNOController controller = UNOController.getInstance();
+    public void testHiddenCardHasBackImage() {
+        NumberCard hiddenCard = new NumberCard(Color.Blue, 3, false);
         
-        // Test with a WildCard
+        assertNotNull(hiddenCard.getImage());
+    }
+    
+    @Test
+    public void testRevealedAndHiddenCardsDifferentImages() {
+        NumberCard revealedCard = new NumberCard(Color.Blue, 3, true);
+        NumberCard hiddenCard = new NumberCard(Color.Blue, 3, false);
+        
+        assertNotEquals(revealedCard.getImage(), hiddenCard.getImage());
+    }
+    
+    @Test
+    public void testWildCardFunctionNotNull() {
+        controller.startGame();
+        controller.setIsFreezed(true);
         WildCard wildCard = new WildCard(true);
-        assertDoesNotThrow(() -> wildCard.cardFunction(controller),
-            "Wild card function should execute without throwing exceptions");
-            
-        // Test with a WildDrawFourCard
+        
+        wildCard.cardFunction(controller);
+        
+        assertNotNull(wildCard);
+    }
+    
+    @Test
+    public void testWildDrawFourCardFunctionNotNull() {
+        controller.startGame();
+        controller.setIsFreezed(true);
         WildDrawFourCard wildDrawFourCard = new WildDrawFourCard(true);
-        assertDoesNotThrow(() -> wildDrawFourCard.cardFunction(controller),
-            "Wild Draw Four card function should execute without throwing exceptions");
+        
+        wildDrawFourCard.cardFunction(controller);
+        
+        assertNotNull(wildDrawFourCard);
     }
 }
