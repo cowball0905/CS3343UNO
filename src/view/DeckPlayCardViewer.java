@@ -62,6 +62,8 @@ public class DeckPlayCardViewer {
             this.isDeciding = false;
             removeButtons();
             this.timer.stopTimer();
+            controller.passNextPlayer(1);
+            controller.eachRound();
         });
         panel.add(redButton);
         
