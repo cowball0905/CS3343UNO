@@ -69,9 +69,11 @@ public class WildCardViewer {
             timer.stopTimer();
             removeButtons();
             if(this.wild.getType()==Type.WildDrawFour){
+                ((Card)wild).loadImage("/asset/uno-card-images-master/Wild_Draw_4_Red.jpg");
                 this.callChallenge();
                 return;
             }
+            ((Card)wild).loadImage("/asset/uno-card-images-master/Wild_Card_Change_Colour_Red.jpg");
             controller.passNextPlayer(1);
             controller.eachRound();
         });
@@ -88,9 +90,11 @@ public class WildCardViewer {
             timer.stopTimer();
             removeButtons();
             if(this.wild.getType()==Type.WildDrawFour){
+                ((Card)wild).loadImage("/asset/uno-card-images-master/Wild_Draw_4_Blue.jpg");
                 this.callChallenge();
                 return;
             }
+            ((Card)wild).loadImage("/asset/uno-card-images-master/Wild_Card_Change_Colour_Blue.jpg");
             controller.passNextPlayer(1);
             controller.eachRound();
         });
@@ -107,9 +111,11 @@ public class WildCardViewer {
             timer.stopTimer();
             removeButtons();
             if(this.wild.getType()==Type.WildDrawFour){
+                ((Card)wild).loadImage("/asset/uno-card-images-master/Wild_Draw_4_Yellow.jpg");
                 this.callChallenge();
                 return;
             }
+            ((Card)wild).loadImage("/asset/uno-card-images-master/Wild_Card_Change_Colour_Yellow.jpg");
             controller.passNextPlayer(1);
             controller.eachRound();
         });
@@ -126,9 +132,11 @@ public class WildCardViewer {
             timer.stopTimer();
             removeButtons();
             if(this.wild.getType()==Type.WildDrawFour){
+                ((Card)wild).loadImage("/asset/uno-card-images-master/Wild_Draw_4_Green.jpg");
                 this.callChallenge();
                 return;
             }
+            ((Card)wild).loadImage("/asset/uno-card-images-master/Wild_Card_Change_Colour_Green.jpg");
             controller.passNextPlayer(1);
             controller.eachRound();
         });
