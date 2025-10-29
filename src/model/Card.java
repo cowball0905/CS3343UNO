@@ -30,7 +30,7 @@ public abstract class Card {
     }
 
     // In Card.java, update the loadImage method
-    protected void loadImage(String path) {
+    public void loadImage(String path) {
         this.cardImagePath = path;  // 保存真實卡牌路徑
         
         // 根據isRevealed決定載入哪個圖像

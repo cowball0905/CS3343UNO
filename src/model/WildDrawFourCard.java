@@ -21,12 +21,13 @@ public class WildDrawFourCard extends Card {
         Player currentPlayer = controller.getCurrentPlayer();
         int playDirection = controller.getPlayDirection(); // 1 for clockwise, -1 for counter-clockwise
 
-        if(controller.getPlayerList().indexOf(controller.getCurrentPlayer())==0){
+        if(controller.checkCurrentPlayer()==0){
             controller.getWildCardViewer().setWildCard(this);
             controller.getTurnTimer().startTimer(10);
         }else{
             Color chooseColor = ((CPUPlayer) controller.getCurrentPlayer()).chooseColor();
             this.setColor(chooseColor);
+            loadImage("/asset/uno-card-images-master/Wild_Card_Draw_4_"+chooseColor.toString()+".jpg");
             System.out.println(chooseColor.toString());
 
             // Get current player index

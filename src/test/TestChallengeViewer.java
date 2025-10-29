@@ -31,6 +31,8 @@ class TestChallengeViewer {
     void setUp() {
         challengeViewer = new ChallengeViewer();
         controller = UNOController.getInstance();
+        controller.setViewers();
+        controller.setPlayers();
         panel = new JPanel();
         timer = new CountDownTimer(panel, () -> {});
         

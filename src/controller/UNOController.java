@@ -3,6 +3,7 @@ package controller;
 import model.*;
 import view.ChallengeViewer;
 import view.ResultViewer;
+import view.DeckPlayCardViewer;
 import view.UNOGamePanel;
 import view.WildCardViewer;
 
@@ -27,7 +28,8 @@ public class UNOController {
     private WildCardViewer wildCardViewer;
     private ChallengeViewer challengeViewer;
     private ResultViewer resultViewer;
-    private final int INITCARDSIZE = 1;
+    private DeckPlayCardViewer deckPlayCardViewer;
+    private final int INITCARDSIZE = 7;
 
     private UNOController() {
         System.out.println("UNO Game window created and should be visible!");
@@ -40,7 +42,7 @@ public class UNOController {
         return instance;
     }
 
-    private void setViewers() {
+    public void setViewers() {
         mainFrame = new JFrame("UNO Game");
         mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         mainFrame.setSize(1000, 700);
@@ -51,6 +53,11 @@ public class UNOController {
         wildCardViewer = new WildCardViewer();
         challengeViewer = new ChallengeViewer();
         resultViewer = new ResultViewer();
+        deckPlayCardViewer = new DeckPlayCardViewer();
+
+        wildCardViewer.setController();
+        challengeViewer.setController();
+        deckPlayCardViewer.setController();
 
         turnTimer = new CountDownTimer(gamePanel, new CountDownTimer.TimerCallback() {
             @Override
@@ -72,6 +79,11 @@ public class UNOController {
                     for(int i=0;i<4;i++){
                         nextPlayer.drawCard(getCardFactory().giveCard(Deck, false, checkCurrentPlayer()==0? true: false, ""));
                     }
+				} else if (deckPlayCardViewer.getIsDeciding()) {
+					deckPlayCardViewer.endDeckCardViewer();
+					passNextPlayer(1);
+					eachRound();
+					isAction = false;
                 }else {
                     getCardFromDeck();
                 }
@@ -79,22 +91,23 @@ public class UNOController {
         });
         
         wildCardViewer.setTimer(turnTimer);
-        wildCardViewer.setController();
         wildCardViewer.setPanel(gamePanel);
 
         challengeViewer.setTimer(turnTimer);
-        challengeViewer.setController();
         challengeViewer.setPanel(gamePanel);
 
         resultViewer.setController();
         resultViewer.setPanel(gamePanel);
+        
+        deckPlayCardViewer.setTimer(turnTimer);
+        deckPlayCardViewer.setPanel(gamePanel);
         
         //initializeGame();
         
         mainFrame.setVisible(true);
     }
 
-    private void setPlayers() {
+    public void setPlayers() {
         players = new ArrayList<>();
         for(int i=0;i<4;i++){
             if(i==0){
@@ -162,9 +175,20 @@ public class UNOController {
             isAction = true;
             System.out.println(currentPlayer.getName()+ " draws a card from the deck.");
             currentPlayer.drawCard(cardFactory.giveCard(Deck,false, checkCurrentPlayer()==0 ? true:false, ""));
-            passNextPlayer(1);
-            eachRound();
-            isAction = false;
+            Card card = currentPlayer.getHand().get(currentPlayer.getHand().size()-1);
+            if(canPlayCard(card,getTopCard(1))){
+                if(players.indexOf(currentPlayer)==0){
+                    deckPlayCardViewer.setIsDeciding(card);
+                    turnTimer.startTimer(10);
+                }else{
+                    System.out.println(currentPlayer.getName()+ " got a matching card! they choose to play the card");
+                    currentPlayer.playCard(card);
+                }
+            }else{
+                passNextPlayer(1);
+                eachRound();
+                isAction = false;
+            }
         }
     }
 
@@ -234,6 +258,7 @@ public class UNOController {
     }
 
     public void passNextPlayer(int amount){
+    	isAction = false;
         int currentIndex = checkCurrentPlayer();
         int nextIndex = (currentIndex + amount * playDirection + players.size()) % players.size();
         currentPlayer = players.get(nextIndex);
@@ -313,6 +338,10 @@ public class UNOController {
     public WildCardViewer getWildCardViewer(){
         return wildCardViewer;
     }
+    
+	public DeckPlayCardViewer getDeckPlayCardViewer() {
+		return deckPlayCardViewer;
+	}
 
     public ResultViewer getResultViewer(){
         return resultViewer;

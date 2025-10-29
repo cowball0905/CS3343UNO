@@ -24,6 +24,9 @@ public class TestWildDrawFourCard {
     public void setUp() {
         // Get the controller instance
         controller = UNOController.getInstance();
+
+        controller.setViewers();
+        controller.setPlayers();
         
         // Clear any existing players first
         controller.getPlayerList().clear();
