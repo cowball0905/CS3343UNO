@@ -41,7 +41,7 @@ public class TestWildCardViewer {
     }
 
     @Test
-    public void testInitialStateNotHavingWild() {
+    public void testNoWildCardState() {
         assertEquals(false, wildCardViewer.isHavingWild());
     }
 
@@ -61,6 +61,7 @@ public class TestWildCardViewer {
         wildCardViewer.setWildCard(wildCard);
         
         assertEquals(wildCard, wildCardViewer.getCard());
+        assertTrue(wildCardViewer.isHavingWild());
     }
 
     @Test
@@ -82,8 +83,10 @@ public class TestWildCardViewer {
         assertEquals(false, wildCardViewer.isHavingWild());
     }
 
+    
+    //Need to change the autoSelectColor function to also change color of placed card to red
     @Test
-    public void testAutoSelectColorSetsRed() {
+    public void testEndTimeAutoSelectColorSetsRed() {
         Card wildCard = new WildCard(true);
         wildCardViewer.setWildCard(wildCard);
         
@@ -203,6 +206,8 @@ public class TestWildCardViewer {
         g.dispose();
     }
 
+    
+    //Testing wildCardViewer.removeButtons() for all four colors
     @Test
     public void testRemoveButtonsClearsRedButton() throws Exception {
         BufferedImage img = new BufferedImage(100, 100, BufferedImage.TYPE_INT_ARGB);
@@ -263,6 +268,9 @@ public class TestWildCardViewer {
         g.dispose();
     }
 
+    //Check that clicking button sets correct button
+    //1st Assert: Wild Card detected color
+    //2nd Assert: UNOController detected color
     @Test
     public void testRedButtonClickSetsRedColor() throws Exception {
         controller.startGame();
@@ -280,6 +288,10 @@ public class TestWildCardViewer {
         redButton.doClick();
         
         assertEquals(Color.Red, wildCard.getColor());
+        
+        controller.playCard(wildCard);
+        
+        assertEquals(Color.Red, controller.getTopCard(1).getColor());
         g.dispose();
     }
 
@@ -300,6 +312,10 @@ public class TestWildCardViewer {
         blueButton.doClick();
         
         assertEquals(Color.Blue, wildCard.getColor());
+        
+        controller.playCard(wildCard);
+        
+        assertEquals(Color.Blue, controller.getTopCard(1).getColor());
         g.dispose();
     }
 
@@ -320,6 +336,10 @@ public class TestWildCardViewer {
         yellowButton.doClick();
         
         assertEquals(Color.Yellow, wildCard.getColor());
+        
+        controller.playCard(wildCard);
+        
+        assertEquals(Color.Yellow, controller.getTopCard(1).getColor());
         g.dispose();
     }
 
@@ -340,9 +360,14 @@ public class TestWildCardViewer {
         greenButton.doClick();
         
         assertEquals(Color.Green, wildCard.getColor());
+        
+        controller.playCard(wildCard);
+        
+        assertEquals(Color.Green, controller.getTopCard(1).getColor());
         g.dispose();
     }
 
+    //Check that clicking button switches wildCardViewer state
     @Test
     public void testRedButtonClickResetsHavingWild() throws Exception {
         controller.startGame();
@@ -359,6 +384,66 @@ public class TestWildCardViewer {
         JButton redButton = (JButton) redButtonField.get(wildCardViewer);
         redButton.doClick();
         
+        assertEquals(false, wildCardViewer.isHavingWild());
+        g.dispose();
+    }
+    
+    @Test
+    public void testBlueButtonClickResetsHavingWild() throws Exception {
+        controller.startGame();
+        controller.setIsFreezed(true);
+        Card wildCard = new WildCard(true);
+        wildCardViewer.setWildCard(wildCard);
+
+        BufferedImage img = new BufferedImage(100, 100, BufferedImage.TYPE_INT_ARGB);
+        Graphics g = img.getGraphics();
+        wildCardViewer.drawButtons(g);
+
+        Field blueButtonField = WildCardViewer.class.getDeclaredField("blueButton");
+        blueButtonField.setAccessible(true);
+        JButton blueButton = (JButton) blueButtonField.get(wildCardViewer);
+        blueButton.doClick();
+
+        assertEquals(false, wildCardViewer.isHavingWild());
+        g.dispose();
+    }
+
+    @Test
+    public void testYellowButtonClickResetsHavingWild() throws Exception {
+        controller.startGame();
+        controller.setIsFreezed(true);
+        Card wildCard = new WildCard(true);
+        wildCardViewer.setWildCard(wildCard);
+
+        BufferedImage img = new BufferedImage(100, 100, BufferedImage.TYPE_INT_ARGB);
+        Graphics g = img.getGraphics();
+        wildCardViewer.drawButtons(g);
+
+        Field yellowButtonField = WildCardViewer.class.getDeclaredField("yellowButton");
+        yellowButtonField.setAccessible(true);
+        JButton yellowButton = (JButton) yellowButtonField.get(wildCardViewer);
+        yellowButton.doClick();
+
+        assertEquals(false, wildCardViewer.isHavingWild());
+        g.dispose();
+    }
+
+    @Test
+    public void testGreenButtonClickResetsHavingWild() throws Exception {
+        controller.startGame();
+        controller.setIsFreezed(true);
+        Card wildCard = new WildCard(true);
+        wildCardViewer.setWildCard(wildCard);
+
+        BufferedImage img = new BufferedImage(100, 100, BufferedImage.TYPE_INT_ARGB);
+        Graphics g = img.getGraphics();
+        wildCardViewer.drawButtons(g);
+
+        Field greenButtonField = WildCardViewer.class.getDeclaredField("greenButton");
+        greenButtonField.setAccessible(true);
+        JButton greenButton = (JButton) greenButtonField.get(wildCardViewer);
+        greenButton.doClick();
+
         assertEquals(false, wildCardViewer.isHavingWild());
         g.dispose();
     }
