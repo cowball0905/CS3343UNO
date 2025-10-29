@@ -11,6 +11,11 @@ public class DrawTwoCard extends Card {
     }
 
     @Override
+    public int getValue() {
+        return 20;
+    }
+
+    @Override
     public void cardFunction(UNOController controller) {
         System.out.println("Draw Two card played: next player draws 2 cards");
 

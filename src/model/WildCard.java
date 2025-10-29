@@ -9,6 +9,11 @@ public class WildCard extends Card {
     }
 
     @Override
+    public int getValue() {
+        return 50;
+    }
+
+    @Override
     public void cardFunction(UNOController controller) {
         System.out.println("Wild card played: change color");
 

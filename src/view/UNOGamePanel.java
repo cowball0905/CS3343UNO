@@ -11,6 +11,8 @@ import java.util.List;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JPanel;
+import javax.swing.Timer;
+
 import controller.UNOController;
 import model.Card;
 import model.Player;
@@ -31,7 +33,7 @@ public class UNOGamePanel extends JPanel {
     private JButton catchcpu2Button;
     private JButton catchcpu3Button;
     private boolean isGameEnd = false;
-    
+
     public UNOGamePanel() {
         this.controller = UNOController.getInstance();
         setPreferredSize(new Dimension(WIDTH, HEIGHT));
@@ -43,7 +45,6 @@ public class UNOGamePanel extends JPanel {
         this.isGameEnd = isGameEnd;
     }
 
-    
     private JButton updateDeck(){
         JButton button = new JButton();
         button.setBounds(140, 30, 80, 120);
@@ -53,6 +54,7 @@ public class UNOGamePanel extends JPanel {
         
         button.addActionListener(e -> {
             if (isGameEnd) {
+                System.out.println("Game has ended, cannot draw card.");
                 return;
             }
             if(controller.getPlayerList().indexOf(controller.getCurrentPlayer()) !=0){
@@ -258,6 +260,7 @@ public class UNOGamePanel extends JPanel {
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
+        
         Graphics2D graphic2D = (Graphics2D) g;
         
         // Get current game state from controller with error handling
@@ -320,6 +323,9 @@ public class UNOGamePanel extends JPanel {
         catchcpu1Button.setContentAreaFilled(false);
         catchcpu1Button.setFocusPainted(false);
         catchcpu1Button.addActionListener(e -> {
+            if(isGameEnd) {
+                return;
+            }
             controller.getPlayerList().get(0).catchForgotShout(controller.getPlayerList().get(1));
         });
         add(catchcpu1Button);
@@ -331,6 +337,9 @@ public class UNOGamePanel extends JPanel {
         catchcpu2Button.setContentAreaFilled(false);
         catchcpu2Button.setFocusPainted(false);
         catchcpu2Button.addActionListener(e -> {
+            if(isGameEnd) {
+                return;
+            }
             controller.getPlayerList().get(0).catchForgotShout(controller.getPlayerList().get(2));
         });
         add(catchcpu2Button);
@@ -342,6 +351,9 @@ public class UNOGamePanel extends JPanel {
         catchcpu3Button.setContentAreaFilled(false);
         catchcpu3Button.setFocusPainted(false);
         catchcpu3Button.addActionListener(e -> {
+            if(isGameEnd) {
+                return;
+            }
             controller.getPlayerList().get(0).catchForgotShout(controller.getPlayerList().get(3));
         });
         add(catchcpu3Button);
@@ -439,9 +451,10 @@ public class UNOGamePanel extends JPanel {
             controller.getDeckPlayCardViewer().drawWindow(g);  
         }
         if(isGameEnd) {
-            graphic2D.setColor(Color.BLUE);
+            graphic2D.setColor(Color.RED);
             graphic2D.setFont(new Font("Arial", 1, 100));
             graphic2D.drawString(controller.getCurrentPlayer().getName() + " Win !!!", 150, 330);
+            controller.getResultViewer().displayResult(g);
         }
     }
 }

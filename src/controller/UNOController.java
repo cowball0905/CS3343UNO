@@ -2,6 +2,7 @@ package controller;
 
 import model.*;
 import view.ChallengeViewer;
+import view.ResultViewer;
 import view.DeckPlayCardViewer;
 import view.UNOGamePanel;
 import view.WildCardViewer;
@@ -26,6 +27,7 @@ public class UNOController {
     private boolean isFreezed = false;
     private WildCardViewer wildCardViewer;
     private ChallengeViewer challengeViewer;
+    private ResultViewer resultViewer;
     private DeckPlayCardViewer deckPlayCardViewer;
     private final int INITCARDSIZE = 7;
 
@@ -50,6 +52,7 @@ public class UNOController {
         gamePanel = new UNOGamePanel();
         wildCardViewer = new WildCardViewer();
         challengeViewer = new ChallengeViewer();
+        resultViewer = new ResultViewer();
         deckPlayCardViewer = new DeckPlayCardViewer();
 
         wildCardViewer.setController();
@@ -92,6 +95,9 @@ public class UNOController {
 
         challengeViewer.setTimer(turnTimer);
         challengeViewer.setPanel(gamePanel);
+
+        resultViewer.setController();
+        resultViewer.setPanel(gamePanel);
         
         deckPlayCardViewer.setTimer(turnTimer);
         deckPlayCardViewer.setPanel(gamePanel);
@@ -184,6 +190,30 @@ public class UNOController {
                 isAction = false;
             }
         }
+    }
+
+
+    public ArrayList<Player> getSortedPlayersScore() {
+        ArrayList<Player> sortedPlayers = new ArrayList<>(players);
+        int n = sortedPlayers.size();
+
+        for (int i = 0; i < n - 1; i++) {
+            for (int j = 0; j < n - i - 1; j++) {
+                int score1 = sortedPlayers.get(j).getScore();
+                int score2 = sortedPlayers.get(j + 1).getScore();
+
+                if (score1 > score2) {
+                    Player temp = sortedPlayers.get(j);
+                    sortedPlayers.set(j, sortedPlayers.get(j + 1));
+                    sortedPlayers.set(j + 1, temp);
+                }
+            }
+
+            sortedPlayers.remove(currentPlayer);
+            sortedPlayers.add(0, currentPlayer);
+        }
+
+        return sortedPlayers;
     }
 
     public boolean isGameEnd(Card card) {
@@ -313,6 +343,10 @@ public class UNOController {
 		return deckPlayCardViewer;
 	}
 
+    public ResultViewer getResultViewer(){
+        return resultViewer;
+    }
+
     public ArrayList<Card> getHumanPlayedCard() {
         return players.get(0).getHand();
     }
@@ -359,6 +393,10 @@ public class UNOController {
 
     public void setIsFreezed(boolean freeze){
         isFreezed = freeze;
+    }
+
+    public boolean getIsFreezed() {
+        return isFreezed;
     }
     
 	public static void resetInstance() {

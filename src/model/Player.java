@@ -15,7 +15,6 @@ public abstract class Player implements Drawable, Playable, Shoutable, Catchable
         this.hand = new ArrayList<>();
         this.isShout = false;
     }
-    
     public void setController() {
         this.controller = UNOController.getInstance();
     }
@@ -24,7 +23,14 @@ public abstract class Player implements Drawable, Playable, Shoutable, Catchable
     public ArrayList<Card> getHand() { return hand; }
     public boolean getIsShout() { return isShout; }
     public void setIsShout(boolean saidUno) { this.isShout = saidUno; }
-    
+    public int getScore() { 
+        int score = 0;
+        for (Card card : hand) {
+            score += card.getValue();
+        }
+        return score; 
+    }
+
     public abstract void drawCard(Card card);
     public abstract void playCard(Card card);
     public abstract String shoutUno();
