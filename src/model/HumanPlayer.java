@@ -73,7 +73,7 @@ public class HumanPlayer extends Player {
         } else if (this.getIsShout()){
             errorMessage = "You shouted UNO already!";
         } else if (this.getHand().size() > 2) {
-            errorMessage = "You have more than 2 card!";
+            errorMessage = "You have more than 2 cards!";
         } else {
             boolean hasPlayableCard = false;
             for (Card c : this.getHand()){
