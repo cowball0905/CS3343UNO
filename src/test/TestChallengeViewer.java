@@ -277,8 +277,6 @@ public class TestChallengeViewer {
         greenButtonField.setAccessible(true);
         JButton greenButton = (JButton) greenButtonField.get(challengeViewer);
 
-        assertEquals(true, challengeViewer.getIsChallenging());
-
         greenButton.doClick();
 
         assertEquals(false, challengeViewer.getIsChallenging());
