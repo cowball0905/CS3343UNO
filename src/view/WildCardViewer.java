@@ -161,6 +161,7 @@ public class WildCardViewer {
     
     public void autoSelectColor() {
         wild.setColor(model.Color.Red);
+        System.out.println("Change to Red");
         if(this.wild.getType()==Type.WildDrawFour){
             ((Card)wild).loadImage("/asset/uno-card-images-master/Wild_Card_Draw_4_Red.jpg");
         }else{
