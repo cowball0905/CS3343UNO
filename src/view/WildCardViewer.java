@@ -161,6 +161,11 @@ public class WildCardViewer {
     
     public void autoSelectColor() {
         wild.setColor(model.Color.Red);
+        if(this.wild.getType()==Type.WildDrawFour){
+            ((Card)wild).loadImage("/asset/uno-card-images-master/Wild_Card_Draw_4_Red.jpg");
+        }else{
+            ((Card)wild).loadImage("/asset/uno-card-images-master/Wild_Card_Change_Colour_Red.jpg");
+        }
     }
     
     public void removeButtons() {

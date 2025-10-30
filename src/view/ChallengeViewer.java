@@ -19,7 +19,7 @@ public class ChallengeViewer {
     private JButton redButton;
     private JButton greenButton;
 
-    public ChallengeViewer(){
+    public ChallengeViewer() {
         isChallenging = false;
     }
 
@@ -30,23 +30,25 @@ public class ChallengeViewer {
     public void setTimer(CountDownTimer timer) {
         this.timer = timer;
     }
-    
+
     public void setPanel(JPanel panel) {
         this.panel = panel;
     }
 
-    public void setChallenge(Boolean Challenge){
+    public void setChallenge(Boolean Challenge) {
         this.isChallenging = Challenge;
     }
 
-    public void drawWindow(Graphics g){
-      if (this.isChallenging) {
-        drawButtons(g);
-      }
+    public void drawWindow(Graphics g) {
+        if (this.isChallenging) {
+            drawButtons(g);
+        }
     }
 
-    public void drawButtons(Graphics g){
-        if(redButton!=null){return;}
+    public void drawButtons(Graphics g) {
+        if (redButton != null) {
+            return;
+        }
         redButton = new JButton("Get 4 Cards");
         redButton.setBackground(Color.RED);
         redButton.setOpaque(true);
@@ -60,14 +62,15 @@ public class ChallengeViewer {
             ArrayList<Player> playerList = controller.getPlayerList();
             int nextIndex = (currentIndex + (1 * playDirection) + playerList.size()) % playerList.size();
             Player nextPlayer = playerList.get(nextIndex);
-            for(int i=0;i<4;i++){
-                nextPlayer.drawCard(controller.getCardFactory().giveCard(controller.getDeck(), false, controller.checkPlayer(nextPlayer)==0, ""));
+            for (int i = 0; i < 4; i++) {
+                nextPlayer.drawCard(controller.getCardFactory().giveCard(controller.getDeck(), false,
+                        controller.checkPlayer(nextPlayer) == 0, ""));
             }
             controller.passNextPlayer(2);
             controller.eachRound();
         });
         panel.add(redButton);
-        
+
         greenButton = new JButton("Challenge");
         greenButton.setBackground(Color.GREEN);
         greenButton.setOpaque(true);
@@ -85,7 +88,7 @@ public class ChallengeViewer {
             this.isChallenging = false;
         });
         panel.add(greenButton);
-        
+
         if (timer != null) {
             int remaining = timer.getRemainingSeconds();
             g.setColor(Color.BLACK);
@@ -93,11 +96,11 @@ public class ChallengeViewer {
             g.drawString("Time: " + remaining + "s", 420, 415);
         }
     }
-    
+
     public boolean getIsChallenging() {
         return this.isChallenging;
     }
-    
+
     public void removeButtons() {
         panel.remove(redButton);
         panel.remove(greenButton);

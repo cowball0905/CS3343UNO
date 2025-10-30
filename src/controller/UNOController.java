@@ -48,7 +48,7 @@ public class UNOController {
         mainFrame.setSize(1000, 700);
         mainFrame.setLocationRelativeTo(null);
         mainFrame.setResizable(false);
-        
+
         gamePanel = new UNOGamePanel();
         wildCardViewer = new WildCardViewer();
         challengeViewer = new ChallengeViewer();
@@ -66,31 +66,35 @@ public class UNOController {
                     wildCardViewer.autoSelectColor();
                     wildCardViewer.setHavingWild(false);
                     wildCardViewer.removeButtons();
-                    if(wildCardViewer.getCard().getType()==Type.WildDrawFour){
+                    if (wildCardViewer.getCard().getType() == Type.WildDrawFour) {
                         wildCardViewer.callChallenge();
-                    }else{  
+                    } else {
                         passNextPlayer(1);
                     }
                     eachRound();
-                }else if(challengeViewer.getIsChallenging()){
+                } else if (challengeViewer.getIsChallenging()) {
                     challengeViewer.setChallenge(false);
+                    challengeViewer.removeButtons();
                     int currentIndex = checkCurrentPlayer();
                     int nextIndex = (currentIndex + (1 * playDirection) + players.size()) % players.size();
                     Player nextPlayer = players.get(nextIndex);
-                    for(int i=0;i<4;i++){
-                        nextPlayer.drawCard(getCardFactory().giveCard(Deck, false, nextIndex==0 ? true : false, ""));
+                    for (int i = 0; i < 4; i++) {
+                        nextPlayer.drawCard(getCardFactory().giveCard(Deck, false, nextIndex == 0 ? true : false, ""));
                     }
-				} else if (deckPlayCardViewer.getIsDeciding()) {
-					deckPlayCardViewer.endDeckCardViewer();
-					passNextPlayer(1);
-					eachRound();
-					isAction = false;
-                }else {
+                    passNextPlayer(2);
+                    eachRound();
+                } else if (deckPlayCardViewer.getIsDeciding()) {
+                    deckPlayCardViewer.endDeckCardViewer();
+                    currentPlayer.playCard(players.get(checkCurrentPlayer()).getHand().get(0));
+                    passNextPlayer(1);
+                    eachRound();
+                    isAction = false;
+                } else {
                     getCardFromDeck();
                 }
             }
         });
-        
+
         wildCardViewer.setTimer(turnTimer);
         wildCardViewer.setPanel(gamePanel);
 
@@ -99,51 +103,50 @@ public class UNOController {
 
         resultViewer.setController();
         resultViewer.setPanel(gamePanel);
-        
+
         deckPlayCardViewer.setTimer(turnTimer);
         deckPlayCardViewer.setPanel(gamePanel);
-        
-        //initializeGame();
-        
+
+        // initializeGame();
+
         mainFrame.setVisible(true);
     }
 
     public void setPlayers() {
         players = new ArrayList<>();
-        for(int i=0;i<4;i++){
-            if(i==0){
+        for (int i = 0; i < 4; i++) {
+            if (i == 0) {
                 players.add(new HumanPlayer("Player"));
-            }else{
-                players.add(new CPUPlayer("CPU"+(i)));
+            } else {
+                players.add(new CPUPlayer("CPU" + (i)));
             }
         }
         for (Player p : players) {
             p.setController();
         }
-        
+
     }
 
     private void initializeGame() {
         Deck = new ArrayList<String>(Arrays.asList(
-            "r0","r1","r2","r3","r4","r5","r6","r7","r8","r9",
-            "r1","r2","r3","r4","r5","r6","r7","r8","r9",
-            "g0","g1","g2","g3","g4","g5","g6","g7","g8","g9",
-            "g1","g2","g3","g4","g5","g6","g7","g8","g9",
-            "b0","b1","b2","b3","b4","b5","b6","b7","b8","b9",
-            "b1","b2","b3","b4","b5","b6","b7","b8","b9",
-            "y0","y1","y2","y3","y4","y5","y6","y7","y8","y9",
-            "y1","y2","y3","y4","y5","y6","y7","y8","y9",
-            "rSkip","rReverse","rDrawTwo",
-            "rSkip","rReverse","rDrawTwo",
-            "gSkip","gReverse","gDrawTwo",
-            "gSkip","gReverse","gDrawTwo",
-            "bSkip","bReverse","bDrawTwo",
-            "bSkip","bReverse","bDrawTwo",
-            "ySkip","yReverse","yDrawTwo",
-            "ySkip","yReverse","yDrawTwo",
-            "WildCard", "WildCard", "WildCard", "WildCard",
-            "WildDrawFour", "WildDrawFour", "WildDrawFour", "WildDrawFour"
-        ));
+                "r0", "r1", "r2", "r3", "r4", "r5", "r6", "r7", "r8", "r9",
+                "r1", "r2", "r3", "r4", "r5", "r6", "r7", "r8", "r9",
+                "g0", "g1", "g2", "g3", "g4", "g5", "g6", "g7", "g8", "g9",
+                "g1", "g2", "g3", "g4", "g5", "g6", "g7", "g8", "g9",
+                "b0", "b1", "b2", "b3", "b4", "b5", "b6", "b7", "b8", "b9",
+                "b1", "b2", "b3", "b4", "b5", "b6", "b7", "b8", "b9",
+                "y0", "y1", "y2", "y3", "y4", "y5", "y6", "y7", "y8", "y9",
+                "y1", "y2", "y3", "y4", "y5", "y6", "y7", "y8", "y9",
+                "rSkip", "rReverse", "rDrawTwo",
+                "rSkip", "rReverse", "rDrawTwo",
+                "gSkip", "gReverse", "gDrawTwo",
+                "gSkip", "gReverse", "gDrawTwo",
+                "bSkip", "bReverse", "bDrawTwo",
+                "bSkip", "bReverse", "bDrawTwo",
+                "ySkip", "yReverse", "yDrawTwo",
+                "ySkip", "yReverse", "yDrawTwo",
+                "WildCard", "WildCard", "WildCard", "WildCard",
+                "WildDrawFour", "WildDrawFour", "WildDrawFour", "WildDrawFour"));
 
         // Clear played cards
         PlayedCard.clear();
@@ -153,17 +156,17 @@ public class UNOController {
         }
         // Stop turn timer
         turnTimer.stopTimer();
-        turnTimer.startTimer(30); 
+        turnTimer.startTimer(30);
         gamePanel.setIsGameEnd(false);
         // Reset other game state variables if needed
         isAction = false;
 
-        PlayedCard.add(cardFactory.giveCard(Deck,true, true, "")); // 已打出的牌顯示
-        
+        PlayedCard.add(cardFactory.giveCard(Deck, true, true, "")); // 已打出的牌顯示
+
         for (int i = 0; i < INITCARDSIZE; i++) {
-            players.get(0).drawCard(cardFactory.giveCard(Deck,false, true, "")); // 玩家的牌顯示
-            for(int j = 1 ; j < 4 ; j++){
-                players.get(j).drawCard(cardFactory.giveCard(Deck,false, false, "")); // CPU的牌隱藏
+            players.get(0).drawCard(cardFactory.giveCard(Deck, false, true, "")); // 玩家的牌顯示
+            for (int j = 1; j < 4; j++) {
+                players.get(j).drawCard(cardFactory.giveCard(Deck, false, false, "")); // CPU的牌隱藏
             }
         }
         currentPlayer = players.get(0);
@@ -171,28 +174,27 @@ public class UNOController {
         playDirection = 1;
     }
 
-    public void getCardFromDeck(){
-        if(!isAction){
+    public void getCardFromDeck() {
+        if (!isAction) {
             isAction = true;
-            System.out.println(currentPlayer.getName()+ " draws a card from the deck.");
-            currentPlayer.drawCard(cardFactory.giveCard(Deck,false, checkCurrentPlayer()==0 ? true:false, ""));
-            Card card = currentPlayer.getHand().get(currentPlayer.getHand().size()-1);
-            if(canPlayCard(card,getTopCard(1))){
-                if(checkCurrentPlayer()==0){
+            System.out.println(currentPlayer.getName() + " draws a card from the deck.");
+            currentPlayer.drawCard(cardFactory.giveCard(Deck, false, checkCurrentPlayer() == 0 ? true : false, ""));
+            Card card = currentPlayer.getHand().get(currentPlayer.getHand().size() - 1);
+            if (canPlayCard(card, getTopCard(1))) {
+                if (checkCurrentPlayer() == 0) {
                     deckPlayCardViewer.setIsDeciding(card);
                     turnTimer.startTimer(10);
-                }else{
-                    System.out.println(currentPlayer.getName()+ " got a matching card! they choose to play the card");
+                } else {
+                    System.out.println(currentPlayer.getName() + " got a matching card! they choose to play the card");
                     currentPlayer.playCard(card);
                 }
-            }else{
+            } else {
                 passNextPlayer(1);
                 eachRound();
                 isAction = false;
             }
         }
     }
-
 
     public ArrayList<Player> getSortedPlayersScore() {
         ArrayList<Player> sortedPlayers = new ArrayList<>(players);
@@ -227,51 +229,51 @@ public class UNOController {
         return false;
     }
 
-    public void eachRound(){ 
+    public void eachRound() {
         gamePanel.updateDisplay();
-        if (currentPlayer == players.get(0)){
-            if(!isFreezed){
-                turnTimer.startTimer(30); 
+        if (currentPlayer == players.get(0)) {
+            if (!isFreezed) {
+                turnTimer.startTimer(30);
             }
         } else {
             turnTimer.stopTimer();
             CPUPlayer cpuPlayer = (CPUPlayer) currentPlayer;
-            
+
             Timer cpuTimer = new Timer(2000, e -> cpuPlayer.chooseCard());
-            cpuTimer.setRepeats(false);  
-            if(!isFreezed){
+            cpuTimer.setRepeats(false);
+            if (!isFreezed) {
                 cpuTimer.start();
             }
         }
     }
 
-    public void playCard(Card card){
+    public void playCard(Card card) {
         isAction = true;
         card.setRotation(0);
         PlayedCard.add(card);
         currentPlayer.playCard(card);
         gamePanel.updateDisplay();
-        if(isGameEnd(card)) {
+        if (isGameEnd(card)) {
             return;
         }
         card.cardFunction(this);
         isAction = false;
     }
 
-    public void passNextPlayer(int amount){
-    	isAction = false;
+    public void passNextPlayer(int amount) {
+        isAction = false;
         int currentIndex = checkCurrentPlayer();
         int nextIndex = (currentIndex + amount * playDirection + players.size()) % players.size();
         currentPlayer = players.get(nextIndex);
         gamePanel.updateDisplay();
     }
-    
-    public boolean canPlayCard(Card playedCard,Card matchCard) {    
+
+    public boolean canPlayCard(Card playedCard, Card matchCard) {
         // 如果没有顶牌（游戏刚开始或PlayedCard为空），允许任何牌
         if (matchCard == null) {
             return true;
         }
-        
+
         switch (playedCard.getType()) {
             case Wild:
             case WildDrawFour:
@@ -284,9 +286,10 @@ public class UNOController {
                 }
                 return false;
             case Number:
-                if(playedCard.getColor() == matchCard.getColor()){
+                if (playedCard.getColor() == matchCard.getColor()) {
                     return true;
-                }else if(matchCard.getType()==Type.Number && ((NumberCard) playedCard).getValue() == ((NumberCard)matchCard).getValue()){
+                } else if (matchCard.getType() == Type.Number
+                        && ((NumberCard) playedCard).getValue() == ((NumberCard) matchCard).getValue()) {
                     return true;
                 }
                 return false;
@@ -295,7 +298,7 @@ public class UNOController {
         }
     }
 
-    public ChallengeViewer getChallengeViewer(){
+    public ChallengeViewer getChallengeViewer() {
         return this.challengeViewer;
     }
 
@@ -303,18 +306,18 @@ public class UNOController {
         setPlayers();
         setViewers();
         initializeGame();
-        
+
         if (mainFrame != null) {
             mainFrame.getContentPane().removeAll();
-            
+
             if (gamePanel == null) {
                 gamePanel = new UNOGamePanel();
             }
-            
+
             mainFrame.add(gamePanel);
             mainFrame.revalidate();
             gamePanel.requestFocusInWindow();
-            gamePanel.startGame(); 
+            gamePanel.startGame();
         }
 
         // Ensure currentPlayer is human before starting the round
@@ -331,20 +334,20 @@ public class UNOController {
     public ArrayList<String> getDeck() {
         return this.Deck;
     }
-    
+
     public CountDownTimer getTurnTimer() {
         return this.turnTimer;
     }
 
-    public WildCardViewer getWildCardViewer(){
+    public WildCardViewer getWildCardViewer() {
         return wildCardViewer;
     }
-    
-	public DeckPlayCardViewer getDeckPlayCardViewer() {
-		return deckPlayCardViewer;
-	}
 
-    public ResultViewer getResultViewer(){
+    public DeckPlayCardViewer getDeckPlayCardViewer() {
+        return deckPlayCardViewer;
+    }
+
+    public ResultViewer getResultViewer() {
         return resultViewer;
     }
 
@@ -353,7 +356,7 @@ public class UNOController {
     }
 
     public ArrayList<Card> getCPUCard(int index) {
-        return players.get(index+1).getHand();
+        return players.get(index + 1).getHand();
     }
 
     public Card getTopCard(int index) {
@@ -368,7 +371,7 @@ public class UNOController {
         this.currentPlayer = player;
     }
 
-    public ArrayList<Player> getPlayerList(){
+    public ArrayList<Player> getPlayerList() {
         return players;
     }
 
@@ -378,31 +381,31 @@ public class UNOController {
 
     public void setPlayDirection(int direction) {
         this.playDirection = direction;
-    } 
+    }
 
     public UNOGamePanel getGamePanel() {
         return gamePanel;
     }
 
-    public int checkCurrentPlayer(){
+    public int checkCurrentPlayer() {
         return players.indexOf(currentPlayer);
     }
 
-    public int checkPlayer(Player p){
+    public int checkPlayer(Player p) {
         return players.indexOf(p);
     }
 
-    public void setIsFreezed(boolean freeze){
+    public void setIsFreezed(boolean freeze) {
         isFreezed = freeze;
     }
 
     public boolean getIsFreezed() {
         return isFreezed;
     }
-    
-	public static void resetInstance() {
-	    if (instance != null) {
-	        instance = null;
-	    }
-	}
+
+    public static void resetInstance() {
+        if (instance != null) {
+            instance = null;
+        }
+    }
 }
