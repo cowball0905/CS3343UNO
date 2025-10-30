@@ -285,12 +285,10 @@ public class TestWildCardViewer {
         Field redButtonField = WildCardViewer.class.getDeclaredField("redButton");
         redButtonField.setAccessible(true);
         JButton redButton = (JButton) redButtonField.get(wildCardViewer);
+        controller.playCard(wildCard);
         redButton.doClick();
         
         assertEquals(Color.Red, wildCard.getColor());
-        
-        controller.playCard(wildCard);
-        
         assertEquals(Color.Red, controller.getTopCard(1).getColor());
         g.dispose();
     }
@@ -309,12 +307,10 @@ public class TestWildCardViewer {
         Field blueButtonField = WildCardViewer.class.getDeclaredField("blueButton");
         blueButtonField.setAccessible(true);
         JButton blueButton = (JButton) blueButtonField.get(wildCardViewer);
+        controller.playCard(wildCard);
         blueButton.doClick();
         
         assertEquals(Color.Blue, wildCard.getColor());
-        
-        controller.playCard(wildCard);
-        
         assertEquals(Color.Blue, controller.getTopCard(1).getColor());
         g.dispose();
     }
@@ -333,12 +329,10 @@ public class TestWildCardViewer {
         Field yellowButtonField = WildCardViewer.class.getDeclaredField("yellowButton");
         yellowButtonField.setAccessible(true);
         JButton yellowButton = (JButton) yellowButtonField.get(wildCardViewer);
+        controller.playCard(wildCard);
         yellowButton.doClick();
         
         assertEquals(Color.Yellow, wildCard.getColor());
-        
-        controller.playCard(wildCard);
-        
         assertEquals(Color.Yellow, controller.getTopCard(1).getColor());
         g.dispose();
     }
@@ -357,12 +351,10 @@ public class TestWildCardViewer {
         Field greenButtonField = WildCardViewer.class.getDeclaredField("greenButton");
         greenButtonField.setAccessible(true);
         JButton greenButton = (JButton) greenButtonField.get(wildCardViewer);
+        controller.playCard(wildCard);
         greenButton.doClick();
         
         assertEquals(Color.Green, wildCard.getColor());
-        
-        controller.playCard(wildCard);
-        
         assertEquals(Color.Green, controller.getTopCard(1).getColor());
         g.dispose();
     }
