@@ -87,4 +87,52 @@ public class TestDrawTwoCard {
         
         assertEquals(controller.getPlayerList().get(3), controller.getCurrentPlayer());
     }
+
+    @Test
+    public void testCheckCardSameColor() {
+        DrawTwoCard topCard = new DrawTwoCard(Color.Red, true);
+        NumberCard playedCard = new NumberCard(Color.Red, 5, true);
+        
+        assertEquals(true, topCard.checkCard(playedCard));
+    }
+
+    @Test
+    public void testCheckCardSameType() {
+        DrawTwoCard topCard = new DrawTwoCard(Color.Red, true);
+        DrawTwoCard playedCard = new DrawTwoCard(Color.Blue, true);
+        
+        assertEquals(true, topCard.checkCard(playedCard));
+    }
+
+    @Test
+    public void testCheckCardWildCard() {
+        DrawTwoCard topCard = new DrawTwoCard(Color.Red, true);
+        WildCard playedCard = new WildCard(true);
+        
+        assertEquals(true, topCard.checkCard(playedCard));
+    }
+
+    @Test
+    public void testCheckCardWildDrawFour() {
+        DrawTwoCard topCard = new DrawTwoCard(Color.Red, true);
+        WildDrawFourCard playedCard = new WildDrawFourCard(true);
+        
+        assertEquals(true, topCard.checkCard(playedCard));
+    }
+
+    @Test
+    public void testCheckCardDifferentColorAndType() {
+        DrawTwoCard topCard = new DrawTwoCard(Color.Red, true);
+        SkipCard playedCard = new SkipCard(Color.Blue, true);
+        
+        assertEquals(false, topCard.checkCard(playedCard));
+    }
+
+    @Test
+    public void testCheckCardNumberDifferentColor() {
+        DrawTwoCard topCard = new DrawTwoCard(Color.Red, true);
+        NumberCard playedCard = new NumberCard(Color.Blue, 5, true);
+        
+        assertEquals(false, topCard.checkCard(playedCard));
+    }
 }

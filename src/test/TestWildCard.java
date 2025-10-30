@@ -108,4 +108,52 @@ public class TestWildCard {
         
         assertEquals(card, controller.getWildCardViewer().getCard());
     }
+
+    @Test
+    public void testCheckCardNumberCard() {
+        WildCard topCard = new WildCard(true);
+        NumberCard playedCard = new NumberCard(Color.Red, 5, true);
+        
+        assertEquals(true, topCard.checkCard(playedCard));
+    }
+
+    @Test
+    public void testCheckCardSkipCard() {
+        WildCard topCard = new WildCard(true);
+        SkipCard playedCard = new SkipCard(Color.Blue, true);
+        
+        assertEquals(true, topCard.checkCard(playedCard));
+    }
+
+    @Test
+    public void testCheckCardReverseCard() {
+        WildCard topCard = new WildCard(true);
+        ReverseCard playedCard = new ReverseCard(Color.Green, true);
+        
+        assertEquals(true, topCard.checkCard(playedCard));
+    }
+
+    @Test
+    public void testCheckCardDrawTwoCard() {
+        WildCard topCard = new WildCard(true);
+        DrawTwoCard playedCard = new DrawTwoCard(Color.Yellow, true);
+        
+        assertEquals(true, topCard.checkCard(playedCard));
+    }
+
+    @Test
+    public void testCheckCardWildCard() {
+        WildCard topCard = new WildCard(true);
+        WildCard playedCard = new WildCard(true);
+        
+        assertEquals(true, topCard.checkCard(playedCard));
+    }
+
+    @Test
+    public void testCheckCardWildDrawFour() {
+        WildCard topCard = new WildCard(true);
+        WildDrawFourCard playedCard = new WildDrawFourCard(true);
+        
+        assertEquals(true, topCard.checkCard(playedCard));
+    }
 }

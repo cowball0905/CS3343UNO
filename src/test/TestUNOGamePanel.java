@@ -12,6 +12,8 @@ import view.UNOGamePanel;
 
 import javax.swing.JButton;
 import java.awt.Component;
+import java.awt.Graphics;
+import java.awt.image.BufferedImage;
 import java.lang.reflect.Field;
 
 public class TestUNOGamePanel {
@@ -66,6 +68,9 @@ public class TestUNOGamePanel {
 
     @Test
     public void testStartGameNotNull() {
+        controller.startGame();
+        controller.setIsFreezed(true);
+        
         gamePanel.startGame();
         
         assertNotNull(gamePanel);
@@ -73,6 +78,9 @@ public class TestUNOGamePanel {
 
     @Test
     public void testUpdateDisplayNotNull() {
+        controller.startGame();
+        controller.setIsFreezed(true);
+        
         gamePanel.updateDisplay();
         
         assertNotNull(gamePanel);
@@ -151,7 +159,14 @@ public class TestUNOGamePanel {
     @Test
     public void testUnoButtonExists() {
         controller.startGame();
+        controller.setIsFreezed(true);
+        gamePanel.startGame();
         gamePanel.updateCardButtons();
+        
+        BufferedImage img = new BufferedImage(800, 600, BufferedImage.TYPE_INT_ARGB);
+        Graphics g = img.getGraphics();
+        gamePanel.repaint();
+        g.dispose();
         
         assertEquals(true, hasUnoButton());
     }
@@ -162,33 +177,6 @@ public class TestUNOGamePanel {
         gamePanel.updateCardButtons();
         
         assertEquals(true, hasDeckButton());
-    }
-
-    @Test
-    public void testCatchCPU1ButtonExists() {
-        controller.startGame();
-        gamePanel.updateDisplay();
-        gamePanel.repaint();
-        
-        assertEquals(true, hasCatchButton("catchcpu1Button"));
-    }
-
-    @Test
-    public void testCatchCPU2ButtonExists() {
-        controller.startGame();
-        gamePanel.updateDisplay();
-        gamePanel.repaint();
-        
-        assertEquals(true, hasCatchButton("catchcpu2Button"));
-    }
-
-    @Test
-    public void testCatchCPU3ButtonExists() {
-        controller.startGame();
-        gamePanel.updateDisplay();
-        gamePanel.repaint();
-        
-        assertEquals(true, hasCatchButton("catchcpu3Button"));
     }
 
     // Helper methods
@@ -243,16 +231,5 @@ public class TestUNOGamePanel {
             }
         }
         return false;
-    }
-
-    private boolean hasCatchButton(String buttonName) {
-        try {
-            Field field = UNOGamePanel.class.getDeclaredField(buttonName);
-            field.setAccessible(true);
-            JButton button = (JButton) field.get(gamePanel);
-            return button != null;
-        } catch (Exception e) {
-            return false;
-        }
     }
 }

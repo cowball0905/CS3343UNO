@@ -128,25 +128,24 @@ public class UNOController {
 
     private void initializeGame() {
         Deck = new ArrayList<String>(Arrays.asList(
-                "r0","r1","r2","r3","r4","r5","r6","r7","r8","r9",
-                "r1","r2","r3","r4","r5","r6","r7","r8","r9",
-                "g0","g1","g2","g3","g4","g5","g6","g7","g8","g9",
-                "g1","g2","g3","g4","g5","g6","g7","g8","g9",
-                "b0","b1","b2","b3","b4","b5","b6","b7","b8","b9",
-                "b1","b2","b3","b4","b5","b6","b7","b8","b9",
-                "y0","y1","y2","y3","y4","y5","y6","y7","y8","y9",
-                "y1","y2","y3","y4","y5","y6","y7","y8","y9",
-                "rSkip","rReverse","rDrawTwo",
-                "rSkip","rReverse","rDrawTwo",
-                "gSkip","gReverse","gDrawTwo",
-                "gSkip","gReverse","gDrawTwo",
-                "bSkip","bReverse","bDrawTwo",
-                "bSkip","bReverse","bDrawTwo",
-                "ySkip","yReverse","yDrawTwo",
-                "ySkip","yReverse","yDrawTwo",
+                "r0", "r1", "r2", "r3", "r4", "r5", "r6", "r7", "r8", "r9",
+                "r1", "r2", "r3", "r4", "r5", "r6", "r7", "r8", "r9",
+                "g0", "g1", "g2", "g3", "g4", "g5", "g6", "g7", "g8", "g9",
+                "g1", "g2", "g3", "g4", "g5", "g6", "g7", "g8", "g9",
+                "b0", "b1", "b2", "b3", "b4", "b5", "b6", "b7", "b8", "b9",
+                "b1", "b2", "b3", "b4", "b5", "b6", "b7", "b8", "b9",
+                "y0", "y1", "y2", "y3", "y4", "y5", "y6", "y7", "y8", "y9",
+                "y1", "y2", "y3", "y4", "y5", "y6", "y7", "y8", "y9",
+                "rSkip", "rReverse", "rDrawTwo",
+                "rSkip", "rReverse", "rDrawTwo",
+                "gSkip", "gReverse", "gDrawTwo",
+                "gSkip", "gReverse", "gDrawTwo",
+                "bSkip", "bReverse", "bDrawTwo",
+                "bSkip", "bReverse", "bDrawTwo",
+                "ySkip", "yReverse", "yDrawTwo",
+                "ySkip", "yReverse", "yDrawTwo",
                 "WildCard", "WildCard", "WildCard", "WildCard",
-                "WildDrawFour", "WildDrawFour", "WildDrawFour", "WildDrawFour"
-            ));
+                "WildDrawFour", "WildDrawFour", "WildDrawFour", "WildDrawFour"));
 
         // Clear played cards
         PlayedCard.clear();
@@ -274,28 +273,7 @@ public class UNOController {
             return true;
         }
 
-        switch (playedCard.getType()) {
-            case Wild:
-            case WildDrawFour:
-                return true;
-            case Skip:
-            case Reverse:
-            case DrawTwo:
-                if (playedCard.getColor() == matchCard.getColor() || playedCard.getType() == matchCard.getType()) {
-                    return true;
-                }
-                return false;
-            case Number:
-                if (playedCard.getColor() == matchCard.getColor()) {
-                    return true;
-                } else if (matchCard.getType() == Type.Number
-                        && ((NumberCard) playedCard).getValue() == ((NumberCard) matchCard).getValue()) {
-                    return true;
-                }
-                return false;
-            default:
-                return false;
-        }
+        return playedCard.checkCard(matchCard);
     }
 
     public ChallengeViewer getChallengeViewer() {

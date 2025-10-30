@@ -21,6 +21,17 @@ public class ReverseCard extends Card {
         controller.passNextPlayer(1);
         controller.eachRound();
     }
+
+    @Override
+    public boolean checkCard(Card playedCard){
+        if (playedCard.type == Type.Wild || playedCard.type == Type.WildDrawFour) {
+            return true;
+        }
+        if (playedCard.color == this.color || playedCard.type == this.type) {
+            return true;
+        }
+        return false;
+    }
     
     public String toString() {
     	return getColor().toString() + " Reverse";

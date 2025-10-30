@@ -100,4 +100,52 @@ public class TestWildDrawFourCard {
 
 		assertNotNull(card.getColor());
 	}
+
+    @Test
+    public void testCheckCardNumberCard() {
+        WildDrawFourCard topCard = new WildDrawFourCard(true);
+        NumberCard playedCard = new NumberCard(Color.Red, 5, true);
+        
+        assertEquals(true, topCard.checkCard(playedCard));
+    }
+
+    @Test
+    public void testCheckCardSkipCard() {
+        WildDrawFourCard topCard = new WildDrawFourCard(true);
+        SkipCard playedCard = new SkipCard(Color.Blue, true);
+        
+        assertEquals(true, topCard.checkCard(playedCard));
+    }
+
+    @Test
+    public void testCheckCardReverseCard() {
+        WildDrawFourCard topCard = new WildDrawFourCard(true);
+        ReverseCard playedCard = new ReverseCard(Color.Green, true);
+        
+        assertEquals(true, topCard.checkCard(playedCard));
+    }
+
+    @Test
+    public void testCheckCardDrawTwoCard() {
+        WildDrawFourCard topCard = new WildDrawFourCard(true);
+        DrawTwoCard playedCard = new DrawTwoCard(Color.Yellow, true);
+        
+        assertEquals(true, topCard.checkCard(playedCard));
+    }
+
+    @Test
+    public void testCheckCardWildCard() {
+        WildDrawFourCard topCard = new WildDrawFourCard(true);
+        WildCard playedCard = new WildCard(true);
+        
+        assertEquals(true, topCard.checkCard(playedCard));
+    }
+
+    @Test
+    public void testCheckCardWildDrawFour() {
+        WildDrawFourCard topCard = new WildDrawFourCard(true);
+        WildDrawFourCard playedCard = new WildDrawFourCard(true);
+        
+        assertEquals(true, topCard.checkCard(playedCard));
+    }
 }

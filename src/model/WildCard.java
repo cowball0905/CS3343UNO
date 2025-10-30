@@ -19,23 +19,28 @@ public class WildCard extends Card {
         System.out.println("DEBUG: Current player = " + controller.getCurrentPlayer().getName());
         System.out.println("DEBUG: Current player index = " + controller.checkCurrentPlayer());
 
-        if(controller.checkCurrentPlayer()==0){
+        if (controller.checkCurrentPlayer() == 0) {
             System.out.println("DEBUG: Showing WildCardViewer to human");
             controller.getWildCardViewer().setWildCard(this);
             controller.getTurnTimer().stopTimer();
             controller.getTurnTimer().startTimer(10);
-        }else{
+        } else {
             System.out.println("DEBUG: CPU choosing color automatically");
             Color chooseColor = ((CPUPlayer) controller.getCurrentPlayer()).chooseColor();
             this.setColor(chooseColor);
-            this.loadImage("/asset/uno-card-images-master/Wild_Card_Change_Colour_"+chooseColor.toString()+".jpg");
+            this.loadImage("/asset/uno-card-images-master/Wild_Card_Change_Colour_" + chooseColor.toString() + ".jpg");
             System.out.println(chooseColor.toString());
             controller.passNextPlayer(1);
             controller.eachRound();
         }
     }
 
-	public String toString() {
-		return "Wild Card";
-	}
+    @Override
+    public boolean checkCard(Card matchCard) {
+        return true;
+    }
+
+    public String toString() {
+        return "Wild Card";
+    }
 }

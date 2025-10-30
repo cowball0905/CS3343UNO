@@ -83,4 +83,52 @@ public class TestReverseCard {
         
         assertEquals(1, controller.getPlayDirection());
     }
+
+    @Test
+    public void testCheckCardSameColor() {
+        ReverseCard topCard = new ReverseCard(Color.Red, true);
+        NumberCard playedCard = new NumberCard(Color.Red, 5, true);
+        
+        assertEquals(true, topCard.checkCard(playedCard));
+    }
+
+    @Test
+    public void testCheckCardSameType() {
+        ReverseCard topCard = new ReverseCard(Color.Red, true);
+        ReverseCard playedCard = new ReverseCard(Color.Blue, true);
+        
+        assertEquals(true, topCard.checkCard(playedCard));
+    }
+
+    @Test
+    public void testCheckCardWildCard() {
+        ReverseCard topCard = new ReverseCard(Color.Red, true);
+        WildCard playedCard = new WildCard(true);
+        
+        assertEquals(true, topCard.checkCard(playedCard));
+    }
+
+    @Test
+    public void testCheckCardWildDrawFour() {
+        ReverseCard topCard = new ReverseCard(Color.Red, true);
+        WildDrawFourCard playedCard = new WildDrawFourCard(true);
+        
+        assertEquals(true, topCard.checkCard(playedCard));
+    }
+
+    @Test
+    public void testCheckCardDifferentColorAndType() {
+        ReverseCard topCard = new ReverseCard(Color.Red, true);
+        SkipCard playedCard = new SkipCard(Color.Blue, true);
+        
+        assertEquals(false, topCard.checkCard(playedCard));
+    }
+
+    @Test
+    public void testCheckCardNumberDifferentColor() {
+        ReverseCard topCard = new ReverseCard(Color.Red, true);
+        NumberCard playedCard = new NumberCard(Color.Blue, 5, true);
+        
+        assertEquals(false, topCard.checkCard(playedCard));
+    }
 }

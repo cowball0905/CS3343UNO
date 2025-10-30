@@ -166,4 +166,6 @@ public abstract class Card {
     abstract public int getValue();
 
     abstract public void cardFunction(controller.UNOController controller);
+
+    abstract public boolean checkCard(Card matchCard);
 }

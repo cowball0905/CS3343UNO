@@ -50,6 +50,11 @@ public class WildDrawFourCard extends Card {
             }
         }
     }
+
+    @Override
+    public boolean checkCard(Card matchCard){
+        return true;
+    }
     
 	public String toString() {
 		return "Wild Draw Four";

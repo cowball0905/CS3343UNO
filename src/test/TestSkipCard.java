@@ -92,4 +92,52 @@ public class TestSkipCard {
         
         assertEquals(expectedNextPlayer, actualNextPlayer);
     }
+
+    @Test
+    public void testCheckCardSameColor() {
+        SkipCard topCard = new SkipCard(Color.Red, true);
+        NumberCard playedCard = new NumberCard(Color.Red, 5, true);
+        
+        assertEquals(true, topCard.checkCard(playedCard));
+    }
+
+    @Test
+    public void testCheckCardSameType() {
+        SkipCard topCard = new SkipCard(Color.Red, true);
+        SkipCard playedCard = new SkipCard(Color.Blue, true);
+        
+        assertEquals(true, topCard.checkCard(playedCard));
+    }
+
+    @Test
+    public void testCheckCardWildCard() {
+        SkipCard topCard = new SkipCard(Color.Red, true);
+        WildCard playedCard = new WildCard(true);
+        
+        assertEquals(true, topCard.checkCard(playedCard));
+    }
+
+    @Test
+    public void testCheckCardWildDrawFour() {
+        SkipCard topCard = new SkipCard(Color.Red, true);
+        WildDrawFourCard playedCard = new WildDrawFourCard(true);
+        
+        assertEquals(true, topCard.checkCard(playedCard));
+    }
+
+    @Test
+    public void testCheckCardDifferentColorAndType() {
+        SkipCard topCard = new SkipCard(Color.Red, true);
+        ReverseCard playedCard = new ReverseCard(Color.Blue, true);
+        
+        assertEquals(false, topCard.checkCard(playedCard));
+    }
+
+    @Test
+    public void testCheckCardNumberDifferentColor() {
+        SkipCard topCard = new SkipCard(Color.Red, true);
+        NumberCard playedCard = new NumberCard(Color.Blue, 5, true);
+        
+        assertEquals(false, topCard.checkCard(playedCard));
+    }
 }
