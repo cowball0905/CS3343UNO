@@ -22,6 +22,7 @@ public class WildCard extends Card {
         if(controller.checkCurrentPlayer()==0){
             System.out.println("DEBUG: Showing WildCardViewer to human");
             controller.getWildCardViewer().setWildCard(this);
+            controller.getTurnTimer().stopTimer();
             controller.getTurnTimer().startTimer(10);
         }else{
             System.out.println("DEBUG: CPU choosing color automatically");

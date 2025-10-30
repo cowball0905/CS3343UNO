@@ -23,6 +23,7 @@ public class WildDrawFourCard extends Card {
 
         if(controller.checkCurrentPlayer()==0){
             controller.getWildCardViewer().setWildCard(this);
+            controller.getTurnTimer().stopTimer();
             controller.getTurnTimer().startTimer(10);
         }else{
             Color chooseColor = ((CPUPlayer) controller.getCurrentPlayer()).chooseColor();
@@ -42,6 +43,7 @@ public class WildDrawFourCard extends Card {
 
             if(nextIndex==0){
                 controller.getChallengeViewer().setChallenge(true);
+                controller.getTurnTimer().stopTimer();
                 controller.getTurnTimer().startTimer(10);
             }else{
                 nextPlayer.challengeDrawFour(currentPlayer);

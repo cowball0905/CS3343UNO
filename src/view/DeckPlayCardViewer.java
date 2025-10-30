@@ -5,10 +5,12 @@ import java.awt.Graphics;
 import java.awt.Color;
 import javax.swing.JButton;
 import javax.swing.JPanel;
+import javax.swing.Timer;
 
 import controller.UNOController;
 import model.Card;
-import model.CountDownTimer;
+import model.CountDownTimer; 
+import javax.swing.Timer;
 
 public class DeckPlayCardViewer {
     private boolean isDeciding;
@@ -19,7 +21,7 @@ public class DeckPlayCardViewer {
     private JButton redButton;
     private JButton greenButton;
 
-    public DeckPlayCardViewer(){
+    public DeckPlayCardViewer() {
         isDeciding = false;
     }
 
@@ -30,29 +32,31 @@ public class DeckPlayCardViewer {
     public void setTimer(CountDownTimer timer) {
         this.timer = timer;
     }
-    
+
     public void setPanel(JPanel panel) {
         this.panel = panel;
     }
 
-    public void setIsDeciding(Card card){
+    public void setIsDeciding(Card card) {
         this.isDeciding = true;
         this.card = card;
     }
 
-    public void endDeckCardViewer(){
+    public void endDeckCardViewer() {
         this.isDeciding = false;
         this.removeButtons();
     }
 
-    public void drawWindow(Graphics g){
-      if (this.isDeciding) {
-        drawButtons(g);
-      }
+    public void drawWindow(Graphics g) {
+        if (this.isDeciding) {
+            drawButtons(g);
+        }
     }
 
-    public void drawButtons(Graphics g){
-        if(redButton!=null){return;}
+    public void drawButtons(Graphics g) {
+        if (redButton != null) {
+            return;
+        }
         redButton = new JButton("Hold");
         redButton.setBackground(Color.RED);
         redButton.setOpaque(true);
@@ -66,7 +70,7 @@ public class DeckPlayCardViewer {
             controller.eachRound();
         });
         panel.add(redButton);
-        
+
         greenButton = new JButton("Play");
         greenButton.setBackground(Color.GREEN);
         greenButton.setOpaque(true);
@@ -75,16 +79,19 @@ public class DeckPlayCardViewer {
             timer.stopTimer();
             removeButtons();
             this.isDeciding = false;
-            controller.playCard(card);
-            this.timer.stopTimer();
+            Timer delayTimer = new Timer(100, event -> {
+                controller.playCard(card);
+            });
+            delayTimer.setRepeats(false);
+            delayTimer.start();
         });
         panel.add(greenButton);
     }
-    
+
     public boolean getIsDeciding() {
         return this.isDeciding;
     }
-    
+
     public void removeButtons() {
         panel.remove(redButton);
         panel.remove(greenButton);
