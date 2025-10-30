@@ -41,7 +41,7 @@ public class WildDrawFourCard extends Card {
             Player nextPlayer = playerList.get(nextIndex);
 
             if(nextIndex==0){
-                controller.getChallengeViewer().setChallenge();
+                controller.getChallengeViewer().setChallenge(true);
                 controller.getTurnTimer().startTimer(10);
             }else{
                 nextPlayer.challengeDrawFour(currentPlayer);

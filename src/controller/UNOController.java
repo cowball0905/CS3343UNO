@@ -73,11 +73,12 @@ public class UNOController {
                     }
                     eachRound();
                 }else if(challengeViewer.getIsChallenging()){
+                    challengeViewer.setChallenge(false);
                     int currentIndex = checkCurrentPlayer();
                     int nextIndex = (currentIndex + (1 * playDirection) + players.size()) % players.size();
                     Player nextPlayer = players.get(nextIndex);
                     for(int i=0;i<4;i++){
-                        nextPlayer.drawCard(getCardFactory().giveCard(Deck, false, checkCurrentPlayer()==0? true: false, ""));
+                        nextPlayer.drawCard(getCardFactory().giveCard(Deck, false, nextIndex==0 ? true : false, ""));
                     }
 				} else if (deckPlayCardViewer.getIsDeciding()) {
 					deckPlayCardViewer.endDeckCardViewer();

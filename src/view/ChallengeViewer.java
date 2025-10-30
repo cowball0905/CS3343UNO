@@ -35,8 +35,8 @@ public class ChallengeViewer {
         this.panel = panel;
     }
 
-    public void setChallenge(){
-        this.isChallenging = true;
+    public void setChallenge(Boolean Challenge){
+        this.isChallenging = Challenge;
     }
 
     public void drawWindow(Graphics g){

@@ -47,7 +47,7 @@ public class TestChallengeViewer {
 
     @Test
     public void testSetChallengeSetsFlag() {
-        challengeViewer.setChallenge();
+        challengeViewer.setChallenge(true);
         
         assertEquals(true, challengeViewer.getIsChallenging());
     }
@@ -84,7 +84,7 @@ public class TestChallengeViewer {
 
     @Test
     public void testSetChallengeAfterInitial() {
-        challengeViewer.setChallenge();
+        challengeViewer.setChallenge(true);
         
         assertEquals(true, challengeViewer.getIsChallenging());
     }
@@ -105,7 +105,7 @@ public class TestChallengeViewer {
 
     @Test
     public void testDrawWindowWhenChallenging() throws Exception {
-        challengeViewer.setChallenge();
+        challengeViewer.setChallenge(true);
         BufferedImage img = new BufferedImage(100, 100, BufferedImage.TYPE_INT_ARGB);
         Graphics g = img.getGraphics();
         
@@ -120,7 +120,7 @@ public class TestChallengeViewer {
 
     @Test
     public void testDrawButtonsCreatesRedButton() throws Exception {
-        challengeViewer.setChallenge();
+        challengeViewer.setChallenge(true);
         BufferedImage img = new BufferedImage(100, 100, BufferedImage.TYPE_INT_ARGB);
         Graphics g = img.getGraphics();
         
@@ -135,7 +135,7 @@ public class TestChallengeViewer {
 
     @Test
     public void testDrawButtonsCreatesGreenButton() throws Exception {
-        challengeViewer.setChallenge();
+        challengeViewer.setChallenge(true);
         BufferedImage img = new BufferedImage(100, 100, BufferedImage.TYPE_INT_ARGB);
         Graphics g = img.getGraphics();
         
@@ -150,7 +150,7 @@ public class TestChallengeViewer {
 
     @Test
     public void testRedButtonText() throws Exception {
-        challengeViewer.setChallenge();
+        challengeViewer.setChallenge(true);
         BufferedImage img = new BufferedImage(100, 100, BufferedImage.TYPE_INT_ARGB);
         Graphics g = img.getGraphics();
         
@@ -165,7 +165,7 @@ public class TestChallengeViewer {
 
     @Test
     public void testGreenButtonText() throws Exception {
-        challengeViewer.setChallenge();
+        challengeViewer.setChallenge(true);
         BufferedImage img = new BufferedImage(100, 100, BufferedImage.TYPE_INT_ARGB);
         Graphics g = img.getGraphics();
         
@@ -180,7 +180,7 @@ public class TestChallengeViewer {
 
     @Test
     public void testRemoveButtonsClearsRedButton() throws Exception {
-        challengeViewer.setChallenge();
+        challengeViewer.setChallenge(true);
         BufferedImage img = new BufferedImage(100, 100, BufferedImage.TYPE_INT_ARGB);
         Graphics g = img.getGraphics();
         challengeViewer.drawButtons(g);
@@ -196,7 +196,7 @@ public class TestChallengeViewer {
 
     @Test
     public void testRemoveButtonsClearsGreenButton() throws Exception {
-        challengeViewer.setChallenge();
+        challengeViewer.setChallenge(true);
         BufferedImage img = new BufferedImage(100, 100, BufferedImage.TYPE_INT_ARGB);
         Graphics g = img.getGraphics();
         challengeViewer.drawButtons(g);
@@ -217,7 +217,7 @@ public class TestChallengeViewer {
         Player nextPlayer = controller.getPlayerList().get(1);
         int initialHandSize = nextPlayer.getHand().size();
         
-        challengeViewer.setChallenge();
+        challengeViewer.setChallenge(true);
         BufferedImage img = new BufferedImage(100, 100, BufferedImage.TYPE_INT_ARGB);
         Graphics g = img.getGraphics();
         challengeViewer.drawButtons(g);
@@ -236,7 +236,7 @@ public class TestChallengeViewer {
         controller.startGame();
         controller.setIsFreezed(true);
         
-        challengeViewer.setChallenge();
+        challengeViewer.setChallenge(true);
         BufferedImage img = new BufferedImage(100, 100, BufferedImage.TYPE_INT_ARGB);
         Graphics g = img.getGraphics();
         challengeViewer.drawButtons(g);
@@ -255,7 +255,7 @@ public class TestChallengeViewer {
         controller.startGame();
         controller.setIsFreezed(true);
         
-        challengeViewer.setChallenge();
+        challengeViewer.setChallenge(true);
         BufferedImage img = new BufferedImage(100, 100, BufferedImage.TYPE_INT_ARGB);
         Graphics g = img.getGraphics();
         challengeViewer.drawButtons(g);
