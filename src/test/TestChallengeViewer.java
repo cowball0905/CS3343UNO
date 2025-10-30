@@ -27,7 +27,7 @@ public class TestChallengeViewer {
         controller = UNOController.getInstance();
         controller.setPlayers();
         controller.setViewers();
-        
+
         challengeViewer = new ChallengeViewer();
         testPanel = new JPanel();
         challengeViewer.setPanel(testPanel);
@@ -48,7 +48,7 @@ public class TestChallengeViewer {
     @Test
     public void testSetChallengeSetsFlag() {
         challengeViewer.setChallenge(true);
-        
+
         assertEquals(true, challengeViewer.getIsChallenging());
     }
 
@@ -60,32 +60,32 @@ public class TestChallengeViewer {
     @Test
     public void testSetControllerNotNull() {
         challengeViewer.setController();
-        
+
         assertNotNull(controller);
     }
 
     @Test
     public void testSetTimerNotNull() {
         CountDownTimer timer = controller.getTurnTimer();
-        
+
         challengeViewer.setTimer(timer);
-        
+
         assertNotNull(timer);
     }
 
     @Test
     public void testSetPanelNotNull() {
         JPanel panel = new JPanel();
-        
+
         challengeViewer.setPanel(panel);
-        
+
         assertNotNull(panel);
     }
 
     @Test
     public void testSetChallengeAfterInitial() {
         challengeViewer.setChallenge(true);
-        
+
         assertEquals(true, challengeViewer.getIsChallenging());
     }
 
@@ -93,12 +93,12 @@ public class TestChallengeViewer {
     public void testDrawWindowWhenNotChallenging() throws Exception {
         BufferedImage img = new BufferedImage(100, 100, BufferedImage.TYPE_INT_ARGB);
         Graphics g = img.getGraphics();
-        
+
         challengeViewer.drawWindow(g);
         Field redButtonField = ChallengeViewer.class.getDeclaredField("redButton");
         redButtonField.setAccessible(true);
         JButton redButton = (JButton) redButtonField.get(challengeViewer);
-        
+
         assertEquals(null, redButton);
         g.dispose();
     }
@@ -108,12 +108,12 @@ public class TestChallengeViewer {
         challengeViewer.setChallenge(true);
         BufferedImage img = new BufferedImage(100, 100, BufferedImage.TYPE_INT_ARGB);
         Graphics g = img.getGraphics();
-        
+
         challengeViewer.drawWindow(g);
         Field redButtonField = ChallengeViewer.class.getDeclaredField("redButton");
         redButtonField.setAccessible(true);
         JButton redButton = (JButton) redButtonField.get(challengeViewer);
-        
+
         assertNotNull(redButton);
         g.dispose();
     }
@@ -123,12 +123,12 @@ public class TestChallengeViewer {
         challengeViewer.setChallenge(true);
         BufferedImage img = new BufferedImage(100, 100, BufferedImage.TYPE_INT_ARGB);
         Graphics g = img.getGraphics();
-        
+
         challengeViewer.drawButtons(g);
         Field redButtonField = ChallengeViewer.class.getDeclaredField("redButton");
         redButtonField.setAccessible(true);
         JButton redButton = (JButton) redButtonField.get(challengeViewer);
-        
+
         assertNotNull(redButton);
         g.dispose();
     }
@@ -138,12 +138,12 @@ public class TestChallengeViewer {
         challengeViewer.setChallenge(true);
         BufferedImage img = new BufferedImage(100, 100, BufferedImage.TYPE_INT_ARGB);
         Graphics g = img.getGraphics();
-        
+
         challengeViewer.drawButtons(g);
         Field greenButtonField = ChallengeViewer.class.getDeclaredField("greenButton");
         greenButtonField.setAccessible(true);
         JButton greenButton = (JButton) greenButtonField.get(challengeViewer);
-        
+
         assertNotNull(greenButton);
         g.dispose();
     }
@@ -153,12 +153,12 @@ public class TestChallengeViewer {
         challengeViewer.setChallenge(true);
         BufferedImage img = new BufferedImage(100, 100, BufferedImage.TYPE_INT_ARGB);
         Graphics g = img.getGraphics();
-        
+
         challengeViewer.drawButtons(g);
         Field redButtonField = ChallengeViewer.class.getDeclaredField("redButton");
         redButtonField.setAccessible(true);
         JButton redButton = (JButton) redButtonField.get(challengeViewer);
-        
+
         assertEquals("Get 4 Cards", redButton.getText());
         g.dispose();
     }
@@ -168,12 +168,12 @@ public class TestChallengeViewer {
         challengeViewer.setChallenge(true);
         BufferedImage img = new BufferedImage(100, 100, BufferedImage.TYPE_INT_ARGB);
         Graphics g = img.getGraphics();
-        
+
         challengeViewer.drawButtons(g);
         Field greenButtonField = ChallengeViewer.class.getDeclaredField("greenButton");
         greenButtonField.setAccessible(true);
         JButton greenButton = (JButton) greenButtonField.get(challengeViewer);
-        
+
         assertEquals("Challenge", greenButton.getText());
         g.dispose();
     }
@@ -184,12 +184,12 @@ public class TestChallengeViewer {
         BufferedImage img = new BufferedImage(100, 100, BufferedImage.TYPE_INT_ARGB);
         Graphics g = img.getGraphics();
         challengeViewer.drawButtons(g);
-        
+
         challengeViewer.removeButtons();
         Field redButtonField = ChallengeViewer.class.getDeclaredField("redButton");
         redButtonField.setAccessible(true);
         JButton redButton = (JButton) redButtonField.get(challengeViewer);
-        
+
         assertEquals(null, redButton);
         g.dispose();
     }
@@ -200,12 +200,12 @@ public class TestChallengeViewer {
         BufferedImage img = new BufferedImage(100, 100, BufferedImage.TYPE_INT_ARGB);
         Graphics g = img.getGraphics();
         challengeViewer.drawButtons(g);
-        
+
         challengeViewer.removeButtons();
         Field greenButtonField = ChallengeViewer.class.getDeclaredField("greenButton");
         greenButtonField.setAccessible(true);
         JButton greenButton = (JButton) greenButtonField.get(challengeViewer);
-        
+
         assertEquals(null, greenButton);
         g.dispose();
     }
@@ -216,17 +216,17 @@ public class TestChallengeViewer {
         controller.setIsFreezed(true);
         Player nextPlayer = controller.getPlayerList().get(1);
         int initialHandSize = nextPlayer.getHand().size();
-        
+
         challengeViewer.setChallenge(true);
         BufferedImage img = new BufferedImage(100, 100, BufferedImage.TYPE_INT_ARGB);
         Graphics g = img.getGraphics();
         challengeViewer.drawButtons(g);
-        
+
         Field redButtonField = ChallengeViewer.class.getDeclaredField("redButton");
         redButtonField.setAccessible(true);
         JButton redButton = (JButton) redButtonField.get(challengeViewer);
         redButton.doClick();
-        
+
         assertEquals(initialHandSize + 4, nextPlayer.getHand().size());
         g.dispose();
     }
@@ -235,17 +235,17 @@ public class TestChallengeViewer {
     public void testRedButtonClickResetsChallenging() throws Exception {
         controller.startGame();
         controller.setIsFreezed(true);
-        
+
         challengeViewer.setChallenge(true);
         BufferedImage img = new BufferedImage(100, 100, BufferedImage.TYPE_INT_ARGB);
         Graphics g = img.getGraphics();
         challengeViewer.drawButtons(g);
-        
+
         Field redButtonField = ChallengeViewer.class.getDeclaredField("redButton");
         redButtonField.setAccessible(true);
         JButton redButton = (JButton) redButtonField.get(challengeViewer);
         redButton.doClick();
-        
+
         assertEquals(false, challengeViewer.getIsChallenging());
         g.dispose();
     }
@@ -254,18 +254,33 @@ public class TestChallengeViewer {
     public void testGreenButtonClickResetsChallenging() throws Exception {
         controller.startGame();
         controller.setIsFreezed(true);
-        
+
+        Player currentPlayer = controller.getCurrentPlayer();
+        Player nextPlayer = controller.getPlayerList().get(1);
+
+        currentPlayer.getHand().clear();
+        nextPlayer.getHand().clear();
+
+        for (int i = 0; i < 3; i++) {
+            currentPlayer.drawCard(controller.getCardFactory().giveCard(controller.getDeck(), false, true, ""));
+        }
+
+        for (int i = 0; i < 6; i++) {
+            nextPlayer.drawCard(controller.getCardFactory().giveCard(controller.getDeck(), false, false, ""));
+        }
+
         challengeViewer.setChallenge(true);
-        BufferedImage img = new BufferedImage(100, 100, BufferedImage.TYPE_INT_ARGB);
-        Graphics g = img.getGraphics();
-        challengeViewer.drawButtons(g);
-        
+        BufferedImage img = new BufferedImage(1, 1, BufferedImage.TYPE_INT_ARGB);
+        challengeViewer.drawButtons(img.getGraphics());
+
         Field greenButtonField = ChallengeViewer.class.getDeclaredField("greenButton");
         greenButtonField.setAccessible(true);
         JButton greenButton = (JButton) greenButtonField.get(challengeViewer);
+
+        assertEquals(true, challengeViewer.getIsChallenging());
+
         greenButton.doClick();
-        
+
         assertEquals(false, challengeViewer.getIsChallenging());
-        g.dispose();
     }
 }

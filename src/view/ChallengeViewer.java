@@ -84,8 +84,8 @@ public class ChallengeViewer {
             Player currentPlayer = controller.getCurrentPlayer();
             timer.stopTimer();
             removeButtons();
-            nextPlayer.challengeDrawFour(currentPlayer);
             this.isChallenging = false;
+            nextPlayer.challengeDrawFour(currentPlayer);
         });
         panel.add(greenButton);
 
