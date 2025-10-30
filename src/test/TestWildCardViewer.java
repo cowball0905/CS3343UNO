@@ -447,4 +447,85 @@ public class TestWildCardViewer {
         assertEquals(false, wildCardViewer.isHavingWild());
         g.dispose();
     }
+    
+    //Timer visibility tests
+    @Test
+    public void testCountdownTimerVisibleDuringWildCardRound() throws Exception {
+        Card wildCard = new WildCard(true);
+        wildCardViewer.setWildCard(wildCard);
+        CountDownTimer timer = controller.getTurnTimer();
+        wildCardViewer.setTimer(timer);
+        timer.startTimer(10);
+        
+        BufferedImage img = new BufferedImage(500, 500, BufferedImage.TYPE_INT_ARGB);
+        Graphics g = img.createGraphics();
+        
+        wildCardViewer.drawButtons(g);
+        
+        Field timerField = WildCardViewer.class.getDeclaredField("timer");
+        timerField.setAccessible(true);
+        CountDownTimer viewerTimer = (CountDownTimer) timerField.get(wildCardViewer);
+        
+        assertNotNull(viewerTimer);
+        assertTrue(wildCardViewer.isHavingWild());
+        
+        g.dispose();
+    }
+    
+    @Test
+    public void testCountDownTimerHiddenBeforeWildCardRound() throws Exception {
+        WildCardViewer freshViewer = new WildCardViewer();
+        freshViewer.setPanel(testPanel);
+        freshViewer.setController();
+        
+        BufferedImage img = new BufferedImage(800, 600, BufferedImage.TYPE_INT_ARGB);
+        Graphics g = img.createGraphics();
+        
+        freshViewer.drawButtons(g);
+        
+        Field timerField = WildCardViewer.class.getDeclaredField("timer");
+        timerField.setAccessible(true);
+        CountDownTimer viewerTimer = (CountDownTimer) timerField.get(freshViewer);
+        
+        assertNull(viewerTimer, "Timer should be null before wild card round");
+        
+        g.dispose();
+    }
+    
+    @Test
+    public void testCountDownTimerHiddenAfterWildCardRound() throws Exception {
+        WildCardViewer freshViewer = new WildCardViewer();
+        freshViewer.setPanel(testPanel);
+        freshViewer.setController();
+        
+        Card wildCard = new WildCard(true);
+        freshViewer.setWildCard(wildCard);
+        CountDownTimer timer = controller.getTurnTimer();
+        freshViewer.setTimer(timer);
+        timer.startTimer(10);
+        
+        BufferedImage img = new BufferedImage(800, 600, BufferedImage.TYPE_INT_ARGB);
+        Graphics g = img.createGraphics();
+        
+        Field timerField = WildCardViewer.class.getDeclaredField("timer");
+        timerField.setAccessible(true);
+        
+        // Verify timer is set during wild card round
+        CountDownTimer viewerTimer = (CountDownTimer) timerField.get(freshViewer);
+        assertNotNull(viewerTimer);
+        assertTrue(timer.isRunning());
+        
+        // Simulate end of wild card round
+        freshViewer.setHavingWild(false);
+        freshViewer.setTimer(null);
+        timer.stopTimer();
+        
+        freshViewer.drawButtons(g);
+        
+        viewerTimer = (CountDownTimer) timerField.get(freshViewer);
+        assertNull(viewerTimer);
+        assertFalse(timer.isRunning());
+        
+        g.dispose();
+    }
 }
