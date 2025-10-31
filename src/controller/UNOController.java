@@ -179,7 +179,7 @@ public class UNOController {
             System.out.println(currentPlayer.getName() + " draws a card from the deck.");
             currentPlayer.drawCard(cardFactory.giveCard(Deck, false, checkCurrentPlayer() == 0 ? true : false, ""));
             Card card = currentPlayer.getHand().get(currentPlayer.getHand().size() - 1);
-            if (canPlayCard(card, getTopCard(1))) {
+            if (canPlayCard(getTopCard(1),card)) {
                 if (checkCurrentPlayer() == 0) {
                     deckPlayCardViewer.setIsDeciding(card);
                     turnTimer.startTimer(10);
