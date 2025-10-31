@@ -316,6 +316,21 @@ public class UNOGamePanel extends JPanel {
         graphic2D.setColor(Color.WHITE);
         
         // CPU1 標籤 (左側)
+        if(controller.getCurrentPlayer() == controller.getPlayerList().get(1)) {
+        	graphic2D.setColor(Color.BLACK);
+            graphic2D.drawString("CPU 1 (" + computer1Hand.size() + " cards)" + (controller.getPlayerList().get(1).getIsShout() ? " *UNO*" : ""), 105 - 1, 220 - 1); // West, North
+            graphic2D.drawString("CPU 1 (" + computer1Hand.size() + " cards)" + (controller.getPlayerList().get(1).getIsShout() ? " *UNO*" : ""), 105 - 1, 220 + 1); // West, South
+            graphic2D.drawString("CPU 1 (" + computer1Hand.size() + " cards)" + (controller.getPlayerList().get(1).getIsShout() ? " *UNO*" : ""), 105 + 1, 220 - 1); // East, North
+            graphic2D.drawString("CPU 1 (" + computer1Hand.size() + " cards)" + (controller.getPlayerList().get(1).getIsShout() ? " *UNO*" : ""), 105 + 1, 220 + 1); // East, South
+            graphic2D.setColor(Color.YELLOW);
+        } else {
+            graphic2D.setColor(Color.BLACK);
+            graphic2D.drawString("CPU 1 (" + computer1Hand.size() + " cards)" + (controller.getPlayerList().get(1).getIsShout() ? " *UNO*" : ""), 105 - 1, 220 - 1);
+            graphic2D.drawString("CPU 1 (" + computer1Hand.size() + " cards)" + (controller.getPlayerList().get(1).getIsShout() ? " *UNO*" : ""), 105 - 1, 220 + 1);
+            graphic2D.drawString("CPU 1 (" + computer1Hand.size() + " cards)" + (controller.getPlayerList().get(1).getIsShout() ? " *UNO*" : ""), 105 + 1, 220 - 1);
+            graphic2D.drawString("CPU 1 (" + computer1Hand.size() + " cards)" + (controller.getPlayerList().get(1).getIsShout() ? " *UNO*" : ""), 105 + 1, 220 + 1);
+            graphic2D.setColor(Color.WHITE);
+        }
         graphic2D.drawString("CPU 1 (" + computer1Hand.size() + " cards)" + (controller.getPlayerList().get(1).getIsShout() ? " *UNO*" : ""), 105, 220);
         catchcpu1Button = new JButton();
         catchcpu1Button.setBounds(105, 200, 250, 30); // Positioned where the old text was
@@ -330,6 +345,21 @@ public class UNOGamePanel extends JPanel {
         });
         add(catchcpu1Button);
         // CPU2 標籤 (頂部居中)
+        if(controller.getCurrentPlayer() == controller.getPlayerList().get(2)) {
+        	graphic2D.setColor(Color.BLACK);
+            graphic2D.drawString("CPU 2 (" + computer2Hand.size() + " cards)" + (controller.getPlayerList().get(2).getIsShout() ? " *UNO*" : ""), 420 - 1, 40 - 1); // West, North
+            graphic2D.drawString("CPU 2 (" + computer2Hand.size() + " cards)" + (controller.getPlayerList().get(2).getIsShout() ? " *UNO*" : ""), 420 - 1, 40 + 1); // West, South
+            graphic2D.drawString("CPU 2 (" + computer2Hand.size() + " cards)" + (controller.getPlayerList().get(2).getIsShout() ? " *UNO*" : ""), 420 + 1, 40 - 1); // East, North
+            graphic2D.drawString("CPU 2 (" + computer2Hand.size() + " cards)" + (controller.getPlayerList().get(2).getIsShout() ? " *UNO*" : ""), 420 + 1, 40 + 1); // East, South
+            graphic2D.setColor(Color.YELLOW);
+        } else {
+            graphic2D.setColor(Color.BLACK);
+            graphic2D.drawString("CPU 2 (" + computer2Hand.size() + " cards)" + (controller.getPlayerList().get(2).getIsShout() ? " *UNO*" : ""), 420 - 1, 40 - 1);
+            graphic2D.drawString("CPU 2 (" + computer2Hand.size() + " cards)" + (controller.getPlayerList().get(2).getIsShout() ? " *UNO*" : ""), 420 - 1, 40 + 1);
+            graphic2D.drawString("CPU 2 (" + computer2Hand.size() + " cards)" + (controller.getPlayerList().get(2).getIsShout() ? " *UNO*" : ""), 420 + 1, 40 - 1);
+            graphic2D.drawString("CPU 2 (" + computer2Hand.size() + " cards)" + (controller.getPlayerList().get(2).getIsShout() ? " *UNO*" : ""), 420 + 1, 40 + 1);
+            graphic2D.setColor(Color.WHITE);
+        }
         graphic2D.drawString("CPU 2 (" + computer2Hand.size() + " cards)" + (controller.getPlayerList().get(2).getIsShout() ? " *UNO*" : ""),420, 40);
         catchcpu2Button = new JButton();
         catchcpu2Button.setBounds(420, 20, 250, 30); // Positioned where the old text was
@@ -344,6 +374,21 @@ public class UNOGamePanel extends JPanel {
         });
         add(catchcpu2Button);
         // CPU3 標籤 (右側)
+        if(controller.getCurrentPlayer() == controller.getPlayerList().get(3)) {
+        	graphic2D.setColor(Color.BLACK);
+            graphic2D.drawString("CPU 3 (" + computer3Hand.size() + " cards)" + (controller.getPlayerList().get(3).getIsShout() ? " *UNO*" : ""), 745 - 1, 220 - 1); // West, North
+            graphic2D.drawString("CPU 3 (" + computer3Hand.size() + " cards)" + (controller.getPlayerList().get(3).getIsShout() ? " *UNO*" : ""), 745 - 1, 220 + 1); // West, South
+            graphic2D.drawString("CPU 3 (" + computer3Hand.size() + " cards)" + (controller.getPlayerList().get(3).getIsShout() ? " *UNO*" : ""), 745 + 1, 220 - 1); // East, North
+            graphic2D.drawString("CPU 3 (" + computer3Hand.size() + " cards)" + (controller.getPlayerList().get(3).getIsShout() ? " *UNO*" : ""), 745 + 1, 220 + 1); // East, South
+            graphic2D.setColor(Color.YELLOW);
+        } else {
+            graphic2D.setColor(Color.BLACK);
+            graphic2D.drawString("CPU 3 (" + computer3Hand.size() + " cards)" + (controller.getPlayerList().get(3).getIsShout() ? " *UNO*" : ""), 745 - 1, 220 - 1);
+            graphic2D.drawString("CPU 3 (" + computer3Hand.size() + " cards)" + (controller.getPlayerList().get(3).getIsShout() ? " *UNO*" : ""), 745 - 1, 220 + 1);
+            graphic2D.drawString("CPU 3 (" + computer3Hand.size() + " cards)" + (controller.getPlayerList().get(3).getIsShout() ? " *UNO*" : ""), 745 + 1, 220 - 1);
+            graphic2D.drawString("CPU 3 (" + computer3Hand.size() + " cards)" + (controller.getPlayerList().get(3).getIsShout() ? " *UNO*" : ""), 745 + 1, 220 + 1);
+            graphic2D.setColor(Color.WHITE);
+        }
         graphic2D.drawString("CPU 3 (" + computer3Hand.size() + " cards)" + (controller.getPlayerList().get(3).getIsShout() ? " *UNO*" : ""), 745, 220);
         catchcpu3Button = new JButton();
         catchcpu3Button.setBounds(745, 200, 250, 30); // Positioned where the old text was
@@ -374,7 +419,21 @@ public class UNOGamePanel extends JPanel {
         // === 第二層：繼續繪製文字標籤 (上層) ===
         // Player 標籤
         graphic2D.setFont(new Font("Arial", Font.BOLD, 18));
-        graphic2D.setColor(Color.WHITE);
+        if(controller.getCurrentPlayer() == controller.getPlayerList().get(0)) {
+            graphic2D.setColor(Color.BLACK);
+            graphic2D.drawString("YOU (" + playerHand.size() + " cards)" + (controller.getPlayerList().get(0).getIsShout() ? " *UNO*" : ""), 420 - 1, 600 - 1); // West, North
+            graphic2D.drawString("YOU (" + playerHand.size() + " cards)" + (controller.getPlayerList().get(0).getIsShout() ? " *UNO*" : ""), 420 - 1, 600 + 1); // West, South
+            graphic2D.drawString("YOU (" + playerHand.size() + " cards)" + (controller.getPlayerList().get(0).getIsShout() ? " *UNO*" : ""), 420 + 1, 600 - 1); // East, North
+            graphic2D.drawString("YOU (" + playerHand.size() + " cards)" + (controller.getPlayerList().get(0).getIsShout() ? " *UNO*" : ""), 420 + 1, 600 + 1); // East, South
+            graphic2D.setColor(Color.YELLOW);
+        } else {
+            graphic2D.setColor(Color.BLACK);
+            graphic2D.drawString("YOU (" + playerHand.size() + " cards)" + (controller.getPlayerList().get(0).getIsShout() ? " *UNO*" : ""), 420 - 1, 600 - 1);
+            graphic2D.drawString("YOU (" + playerHand.size() + " cards)" + (controller.getPlayerList().get(0).getIsShout() ? " *UNO*" : ""), 420 - 1, 600 + 1);
+            graphic2D.drawString("YOU (" + playerHand.size() + " cards)" + (controller.getPlayerList().get(0).getIsShout() ? " *UNO*" : ""), 420 + 1, 600 - 1);
+            graphic2D.drawString("YOU (" + playerHand.size() + " cards)" + (controller.getPlayerList().get(0).getIsShout() ? " *UNO*" : ""), 420 + 1, 600 + 1);
+            graphic2D.setColor(Color.WHITE);
+        }
         graphic2D.drawString("YOU (" + playerHand.size() + " cards)" + (controller.getPlayerList().get(0).getIsShout() ? " *UNO*" : ""), 420, 600);
 
         // Discard pile label
