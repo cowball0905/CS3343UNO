@@ -63,35 +63,6 @@ public class HumanPlayer extends Player {
     }
     */
 
-    
-    @Override
-    public String shoutUno() {
-        
-        String errorMessage =  null;
-        if (this != controller.getCurrentPlayer()) {
-            errorMessage = "It's not your turn!";
-        } else if (this.getIsShout()){
-            errorMessage = "You shouted UNO already!";
-        } else if (this.getHand().size() > 2) {
-            errorMessage = "You have more than 2 cards!";
-        } else {
-            boolean hasPlayableCard = false;
-            for (Card c : this.getHand()){
-                if(controller.canPlayCard(c,controller.getTopCard(1))){
-                    hasPlayableCard = true;
-                }
-            }
-            if (!hasPlayableCard) {
-                errorMessage = "You have no playable card!";
-                return errorMessage;
-            }
-            isShout = true;
-            System.out.println(name + " shouts UNO!");
-        }
-        return errorMessage;
-    }
-
-    /*
     @Override
     public String shoutUno() {
         
@@ -108,7 +79,7 @@ public class HumanPlayer extends Player {
         } else {
             boolean hasPlayableCard = false;
             for (Card c : this.getHand()){
-                if(controller.canPlayCard(c)){
+                if(controller.canPlayCard(c, controller.getTopCard(1))){
                     hasPlayableCard = true;
                 }
             }
@@ -121,7 +92,6 @@ public class HumanPlayer extends Player {
         }
         return errorMessage;
     }
-     */
     
     
     @Override
