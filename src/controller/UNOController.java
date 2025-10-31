@@ -329,12 +329,8 @@ public class UNOController {
         return resultViewer;
     }
 
-    public ArrayList<Card> getHumanPlayedCard() {
-        return players.get(0).getHand();
-    }
-
-    public ArrayList<Card> getCPUCard(int index) {
-        return players.get(index + 1).getHand();
+    public ArrayList<Card> getPlayerCard(int index){
+        return players.get(index).getHand();
     }
 
     public Card getTopCard(int index) {
