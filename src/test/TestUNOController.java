@@ -386,17 +386,9 @@ public class TestUNOController {
     }
 
     @Test
-    public void testGetHumanPlayedCardNotNull() {
+    public void testGetHumanCard() {
         controller.startGame();
-        ArrayList<Card> humanHand = controller.getHumanPlayedCard();
-
-        assertNotNull(humanHand);
-    }
-
-    @Test
-    public void testGetHumanPlayedCard() {
-        controller.startGame();
-        ArrayList<Card> humanHand = controller.getHumanPlayedCard();
+        ArrayList<Card> humanHand = controller.getPlayerCard(0);
 
         assertEquals(controller.getPlayerList().get(0).getHand(), humanHand);
     }
@@ -405,7 +397,7 @@ public class TestUNOController {
     public void testGetCPU1Card() {
         controller.startGame();
 
-        ArrayList<Card> cpu1Hand = controller.getCPUCard(0);
+        ArrayList<Card> cpu1Hand = controller.getPlayerCard(1);
 
         assertEquals(controller.getPlayerList().get(1).getHand(), cpu1Hand);
     }
@@ -414,7 +406,7 @@ public class TestUNOController {
     public void testGetCPU2Card() {
         controller.startGame();
 
-        ArrayList<Card> cpu2Hand = controller.getCPUCard(1);
+        ArrayList<Card> cpu2Hand = controller.getPlayerCard(2);
 
         assertEquals(controller.getPlayerList().get(2).getHand(), cpu2Hand);
     }

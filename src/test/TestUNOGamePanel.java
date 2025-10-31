@@ -124,7 +124,7 @@ public class TestUNOGamePanel {
         Card card = new NumberCard(Color.Red, 5, true);
         card.setPosition(100, 100);
         
-        JButton button = gamePanel.createCardButton(card, 0, controller.getHumanPlayedCard());
+        JButton button = gamePanel.createCardButton(card, 0, controller.getPlayerCard(0));
         
         assertNotNull(button);
     }
@@ -134,7 +134,7 @@ public class TestUNOGamePanel {
         Card card = new NumberCard(Color.Red, 5, true);
         card.setPosition(100, 100);
         
-        JButton button = gamePanel.createCardButton(card, 0, controller.getHumanPlayedCard());
+        JButton button = gamePanel.createCardButton(card, 0, controller.getPlayerCard(0));
         
         assertEquals(100, button.getX());
     }

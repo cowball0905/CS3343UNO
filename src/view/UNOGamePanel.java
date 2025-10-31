@@ -72,10 +72,10 @@ public class UNOGamePanel extends JPanel {
     
     private void updateCardPositions() {
         // Get current game state from controller
-        List<Card> playerHand = controller.getHumanPlayedCard();
-        List<Card> computer1Hand = controller.getCPUCard(0);
-        List<Card> computer2Hand = controller.getCPUCard(1);
-        List<Card> computer3Hand = controller.getCPUCard(2);
+        List<Card> playerHand = controller.getPlayerCard(0);
+        List<Card> computer1Hand = controller.getPlayerCard(1);
+        List<Card> computer2Hand = controller.getPlayerCard(2);
+        List<Card> computer3Hand = controller.getPlayerCard(3);
         Card topCard = controller.getTopCard(1);
 
         if (topCard != null) {
@@ -186,7 +186,7 @@ public class UNOGamePanel extends JPanel {
             repaint();
             return;
         }
-        List<Card> playerHand = controller.getHumanPlayedCard();
+        List<Card> playerHand = controller.getPlayerCard(0);
         if (currentSelectedCardIndex == -1){ //Click unselected card
             currentSelectedCardIndex = index;
             playerHand.get(index).setCardSelected(true);
@@ -228,7 +228,7 @@ public class UNOGamePanel extends JPanel {
             remove(btn);
         }
         cardButtons.clear();
-        List<Card> playerHand = controller.getHumanPlayedCard();
+        List<Card> playerHand = controller.getPlayerCard(0);
         
         for (int i = 0; i < playerHand.size(); i++) {
             Card card = playerHand.get(i);
@@ -271,10 +271,10 @@ public class UNOGamePanel extends JPanel {
         Card topCard;
         
         try {
-            playerHand = new ArrayList<>(controller.getHumanPlayedCard());
-            computer1Hand = new ArrayList<>(controller.getCPUCard(0));
-            computer2Hand = new ArrayList<>(controller.getCPUCard(1));
-            computer3Hand = new ArrayList<>(controller.getCPUCard(2));
+            playerHand = new ArrayList<>(controller.getPlayerCard(0));
+            computer1Hand = new ArrayList<>(controller.getPlayerCard(1));
+            computer2Hand = new ArrayList<>(controller.getPlayerCard(2));
+            computer3Hand = new ArrayList<>(controller.getPlayerCard(3));
             topCard = controller.getTopCard(1);
         } catch (Exception e) {
             // 如果获取数据时出错，使用空列表
