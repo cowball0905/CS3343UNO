@@ -192,7 +192,7 @@ public class UNOGamePanel extends JPanel {
             playerHand.get(index).setCardSelected(true);
         } else if (index == currentSelectedCardIndex){ //Click selected card
             Card selectedCard = playerHand.get(index);
-            boolean isPlayed = controller.canPlayCard(controller.getTopCard(1),selectedCard);
+            boolean isPlayed = controller.canPlayCard(selectedCard,controller.getTopCard(1));
             if (isPlayed){
                 controller.playCard(selectedCard);
                 errorMessage = "Card played!";

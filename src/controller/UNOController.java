@@ -179,7 +179,7 @@ public class UNOController {
             System.out.println(currentPlayer.getName() + " draws a card from the deck.");
             currentPlayer.drawCard(cardFactory.giveCard(Deck, false, checkCurrentPlayer() == 0 ? true : false, ""));
             Card card = currentPlayer.getHand().get(currentPlayer.getHand().size() - 1);
-            if (canPlayCard(getTopCard(1),card)) {
+            if (canPlayCard(card,getTopCard(1))) {
                 if (checkCurrentPlayer() == 0) {
                     deckPlayCardViewer.setIsDeciding(card);
                     turnTimer.startTimer(10);
@@ -267,13 +267,13 @@ public class UNOController {
         gamePanel.updateDisplay();
     }
 
-    public boolean canPlayCard(Card playedCard, Card matchCard) {
+    public boolean canPlayCard(Card matchCard, Card topCard) {
         // 如果没有顶牌（游戏刚开始或PlayedCard为空），允许任何牌
         if (matchCard == null) {
             return true;
         }
 
-        return playedCard.checkCard(matchCard);
+        return topCard.checkCard(matchCard);
     }
 
     public ChallengeViewer getChallengeViewer() {
