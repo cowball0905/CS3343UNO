@@ -261,6 +261,7 @@ public class TestUNOController {
     public void testCanPlayCardWildCard() {
         Card topCard = new NumberCard(Color.Red, 5, true);
         Card wildCard = new WildCard(true);
+        wildCard.setColor(Color.Red);
 
         assertTrue(controller.canPlayCard(wildCard, topCard));
     }
@@ -269,6 +270,7 @@ public class TestUNOController {
     public void testCanPlayCardWildDrawFour() {
         Card topCard = new NumberCard(Color.Red, 5, true);
         Card wildDrawFour = new WildDrawFourCard(true);
+        wildDrawFour.setColor(Color.Red);
 
         assertTrue(controller.canPlayCard(wildDrawFour, topCard));
     }

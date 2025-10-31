@@ -112,6 +112,7 @@ public class TestWildCard {
     @Test
     public void testCheckCardNumberCard() {
         WildCard topCard = new WildCard(true);
+        topCard.setColor(Color.Red);
         NumberCard playedCard = new NumberCard(Color.Red, 5, true);
         
         assertEquals(true, topCard.checkCard(playedCard));
@@ -120,6 +121,7 @@ public class TestWildCard {
     @Test
     public void testCheckCardSkipCard() {
         WildCard topCard = new WildCard(true);
+        topCard.setColor(Color.Blue);
         SkipCard playedCard = new SkipCard(Color.Blue, true);
         
         assertEquals(true, topCard.checkCard(playedCard));
@@ -128,6 +130,7 @@ public class TestWildCard {
     @Test
     public void testCheckCardReverseCard() {
         WildCard topCard = new WildCard(true);
+        topCard.setColor(Color.Green);
         ReverseCard playedCard = new ReverseCard(Color.Green, true);
         
         assertEquals(true, topCard.checkCard(playedCard));
@@ -136,6 +139,7 @@ public class TestWildCard {
     @Test
     public void testCheckCardDrawTwoCard() {
         WildCard topCard = new WildCard(true);
+        topCard.setColor(Color.Yellow);
         DrawTwoCard playedCard = new DrawTwoCard(Color.Yellow, true);
         
         assertEquals(true, topCard.checkCard(playedCard));
