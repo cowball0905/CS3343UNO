@@ -256,6 +256,62 @@ public class UNOGamePanel extends JPanel {
         updateCardButtons();
         repaint();
     }
+
+    private void drawCPUcards(Graphics2D graphic2D, List<Card> computerHand) {
+        for (Card card : computerHand) {
+            drawRotatedCard(graphic2D, card);
+        }
+    }
+    
+    private void drawPlayerLabel(Graphics2D graphic2D, int playerIndex, int x, int y, String playerstring, List<Card> playerHand, boolean isDrawButton) {
+        Player player = controller.getPlayerList().get(playerIndex);
+
+        String label = playerstring + " (" + playerHand.size() + " cards)" + (player.getIsShout() ? " *UNO*" : "");
+        
+        graphic2D.setFont(new Font("Arial", Font.BOLD, 18));
+        graphic2D.setColor(Color.BLACK);
+        graphic2D.drawString(label, x - 1, y - 1);
+        graphic2D.drawString(label, x - 1, y + 1);
+        graphic2D.drawString(label, x + 1, y - 1);
+        graphic2D.drawString(label, x + 1, y + 1);
+
+        if (controller.getCurrentPlayer() == player) {
+            graphic2D.setColor(Color.YELLOW);
+        } else {
+            graphic2D.setColor(Color.WHITE);
+        }
+        graphic2D.drawString(label, x, y);
+        
+        if (isDrawButton) {
+            JButton catchButton = new JButton();
+            catchButton.setBounds(x, y - 20, 250, 30);
+            catchButton.setBorderPainted(false);
+            catchButton.setContentAreaFilled(false);
+            catchButton.setFocusPainted(false);
+            catchButton.addActionListener(e -> {
+                if (isGameEnd) {
+                    return;
+                }
+                controller.getPlayerList().get(0).catchForgotShout(player);
+            });
+            
+            if (playerIndex == 1) {
+                catchcpu1Button = catchButton;
+            } else if (playerIndex == 2) {
+                catchcpu2Button = catchButton;
+            } else if (playerIndex == 3) {
+                catchcpu3Button = catchButton;
+            }
+            
+            add(catchButton);
+        }
+    }
+
+    private void drawTextBox(Graphics2D graphic2D, String msg, int x, int y, int width, int height) {
+        graphic2D.drawRect(x, y, width, height);
+        graphic2D.setFont(new Font("Arial", Font.BOLD, 28));
+        graphic2D.drawString(msg, x + 50, y + 30);
+    }
     
     @Override
     protected void paintComponent(Graphics g) {
@@ -297,111 +353,22 @@ public class UNOGamePanel extends JPanel {
         
         // === 第一層：繪製所有卡牌 (底層) ===
         // Draw CPU1 cards
-        for (Card card : computer1Hand) {
-            drawRotatedCard(graphic2D, card);
-        }
-        
+        drawCPUcards(graphic2D, computer1Hand);
+
         // Draw CPU2 cards
-        for (Card card : computer2Hand) {
-            drawRotatedCard(graphic2D, card);
-        }
+        drawCPUcards(graphic2D, computer2Hand);
         
         // Draw CPU3 cards
-        for (Card card : computer3Hand) {
-            drawRotatedCard(graphic2D, card);
-        }
+        drawCPUcards(graphic2D, computer3Hand);
         
         // === 第二層：繪製所有文字標籤 (上層，不會被卡牌覆蓋) ===
         graphic2D.setFont(new Font("Arial", Font.BOLD, 18));
         graphic2D.setColor(Color.WHITE);
-        
-        // CPU1 標籤 (左側)
-        if(controller.getCurrentPlayer() == controller.getPlayerList().get(1)) {
-        	graphic2D.setColor(Color.BLACK);
-            graphic2D.drawString("CPU 1 (" + computer1Hand.size() + " cards)" + (controller.getPlayerList().get(1).getIsShout() ? " *UNO*" : ""), 105 - 1, 220 - 1); // West, North
-            graphic2D.drawString("CPU 1 (" + computer1Hand.size() + " cards)" + (controller.getPlayerList().get(1).getIsShout() ? " *UNO*" : ""), 105 - 1, 220 + 1); // West, South
-            graphic2D.drawString("CPU 1 (" + computer1Hand.size() + " cards)" + (controller.getPlayerList().get(1).getIsShout() ? " *UNO*" : ""), 105 + 1, 220 - 1); // East, North
-            graphic2D.drawString("CPU 1 (" + computer1Hand.size() + " cards)" + (controller.getPlayerList().get(1).getIsShout() ? " *UNO*" : ""), 105 + 1, 220 + 1); // East, South
-            graphic2D.setColor(Color.YELLOW);
-        } else {
-            graphic2D.setColor(Color.BLACK);
-            graphic2D.drawString("CPU 1 (" + computer1Hand.size() + " cards)" + (controller.getPlayerList().get(1).getIsShout() ? " *UNO*" : ""), 105 - 1, 220 - 1);
-            graphic2D.drawString("CPU 1 (" + computer1Hand.size() + " cards)" + (controller.getPlayerList().get(1).getIsShout() ? " *UNO*" : ""), 105 - 1, 220 + 1);
-            graphic2D.drawString("CPU 1 (" + computer1Hand.size() + " cards)" + (controller.getPlayerList().get(1).getIsShout() ? " *UNO*" : ""), 105 + 1, 220 - 1);
-            graphic2D.drawString("CPU 1 (" + computer1Hand.size() + " cards)" + (controller.getPlayerList().get(1).getIsShout() ? " *UNO*" : ""), 105 + 1, 220 + 1);
-            graphic2D.setColor(Color.WHITE);
-        }
-        graphic2D.drawString("CPU 1 (" + computer1Hand.size() + " cards)" + (controller.getPlayerList().get(1).getIsShout() ? " *UNO*" : ""), 105, 220);
-        catchcpu1Button = new JButton();
-        catchcpu1Button.setBounds(105, 200, 250, 30); // Positioned where the old text was
-        catchcpu1Button.setBorderPainted(false);
-        catchcpu1Button.setContentAreaFilled(false);
-        catchcpu1Button.setFocusPainted(false);
-        catchcpu1Button.addActionListener(e -> {
-            if(isGameEnd) {
-                return;
-            }
-            controller.getPlayerList().get(0).catchForgotShout(controller.getPlayerList().get(1));
-        });
-        add(catchcpu1Button);
-        // CPU2 標籤 (頂部居中)
-        if(controller.getCurrentPlayer() == controller.getPlayerList().get(2)) {
-        	graphic2D.setColor(Color.BLACK);
-            graphic2D.drawString("CPU 2 (" + computer2Hand.size() + " cards)" + (controller.getPlayerList().get(2).getIsShout() ? " *UNO*" : ""), 420 - 1, 40 - 1); // West, North
-            graphic2D.drawString("CPU 2 (" + computer2Hand.size() + " cards)" + (controller.getPlayerList().get(2).getIsShout() ? " *UNO*" : ""), 420 - 1, 40 + 1); // West, South
-            graphic2D.drawString("CPU 2 (" + computer2Hand.size() + " cards)" + (controller.getPlayerList().get(2).getIsShout() ? " *UNO*" : ""), 420 + 1, 40 - 1); // East, North
-            graphic2D.drawString("CPU 2 (" + computer2Hand.size() + " cards)" + (controller.getPlayerList().get(2).getIsShout() ? " *UNO*" : ""), 420 + 1, 40 + 1); // East, South
-            graphic2D.setColor(Color.YELLOW);
-        } else {
-            graphic2D.setColor(Color.BLACK);
-            graphic2D.drawString("CPU 2 (" + computer2Hand.size() + " cards)" + (controller.getPlayerList().get(2).getIsShout() ? " *UNO*" : ""), 420 - 1, 40 - 1);
-            graphic2D.drawString("CPU 2 (" + computer2Hand.size() + " cards)" + (controller.getPlayerList().get(2).getIsShout() ? " *UNO*" : ""), 420 - 1, 40 + 1);
-            graphic2D.drawString("CPU 2 (" + computer2Hand.size() + " cards)" + (controller.getPlayerList().get(2).getIsShout() ? " *UNO*" : ""), 420 + 1, 40 - 1);
-            graphic2D.drawString("CPU 2 (" + computer2Hand.size() + " cards)" + (controller.getPlayerList().get(2).getIsShout() ? " *UNO*" : ""), 420 + 1, 40 + 1);
-            graphic2D.setColor(Color.WHITE);
-        }
-        graphic2D.drawString("CPU 2 (" + computer2Hand.size() + " cards)" + (controller.getPlayerList().get(2).getIsShout() ? " *UNO*" : ""),420, 40);
-        catchcpu2Button = new JButton();
-        catchcpu2Button.setBounds(420, 20, 250, 30); // Positioned where the old text was
-        catchcpu2Button.setBorderPainted(false);
-        catchcpu2Button.setContentAreaFilled(false);
-        catchcpu2Button.setFocusPainted(false);
-        catchcpu2Button.addActionListener(e -> {
-            if(isGameEnd) {
-                return;
-            }
-            controller.getPlayerList().get(0).catchForgotShout(controller.getPlayerList().get(2));
-        });
-        add(catchcpu2Button);
-        // CPU3 標籤 (右側)
-        if(controller.getCurrentPlayer() == controller.getPlayerList().get(3)) {
-        	graphic2D.setColor(Color.BLACK);
-            graphic2D.drawString("CPU 3 (" + computer3Hand.size() + " cards)" + (controller.getPlayerList().get(3).getIsShout() ? " *UNO*" : ""), 745 - 1, 220 - 1); // West, North
-            graphic2D.drawString("CPU 3 (" + computer3Hand.size() + " cards)" + (controller.getPlayerList().get(3).getIsShout() ? " *UNO*" : ""), 745 - 1, 220 + 1); // West, South
-            graphic2D.drawString("CPU 3 (" + computer3Hand.size() + " cards)" + (controller.getPlayerList().get(3).getIsShout() ? " *UNO*" : ""), 745 + 1, 220 - 1); // East, North
-            graphic2D.drawString("CPU 3 (" + computer3Hand.size() + " cards)" + (controller.getPlayerList().get(3).getIsShout() ? " *UNO*" : ""), 745 + 1, 220 + 1); // East, South
-            graphic2D.setColor(Color.YELLOW);
-        } else {
-            graphic2D.setColor(Color.BLACK);
-            graphic2D.drawString("CPU 3 (" + computer3Hand.size() + " cards)" + (controller.getPlayerList().get(3).getIsShout() ? " *UNO*" : ""), 745 - 1, 220 - 1);
-            graphic2D.drawString("CPU 3 (" + computer3Hand.size() + " cards)" + (controller.getPlayerList().get(3).getIsShout() ? " *UNO*" : ""), 745 - 1, 220 + 1);
-            graphic2D.drawString("CPU 3 (" + computer3Hand.size() + " cards)" + (controller.getPlayerList().get(3).getIsShout() ? " *UNO*" : ""), 745 + 1, 220 - 1);
-            graphic2D.drawString("CPU 3 (" + computer3Hand.size() + " cards)" + (controller.getPlayerList().get(3).getIsShout() ? " *UNO*" : ""), 745 + 1, 220 + 1);
-            graphic2D.setColor(Color.WHITE);
-        }
-        graphic2D.drawString("CPU 3 (" + computer3Hand.size() + " cards)" + (controller.getPlayerList().get(3).getIsShout() ? " *UNO*" : ""), 745, 220);
-        catchcpu3Button = new JButton();
-        catchcpu3Button.setBounds(745, 200, 250, 30); // Positioned where the old text was
-        catchcpu3Button.setBorderPainted(false);
-        catchcpu3Button.setContentAreaFilled(false);
-        catchcpu3Button.setFocusPainted(false);
-        catchcpu3Button.addActionListener(e -> {
-            if(isGameEnd) {
-                return;
-            }
-            controller.getPlayerList().get(0).catchForgotShout(controller.getPlayerList().get(3));
-        });
-        add(catchcpu3Button);
+
+        drawPlayerLabel(graphic2D, 1, 105, 220, "CPU 1", computer1Hand, true);  // Left side
+        drawPlayerLabel(graphic2D, 2, 420, 40, "CPU 2", computer2Hand, true);   // Top
+        drawPlayerLabel(graphic2D, 3, 745, 220, "CPU 3", computer3Hand, true);  // Right side
+
         // === 繼續第一層：繪製其他卡牌 ===
         // Draw player's cards (底層)
         for (Card card : playerHand) {
@@ -418,23 +385,7 @@ public class UNOGamePanel extends JPanel {
         
         // === 第二層：繼續繪製文字標籤 (上層) ===
         // Player 標籤
-        graphic2D.setFont(new Font("Arial", Font.BOLD, 18));
-        if(controller.getCurrentPlayer() == controller.getPlayerList().get(0)) {
-            graphic2D.setColor(Color.BLACK);
-            graphic2D.drawString("YOU (" + playerHand.size() + " cards)" + (controller.getPlayerList().get(0).getIsShout() ? " *UNO*" : ""), 420 - 1, 600 - 1); // West, North
-            graphic2D.drawString("YOU (" + playerHand.size() + " cards)" + (controller.getPlayerList().get(0).getIsShout() ? " *UNO*" : ""), 420 - 1, 600 + 1); // West, South
-            graphic2D.drawString("YOU (" + playerHand.size() + " cards)" + (controller.getPlayerList().get(0).getIsShout() ? " *UNO*" : ""), 420 + 1, 600 - 1); // East, North
-            graphic2D.drawString("YOU (" + playerHand.size() + " cards)" + (controller.getPlayerList().get(0).getIsShout() ? " *UNO*" : ""), 420 + 1, 600 + 1); // East, South
-            graphic2D.setColor(Color.YELLOW);
-        } else {
-            graphic2D.setColor(Color.BLACK);
-            graphic2D.drawString("YOU (" + playerHand.size() + " cards)" + (controller.getPlayerList().get(0).getIsShout() ? " *UNO*" : ""), 420 - 1, 600 - 1);
-            graphic2D.drawString("YOU (" + playerHand.size() + " cards)" + (controller.getPlayerList().get(0).getIsShout() ? " *UNO*" : ""), 420 - 1, 600 + 1);
-            graphic2D.drawString("YOU (" + playerHand.size() + " cards)" + (controller.getPlayerList().get(0).getIsShout() ? " *UNO*" : ""), 420 + 1, 600 - 1);
-            graphic2D.drawString("YOU (" + playerHand.size() + " cards)" + (controller.getPlayerList().get(0).getIsShout() ? " *UNO*" : ""), 420 + 1, 600 + 1);
-            graphic2D.setColor(Color.WHITE);
-        }
-        graphic2D.drawString("YOU (" + playerHand.size() + " cards)" + (controller.getPlayerList().get(0).getIsShout() ? " *UNO*" : ""), 420, 600);
+        drawPlayerLabel(graphic2D, 0, 420, 600, "YOU", playerHand, false);
 
         // Discard pile label
         if (topCard != null) {
@@ -491,23 +442,17 @@ public class UNOGamePanel extends JPanel {
             controller.getTurnTimer().drawTimer(g);
         }
         if(controller.getWildCardViewer().isHavingWild()){
-            graphic2D.drawRect(300, 200, 360, 230);
-            graphic2D.setFont(new Font("Arial", 1, 28));
-            graphic2D.drawString("Choose a new color", 350, 230);
+            drawTextBox(graphic2D, "Choose a new color", 300, 200, 360, 230);
             controller.getWildCardViewer().drawWindow(g);
         }
         if(controller.getChallengeViewer().getIsChallenging()){
-            graphic2D.drawRect(300, 200, 360, 230);
-            graphic2D.setFont(new Font("Arial", 1, 28));
-            graphic2D.drawString("Choose to Challenge?", 350, 230);
-            controller.getChallengeViewer().drawWindow(g);   
+            drawTextBox(graphic2D, "Choose to Challenge?", 300, 200, 360, 230);
+            controller.getChallengeViewer().drawWindow(g);
         }
-        
+
         if(controller.getDeckPlayCardViewer().getIsDeciding()){
-            graphic2D.drawRect(300, 200, 360, 230);
-            graphic2D.setFont(new Font("Arial", 1, 28));
-            graphic2D.drawString("Play this card?", 350, 230);
-            controller.getDeckPlayCardViewer().drawWindow(g);  
+            drawTextBox(graphic2D, "Play this card?", 300, 200, 360, 230);
+            controller.getDeckPlayCardViewer().drawWindow(g);
         }
         if(isGameEnd) {
             graphic2D.setColor(Color.RED);
