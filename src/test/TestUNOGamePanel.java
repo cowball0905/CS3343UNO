@@ -1,5 +1,6 @@
 package test;
 
+import static org.junit.Assert.assertTrue;
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.jupiter.api.AfterEach;
@@ -13,8 +14,11 @@ import view.UNOGamePanel;
 import javax.swing.JButton;
 import java.awt.Component;
 import java.awt.Graphics;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 
 public class TestUNOGamePanel {
     private UNOGamePanel gamePanel;
@@ -158,17 +162,36 @@ public class TestUNOGamePanel {
 
     @Test
     public void testUnoButtonExists() {
-        controller.startGame();
-        controller.setIsFreezed(true);
-        gamePanel.startGame();
-        gamePanel.updateCardButtons();
+        System.out.println("Before repaint - hasUnoButton(): " + hasUnoButton());
         
-        BufferedImage img = new BufferedImage(800, 600, BufferedImage.TYPE_INT_ARGB);
-        Graphics g = img.getGraphics();
+        // Force a repaint to create the button
         gamePanel.repaint();
+        
+        // Force the repaint to complete
+        try {
+            Thread.sleep(100); // Give time for the repaint to complete
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        
+        System.out.println("After repaint - hasUnoButton(): " + hasUnoButton());
+        
+        // Also try direct painting
+        Graphics g = new BufferedImage(800, 600, BufferedImage.TYPE_INT_ARGB).getGraphics();
+        gamePanel.paint(g);
         g.dispose();
         
-        assertEquals(true, hasUnoButton());
+        System.out.println("After paint - hasUnoButton(): " + hasUnoButton());
+        
+        // Check the components
+        System.out.println("Components in gamePanel: " + gamePanel.getComponents().length);
+        for (Component comp : gamePanel.getComponents()) {
+            System.out.println("Component: " + comp.getClass().getName() + 
+                             ", visible: " + comp.isVisible() + 
+                             ", bounds: " + comp.getBounds());
+        }
+        
+        assertTrue(hasUnoButton());
     }
 
     @Test
@@ -178,6 +201,174 @@ public class TestUNOGamePanel {
         
         assertEquals(true, hasDeckButton());
     }
+    
+    @Test
+    public void testUnoButtonAction() {
+        // Create a test panel
+        UNOGamePanel panel = new UNOGamePanel();
+        
+        // Create a flag to check if shoutUno was called
+        final boolean[] shoutUnoCalled = {false};
+        
+        // Override the shoutUno method
+        UNOGamePanel panelSpy = new UNOGamePanel() {
+            @Override
+            public void shoutUno() {
+                shoutUnoCalled[0] = true;
+            }
+        };
+        
+        // Get the button using reflection
+        JButton unoButton = null;
+        try {
+            Field field = UNOGamePanel.class.getDeclaredField("UnoButton");
+            field.setAccessible(true);
+            unoButton = (JButton) field.get(panelSpy);
+        } catch (Exception e) {
+            fail("Failed to get UnoButton: " + e.getMessage());
+        }
+        
+        // Simulate button click
+        for (ActionListener al : unoButton.getActionListeners()) {
+            al.actionPerformed(new ActionEvent(unoButton, ActionEvent.ACTION_PERFORMED, ""));
+        }
+        
+        // Verify shoutUno was called
+        assertTrue("shoutUno should be called when UNO button is clicked", shoutUnoCalled[0]);
+    }
+
+@Test
+public void testDeckButtonAction() {
+    Graphics g = null;  // Declare g outside the try block
+    try {
+        // Initialize the game
+        controller.startGame();
+        gamePanel.startGame();
+        
+        // Create a test graphics context
+        BufferedImage img = new BufferedImage(1000, 700, BufferedImage.TYPE_INT_ARGB);
+        g = img.getGraphics();
+        
+        // Paint the panel
+        gamePanel.paint(g);
+        
+        // Print all components for debugging
+        System.out.println("All components in gamePanel:");
+        for (Component comp : gamePanel.getComponents()) {
+            System.out.println(" - " + comp.getClass().getSimpleName() + 
+                             " at " + comp.getBounds() + 
+                             " visible: " + comp.isVisible());
+        }
+        
+        // Try to find the deck button by its position
+        JButton deckButton = null;
+        for (Component comp : gamePanel.getComponents()) {
+            if (comp instanceof JButton) {
+                JButton button = (JButton) comp;
+                // Print all buttons for debugging
+                System.out.println("Found button at: " + button.getBounds());
+                // Check if this is likely the deck button by its position
+                if (button.getX() == 140 && button.getY() == 30) {
+                    deckButton = button;
+                    break;
+                }
+            }
+        }
+        
+
+        
+        assertNotNull(deckButton, "Deck button should exist in the panel. Check the button's position in the panel.");
+        
+        // Get initial deck size
+        int initialDeckSize = controller.getDeck().size();
+        
+        // Simulate button click
+        for (ActionListener al : deckButton.getActionListeners()) {
+            al.actionPerformed(new ActionEvent(deckButton, ActionEvent.ACTION_PERFORMED, ""));
+        }
+        
+        // Verify a card was drawn
+        int newDeckSize = controller.getDeck().size();
+        assertEquals(initialDeckSize - 1, newDeckSize, 
+                   "Deck size should decrease by 1 after drawing a card");
+        
+    } catch (Exception e) {
+        e.printStackTrace();
+        fail("Exception during deck button test: " + e.getMessage());
+    } finally {
+        // Clean up
+        if (g != null) {
+            g.dispose();
+        }
+    }
+}
+
+@Test
+public void testDeckButtonWhenGameEnded() {
+    try {
+        // Set up the game
+        controller.startGame();
+        gamePanel.startGame();
+        
+        // Get the deck button using reflection to access the private method
+        Method updateDeckMethod = UNOGamePanel.class.getDeclaredMethod("updateDeck");
+        updateDeckMethod.setAccessible(true);
+        JButton deckButton = (JButton) updateDeckMethod.invoke(gamePanel);
+        
+        // Set game end state
+        gamePanel.setIsGameEnd(true);
+        
+        // Get initial deck size
+        int initialDeckSize = controller.getDeck().size();
+        
+        // Simulate button click
+        for (ActionListener al : deckButton.getActionListeners()) {
+            al.actionPerformed(new ActionEvent(deckButton, ActionEvent.ACTION_PERFORMED, ""));
+        }
+        
+        // Verify deck size didn't change
+        assertEquals(initialDeckSize, controller.getDeck().size(), 
+                   "Deck size should not change when game has ended");
+        
+    } catch (Exception e) {
+        fail("Exception during test: " + e.getMessage());
+    }
+}
+
+@Test
+public void testDeckButtonWhenNotPlayersTurn() {
+    try {
+        // Set up the game
+        controller.startGame();
+        gamePanel.startGame();
+        
+        // Set current player to someone else (not player 0)
+        if (controller.getPlayerList().size() > 1) {
+            controller.setCurrentPlayer(controller.getPlayerList().get(1));
+        }
+        
+        // Get the deck button using reflection
+        Method updateDeckMethod = UNOGamePanel.class.getDeclaredMethod("updateDeck");
+        updateDeckMethod.setAccessible(true);
+        JButton deckButton = (JButton) updateDeckMethod.invoke(gamePanel);
+        
+        // Simulate button click
+        for (ActionListener al : deckButton.getActionListeners()) {
+            al.actionPerformed(new ActionEvent(deckButton, ActionEvent.ACTION_PERFORMED, ""));
+        }
+        
+        // Verify error message was set
+        Field errorField = UNOGamePanel.class.getDeclaredField("errorMessage");
+        errorField.setAccessible(true);
+        String errorMessage = (String) errorField.get(gamePanel);
+        assertEquals("It's not your turn!", errorMessage, 
+                   "Error message should be set when it's not player's turn");
+        
+    } catch (Exception e) {
+        fail("Exception during test: " + e.getMessage());
+    }
+}
+
 
     // Helper methods
     private boolean getIsGameEnd() {
@@ -215,6 +406,7 @@ public class TestUNOGamePanel {
             Field field = UNOGamePanel.class.getDeclaredField("UnoButton");
             field.setAccessible(true);
             JButton button = (JButton) field.get(gamePanel);
+            System.out.println(button);
             return button != null;
         } catch (Exception e) {
             return false;

@@ -39,6 +39,18 @@ public class UNOGamePanel extends JPanel {
         setPreferredSize(new Dimension(WIDTH, HEIGHT));
         setBackground(new Color(255, 255, 255)); 
         setLayout(null);
+        
+        // Initialize the UNO button
+        UnoButton = new JButton();
+        UnoButton.setBounds(110, 460, 120, 106);
+        UnoButton.setBorderPainted(false);
+        UnoButton.setContentAreaFilled(false);
+        UnoButton.setFocusPainted(false);
+        UnoButton.addActionListener(e -> shoutUno());
+        add(UnoButton);
+        
+        // Make sure the button is behind other components
+        setComponentZOrder(UnoButton, getComponentCount() - 1);
     }
 
     public void setIsGameEnd(boolean isGameEnd) {
@@ -414,16 +426,6 @@ public class UNOGamePanel extends JPanel {
         graphic2D.setFont(new Font("Arial", Font.BOLD, 24));
         graphic2D.setColor(Color.BLUE);
         graphic2D.drawString("UNO!", 140, 520);
-        
-        UnoButton = new JButton();
-        UnoButton.setBounds(110, 460, 120, 106);
-        UnoButton.setBorderPainted(false);
-        UnoButton.setContentAreaFilled(false);
-        UnoButton.setFocusPainted(false);
-        UnoButton.addActionListener(e -> {
-            shoutUno();
-        });
-        add(UnoButton);
 
         // Draw error message if it exists and hasn't timed out
         if (errorMessage != null) {
