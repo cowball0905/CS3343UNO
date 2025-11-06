@@ -52,7 +52,7 @@ public class UNOGamePanel extends JPanel {
         // Make sure the button is behind other components
         setComponentZOrder(UnoButton, getComponentCount() - 1);
     }
-
+    
     public void setIsGameEnd(boolean isGameEnd) {
         this.isGameEnd = isGameEnd;
     }
@@ -137,10 +137,14 @@ public class UNOGamePanel extends JPanel {
     // 繪製旋轉卡牌的方法
     private void drawRotatedCard(Graphics2D graphic2D, Card card) {
         // 檢查卡牌和圖像是否存在
-        if (card == null || card.getImage() == null) {
-            System.err.println("Warning: Card or image " + card.getType().toString() + " " + card.getColor().toString() + " is null, skipping draw");
-            return;
-        }
+    	if (card == null) {
+    	    System.err.println("Warning: Card is null, skipping draw");
+    	    return;
+    	}
+    	if (card.getImage() == null) {
+    	    System.err.println("Warning: Card image is null for " + card.getType() + " " + card.getColor() + ", skipping draw");
+    	    return;
+    	}
         
         if (card.isRotated()) {
             AffineTransform oldTransform = graphic2D.getTransform();
@@ -276,7 +280,7 @@ public class UNOGamePanel extends JPanel {
     }
     
     private void drawPlayerLabel(Graphics2D graphic2D, int playerIndex, int x, int y, String playerstring, List<Card> playerHand, boolean isDrawButton) {
-        Player player = controller.getPlayerList().get(playerIndex);
+    	Player player = controller.getPlayerList().get(playerIndex);
 
         String label = playerstring + " (" + playerHand.size() + " cards)" + (player.getIsShout() ? " *UNO*" : "");
         

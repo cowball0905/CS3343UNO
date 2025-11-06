@@ -96,27 +96,24 @@ public class TestUNOController {
 
     @Test
     public void testStartGameSetsCurrentPlayer() {
-        controller.startGame();
 
         assertNotNull(controller.getCurrentPlayer());
     }
 
     @Test
     public void testStartGameFirstPlayerCurrent() {
-        controller.startGame();
+
         assertEquals(controller.getPlayerList().get(0), controller.getCurrentPlayer());
     }
 
     @Test
     public void testStartGamePlayDirection() {
-        controller.startGame();
 
         assertEquals(1, controller.getPlayDirection());
     }
 
     @Test
     public void testStartGameInitializesDeck() {
-        controller.startGame();
 
         assertNotNull(controller.getDeck());
     }
@@ -345,14 +342,12 @@ public class TestUNOController {
 
     @Test
     public void testGetDeck() {
-        controller.startGame();
 
         assertNotNull(controller.getDeck());
     }
 
     @Test
     public void testGetDeckHasCards() {
-        controller.startGame();
 
         assertTrue(controller.getDeck().size() > 0);
     }
@@ -389,7 +384,6 @@ public class TestUNOController {
 
     @Test
     public void testGetHumanCard() {
-        controller.startGame();
         ArrayList<Card> humanHand = controller.getPlayerCard(0);
 
         assertEquals(controller.getPlayerList().get(0).getHand(), humanHand);
@@ -397,7 +391,6 @@ public class TestUNOController {
 
     @Test
     public void testGetCPU1Card() {
-        controller.startGame();
 
         ArrayList<Card> cpu1Hand = controller.getPlayerCard(1);
 
@@ -406,7 +399,6 @@ public class TestUNOController {
 
     @Test
     public void testGetCPU2Card() {
-        controller.startGame();
 
         ArrayList<Card> cpu2Hand = controller.getPlayerCard(2);
 
@@ -415,7 +407,6 @@ public class TestUNOController {
 
     @Test
     public void testIsGameEnd() {
-        controller.startGame();
         controller.setIsFreezed(true);
 
         Player player = controller.getPlayerList().get(0);
@@ -430,7 +421,6 @@ public class TestUNOController {
 
     @Test
     public void testIsGameEndWithCards() {
-        controller.startGame();
         controller.setIsFreezed(true);
 
         Player player = controller.getPlayerList().get(0);
@@ -530,7 +520,6 @@ public class TestUNOController {
 
     @Test
     public void testGetTopCardMostRecent() {
-        controller.startGame();
         controller.setIsFreezed(true);
 
         Card card1 = new NumberCard(Color.Red, 5, true);
@@ -544,7 +533,6 @@ public class TestUNOController {
 
     @Test
     public void testGetTopCardSecondRecent() {
-        controller.startGame();
         controller.setIsFreezed(true);
 
         Card card1 = new NumberCard(Color.Red, 5, true);
