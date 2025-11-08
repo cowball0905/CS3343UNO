@@ -99,23 +99,32 @@ public class UNOGamePanel extends JPanel {
             Card card = playerHand.get(i);
             int cardX = (WIDTH / 2) - (playerHand.size() * card_gap_x / 2) + (i * card_gap_x) + 60;
             int cardY = HEIGHT - 150;
-            card.setPosition(cardX, cardY);
+            if (card != null) {
+            	card.setPosition(cardX, cardY);
+            } else {
+            	System.err.println("Card variable is empty in updateCardPositions()");
+            }
         }
         
         // CPU1 - 左側垂直排列
         for (int i = 0; i < computer1Hand.size(); i++) {
             Card card = computer1Hand.get(i);
-            card.setRotation(90); 
-            
-            int cardX = 50 + 60;
-            int cardY = (HEIGHT / 2) - (computer1Hand.size() * card_gap_y / 2) + (i * card_gap_y);
-            
-            card.setPosition(cardX, cardY);
+            if (card != null) {
+	            card.setRotation(90); 
+	            
+	            int cardX = 50 + 60;
+	            int cardY = (HEIGHT / 2) - (computer1Hand.size() * card_gap_y / 2) + (i * card_gap_y);
+	            
+	            card.setPosition(cardX, cardY);
+            } else {
+            	System.err.println("card is null for CPU1 in updatePlayerPositions()");
+            }
         }
 
         for (int i = 0; i < computer3Hand.size(); i++) {
             Card card = computer3Hand.get(i);
-            card.setRotation(270); // 逆時針旋轉90度
+            if (card != null) {
+            	card.setRotation(270); // 逆時針旋轉90度
             
             // X坐標：固定在右側
             int cardX = WIDTH - 50 - card.getWidth() + 120;
@@ -123,14 +132,21 @@ public class UNOGamePanel extends JPanel {
             int cardY = (HEIGHT / 2) - (computer3Hand.size() * card_gap_y / 2) + (i * card_gap_y);
             
             card.setPosition(cardX, cardY);
+            } else {
+            	System.err.println("card is null for CPU3 in updatePlayerPositions()");
+            }
         }
 
         // CPU2 - 頂部水平排列（不旋轉）
         for (int i = 0; i < computer2Hand.size(); i++) {
             Card card = computer2Hand.get(i);
-            int cardX = (WIDTH / 2) - (computer2Hand.size() * card_gap_x / 2) + (i * card_gap_x) + 60;
-            int cardY = 50;
-            card.setPosition(cardX, cardY);
+            if (card != null) {
+	            int cardX = (WIDTH / 2) - (computer2Hand.size() * card_gap_x / 2) + (i * card_gap_x) + 60;
+	            int cardY = 50;
+	            card.setPosition(cardX, cardY);
+            } else {
+            	System.err.println("card is null for CPU2 in updatePlayerPositions()");
+            }
         }
     }
     
@@ -180,15 +196,18 @@ public class UNOGamePanel extends JPanel {
 
     public JButton createCardButton(Card card, int index, List<Card> Cards) {
         JButton button = new JButton();
-        button.setBounds(card.getX(), card.getY(), card.getWidth(), card.getHeight());
-        button.setBorderPainted(false);
-        button.setContentAreaFilled(false);
-        button.setFocusPainted(false);
-        
-        button.addActionListener(e -> {
-            selectedCard(index);
-        });
-        
+        if (card != null) {
+        	button.setBounds(card.getX(), card.getY(), card.getWidth(), card.getHeight());
+            button.setBorderPainted(false);
+            button.setContentAreaFilled(false);
+            button.setFocusPainted(false);
+            
+            button.addActionListener(e -> {
+                selectedCard(index);
+            });
+        } else {
+        	System.err.println("Card variable is empty in createCardButton()");
+        }
         return button;
     }
 
