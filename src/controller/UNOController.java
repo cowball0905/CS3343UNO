@@ -254,6 +254,7 @@ public class UNOController {
 
     public void playCard(Card card) {
     	if(card == null) {
+    		System.err.println("Card variable is empty in playCard()");
     		return;
     	}
         isAction = true;
