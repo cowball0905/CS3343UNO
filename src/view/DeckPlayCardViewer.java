@@ -5,6 +5,7 @@ import java.awt.Graphics;
 import java.awt.Color;
 import javax.swing.JButton;
 import javax.swing.JPanel;
+import javax.swing.SwingUtilities;
 import javax.swing.Timer;
 
 import controller.UNOController;
@@ -44,7 +45,11 @@ public class DeckPlayCardViewer {
 
     public void endDeckCardViewer() {
         this.isDeciding = false;
-        this.removeButtons();
+        SwingUtilities.invokeLater(() -> {
+            if (redButton != null || greenButton != null) {
+                this.removeButtons();
+            }
+        });
     }
 
     public void drawWindow(Graphics g) {

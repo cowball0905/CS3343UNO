@@ -49,11 +49,11 @@ public class UNOController {
         mainFrame.setLocationRelativeTo(null);
         mainFrame.setResizable(false);
 
-        gamePanel = new UNOGamePanel();
         wildCardViewer = new WildCardViewer();
         challengeViewer = new ChallengeViewer();
         resultViewer = new ResultViewer();
         deckPlayCardViewer = new DeckPlayCardViewer();
+        gamePanel = new UNOGamePanel();
 
         wildCardViewer.setController();
         challengeViewer.setController();
@@ -253,6 +253,9 @@ public class UNOController {
     }
 
     public void playCard(Card card) {
+    	if(card == null) {
+    		return;
+    	}
         isAction = true;
         card.setRotation(0);
         PlayedCard.add(card);
