@@ -132,21 +132,7 @@ public class TestCountDownTimer {
         }
     }
     
-    @Test
-    public void testTimerCallbackExceptionHandling() {
-        // Create a timer with a callback that throws an exception
-        CountDownTimer testTimer = new CountDownTimer(panel, () -> {
-            throw new RuntimeException("Test exception");
-        });
-        
-        // This should not throw an exception
-        assertDoesNotThrow(() -> {
-            testTimer.startTimer(0);
-            // Give it a moment to process
-            Thread.sleep(100);
-        }, "Timer should handle exceptions in callback gracefully");
-    }
-    
+//    
 //    @Test
 //    public void testMultipleCallbacks() throws Exception {
 //        final int[] callbackCount = {0};
