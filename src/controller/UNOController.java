@@ -23,7 +23,6 @@ public class UNOController {
     private ArrayList<Player> players;
     private int playDirection;
     private CountDownTimer turnTimer;
-    private boolean isAction = false;
     private boolean isFreezed = false;
     private WildCardViewer wildCardViewer;
     private ChallengeViewer challengeViewer;
@@ -87,7 +86,6 @@ public class UNOController {
                     deckPlayCardViewer.endDeckCardViewer();
                     Card card = currentPlayer.getHand().get(currentPlayer.getHand().size() - 1);
                     playCard(card);
-                    isAction = false;
                 } else {
                     getCardFromDeck();
                 }
@@ -158,7 +156,6 @@ public class UNOController {
         turnTimer.startTimer(30);
         gamePanel.setIsGameEnd(false);
         // Reset other game state variables if needed
-        isAction = false;
 
         PlayedCard.add(cardFactory.giveCard(Deck, true, true, "")); // 已打出的牌顯示
 
@@ -174,8 +171,6 @@ public class UNOController {
     }
 
     public void getCardFromDeck() {
-        if (!isAction) {
-            isAction = true;
             if (currentPlayer != null) {
             	System.out.println(currentPlayer.getName() + " draws a card from the deck.");
 	            currentPlayer.drawCard(cardFactory.giveCard(Deck, false, checkCurrentPlayer() == 0 ? true : false, ""));
@@ -192,13 +187,10 @@ public class UNOController {
 	            } else {
 	                passNextPlayer(1);
 	                eachRound();
-	                isAction = false;
 	            }
             } else {
             	System.err.println("currentPlayer variable is null in getCardFromDeck()");
             }
-            
-        }
     }
 
     public ArrayList<Player> getSortedPlayersScore() {
@@ -257,7 +249,6 @@ public class UNOController {
     		System.err.println("Card variable is empty in playCard()");
     		return;
     	}
-        isAction = true;
         card.setRotation(0);
         PlayedCard.add(card);
         currentPlayer.playCard(card);
@@ -266,11 +257,9 @@ public class UNOController {
             return;
         }
         card.cardFunction(this);
-        isAction = false;
     }
 
     public void passNextPlayer(int amount) {
-        isAction = false;
         int currentIndex = checkCurrentPlayer();
         int nextIndex = (currentIndex + amount * playDirection + players.size()) % players.size();
         currentPlayer = players.get(nextIndex);
