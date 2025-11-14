@@ -289,7 +289,7 @@ public class TestWildCardViewer {
         redButton.doClick();
         
         assertEquals(Color.Red, wildCard.getColor());
-        assertEquals(Color.Red, controller.getTopCard(1).getColor());
+        assertEquals(Color.Red, controller.getTopCard().getColor());
         g.dispose();
     }
 
@@ -311,7 +311,7 @@ public class TestWildCardViewer {
         blueButton.doClick();
         
         assertEquals(Color.Blue, wildCard.getColor());
-        assertEquals(Color.Blue, controller.getTopCard(1).getColor());
+        assertEquals(Color.Blue, controller.getTopCard().getColor());
         g.dispose();
     }
 
@@ -333,7 +333,7 @@ public class TestWildCardViewer {
         yellowButton.doClick();
         
         assertEquals(Color.Yellow, wildCard.getColor());
-        assertEquals(Color.Yellow, controller.getTopCard(1).getColor());
+        assertEquals(Color.Yellow, controller.getTopCard().getColor());
         g.dispose();
     }
 
@@ -355,7 +355,7 @@ public class TestWildCardViewer {
         greenButton.doClick();
         
         assertEquals(Color.Green, wildCard.getColor());
-        assertEquals(Color.Green, controller.getTopCard(1).getColor());
+        assertEquals(Color.Green, controller.getTopCard().getColor());
         g.dispose();
     }
 

@@ -181,7 +181,7 @@ public class UNOController {
 	            currentPlayer.drawCard(cardFactory.giveCard(Deck, false, checkCurrentPlayer() == 0 ? true : false, ""));
 	            Card card = currentPlayer.getHand().get(currentPlayer.getHand().size() - 1);
                 gamePanel.updateDisplay();
-	            if (canPlayCard(card,getTopCard(1))) {
+	            if (canPlayCard(card,getTopCard())) {
 	                if (checkCurrentPlayer() == 0) {
 	                    deckPlayCardViewer.setIsDeciding(card);
 	                    turnTimer.startTimer(10);
@@ -346,12 +346,14 @@ public class UNOController {
         return players.get(index).getHand();
     }
 
-    public Card getTopCard(int index) {
-    	if (index <= 0 || index > PlayedCard.size()) {
-            System.out.println("Warning: Invalid card index " + index + ", PlayedCard size is " + PlayedCard.size());
-            return null;
-        }
-        return PlayedCard.get(PlayedCard.size() - index);
+    /*
+    Bug1: getTopCard for wilddraw4 
+
+    wilddraw4 need to get second top card, 
+    or it will check the wilddraw4 placed in the playedCard when next player choose to challenge
+    */
+    public Card getTopCard() {
+        return PlayedCard.get(PlayedCard.size() - 1);
     }
 
     public Player getCurrentPlayer() {

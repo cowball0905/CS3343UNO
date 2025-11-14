@@ -119,7 +119,7 @@ public class TestUNOController {
     @Test
     public void testStartGameSetsTopCard() {
     	
-        assertNotNull(controller.getTopCard(1));
+        assertNotNull(controller.getTopCard());
     }
 
     @Test
@@ -296,7 +296,7 @@ public class TestUNOController {
     public void testPlayCard() {
         Card card = new NumberCard(Color.Red, 5, true);
         controller.playCard(card);
-        assertEquals(card, controller.getTopCard(1));
+        assertEquals(card, controller.getTopCard());
     }
 
     @Test
@@ -525,7 +525,7 @@ public class TestUNOController {
         controller.playCard(card1);
         controller.playCard(card2);
 
-        assertEquals(card2, controller.getTopCard(1));
+        assertEquals(card2, controller.getTopCard());
     }
 
     @Test
@@ -538,6 +538,6 @@ public class TestUNOController {
         controller.playCard(card1);
         controller.playCard(card2);
 
-        assertEquals(card1, controller.getTopCard(2));
+        assertEquals(card1, controller.getTopCard());
     }
 }

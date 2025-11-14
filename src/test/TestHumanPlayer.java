@@ -241,7 +241,7 @@ public class TestHumanPlayer {
     public void testChallengeDrawFourSuccess() {
         Player targetPlayer = cpuPlayer;
         targetPlayer.getHand().clear();
-        Card topCard = controller.getTopCard(1);
+        Card topCard = controller.getTopCard();
         Card matchingCard = new NumberCard(topCard.getColor(), 5, true);
         targetPlayer.getHand().add(matchingCard);
         int initialTargetHandSize = targetPlayer.getHand().size();

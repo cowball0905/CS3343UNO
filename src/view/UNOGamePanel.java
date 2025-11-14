@@ -88,7 +88,7 @@ public class UNOGamePanel extends JPanel {
         List<Card> computer1Hand = controller.getPlayerCard(1);
         List<Card> computer2Hand = controller.getPlayerCard(2);
         List<Card> computer3Hand = controller.getPlayerCard(3);
-        Card topCard = controller.getTopCard(1);
+        Card topCard = controller.getTopCard();
 
         if (topCard != null) {
             topCard.setRotation(0);
@@ -227,7 +227,7 @@ public class UNOGamePanel extends JPanel {
             playerHand.get(index).setCardSelected(true);
         } else if (index == currentSelectedCardIndex){ //Click selected card
             Card selectedCard = playerHand.get(index);
-            boolean isPlayed = controller.canPlayCard(selectedCard,controller.getTopCard(1));
+            boolean isPlayed = controller.canPlayCard(selectedCard,controller.getTopCard());
             if (isPlayed){
                 controller.playCard(selectedCard);
                 errorMessage = "Card played!";
@@ -366,7 +366,7 @@ public class UNOGamePanel extends JPanel {
             computer1Hand = new ArrayList<>(controller.getPlayerCard(1));
             computer2Hand = new ArrayList<>(controller.getPlayerCard(2));
             computer3Hand = new ArrayList<>(controller.getPlayerCard(3));
-            topCard = controller.getTopCard(1);
+            topCard = controller.getTopCard();
         } catch (Exception e) {
             // 如果获取数据时出错，使用空列表
             playerHand = new ArrayList<>();

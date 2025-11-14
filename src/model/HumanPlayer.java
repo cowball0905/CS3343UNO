@@ -79,7 +79,7 @@ public class HumanPlayer extends Player {
         } else {
             boolean hasPlayableCard = false;
             for (Card c : this.getHand()){
-                if(controller.canPlayCard(c, controller.getTopCard(1))){
+                if(controller.canPlayCard(c, controller.getTopCard())){
                     hasPlayableCard = true;
                 }
             }
@@ -113,7 +113,7 @@ public class HumanPlayer extends Player {
         ArrayList<Card> validCards = new ArrayList<>();
 
         for(Card card:cards){
-            if(controller.canPlayCard(card,controller.getTopCard(1))){
+            if(controller.canPlayCard(card,controller.getTopCard())){
                 validCards.add(card);
             }
         }
