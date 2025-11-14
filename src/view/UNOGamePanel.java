@@ -33,6 +33,7 @@ public class UNOGamePanel extends JPanel {
     private JButton catchcpu2Button;
     private JButton catchcpu3Button;
     private boolean isGameEnd = false;
+    private String resultMessage = "Win";
 
     public UNOGamePanel() {
         this.controller = UNOController.getInstance();
@@ -55,6 +56,10 @@ public class UNOGamePanel extends JPanel {
     
     public void setIsGameEnd(boolean isGameEnd) {
         this.isGameEnd = isGameEnd;
+    }
+
+    public void setResultMessage(String message) {
+        this.resultMessage = message;
     }
 
     private JButton updateDeck(){
@@ -444,7 +449,7 @@ public class UNOGamePanel extends JPanel {
             }
         }
         
-        if (controller.getTurnTimer() != null) {
+        if (controller.getTurnTimer() != null && !isGameEnd) {
             controller.getTurnTimer().drawTimer(g);
         }
         if(controller.getWildCardViewer().isHavingWild()){
@@ -463,7 +468,11 @@ public class UNOGamePanel extends JPanel {
         if(isGameEnd) {
             graphic2D.setColor(Color.RED);
             graphic2D.setFont(new Font("Arial", 1, 100));
-            graphic2D.drawString(controller.getCurrentPlayer().getName() + " Win !!!", 150, 330);
+            String displayMessage = resultMessage;
+            if(resultMessage == "Win"){
+                displayMessage = controller.getCurrentPlayer().getName() + " " + resultMessage + "  !!!";
+            }
+            graphic2D.drawString(displayMessage, 150, 330);
             controller.getResultViewer().displayResult(g);
         }
     }

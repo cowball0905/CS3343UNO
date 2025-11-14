@@ -1,29 +1,63 @@
 package model;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Random;
+import java.lang.Object;
+import controller.UNOController;
 
 public class ConcreteCardFactory extends CardFactory {
 
     private static final Random random = new Random();
 
     @Override
-    public Card createCard(ArrayList<String> Deck, Boolean isTop, boolean isRevealed, String cardString) {
-        int Decklen = Deck.size();
-        if(isTop){
-            Decklen = 56;
-        }
-        String card;
-        if (cardString != "" && Deck.indexOf(cardString) != -1) { // create specific card
+    public Card createCard(HashMap<String, Integer> Deck, Boolean isTop, boolean isRevealed, String cardString) {
+        String card = null;
+        if (isTop) {
+            ArrayList<String> numberCards = new ArrayList<>();
+            for (String key : Deck.keySet()) {
+                if (!key.equals("WildCard") && !key.equals("WildDrawFour") && 
+                    !key.contains("Skip") && !key.contains("Reverse") && !key.contains("DrawTwo")) {
+                    numberCards.add(key);
+                }
+            }
+            
+            if (numberCards.isEmpty()) {
+                return null;
+            }
+            
+            int index = random.nextInt(numberCards.size());
+            card = numberCards.get(index);
+            
+            Deck.put(card, Deck.get(card) - 1);
+            if (Deck.get(card) == 0) {
+                Deck.remove(card);
+            }
+        } else if (!cardString.isEmpty() && Deck.containsKey(cardString) && Deck.get(cardString) > 0) { // create specific card
             card = cardString;
-            Deck.remove(Deck.indexOf(card));
+            Deck.put(card, Deck.get(card) - 1);
+            if (Deck.get(card) == 0) {
+                Deck.remove(card);
+            }
         } else {
-            if(cardString != ""){
+            if (!cardString.isEmpty()) {
                 System.out.println("Deck doesn't contain this card!!!");
             }
-            int index = random.nextInt(Decklen);
-            card = Deck.get(index);
-            Deck.remove(index);
+            ArrayList<String> availableCards = new ArrayList<>(Deck.keySet());
+            if (availableCards.isEmpty()) {
+                return null;
+            }
+            int index = random.nextInt(availableCards.size());
+            card = availableCards.get(index);
+            
+            Deck.put(card, Deck.get(card) - 1);
+            if (Deck.get(card) == 0) {
+                Deck.remove(card);
+            }
+        }
+
+        if (card == null) {
+            return null;
         }
         
         if (card.equals("WildCard")){

@@ -100,7 +100,12 @@ public class HumanPlayer extends Player {
             System.out.println(name + " catches " + targetPlayer.getName() + " for forgetting to shout UNO!");
             // Target player should draw 2 penalty cards
             for(int i = 0; i < 2; i++){
-                targetPlayer.drawCard(controller.getCardFactory().giveCard(controller.getDeck(), false, false, ""));
+                Card card = controller.getCardFactory().giveCard(controller.getDeck(), false, false, "");
+                if (card == null) {
+                    controller.gameDraw();
+                    return;
+                }
+                targetPlayer.drawCard(card);
             }
             controller.getGamePanel().updateDisplay();
         }
@@ -122,7 +127,12 @@ public class HumanPlayer extends Player {
             if(card.getType()!=Type.Wild && card.getType()!=Type.WildDrawFour){
                 System.out.println("Challenge Success!");
                 for(int i=0;i<4;i++){
-                    targetPlayer.drawCard(controller.getCardFactory().giveCard(controller.getDeck(), false, false, ""));
+                    Card drawnCard = controller.getCardFactory().giveCard(controller.getDeck(), false, false, "");
+                    if (drawnCard == null) {
+                        controller.gameDraw();
+                        return;
+                    }
+                    targetPlayer.drawCard(drawnCard);
                 }
                 controller.passNextPlayer(1);
                 controller.eachRound();
@@ -132,7 +142,12 @@ public class HumanPlayer extends Player {
 
         System.out.println("Challenge Fail!");
         for(int i=0;i<6;i++){
-            drawCard(controller.getCardFactory().giveCard(controller.getDeck(), false, false, ""));
+            Card drawnCard = controller.getCardFactory().giveCard(controller.getDeck(), false, false, "");
+            if (drawnCard == null) {
+                controller.gameDraw();
+                return;
+            }
+            drawCard(drawnCard);
         }
         controller.passNextPlayer(2);
         controller.eachRound();

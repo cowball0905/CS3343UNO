@@ -8,6 +8,7 @@ import javax.swing.JButton;
 import javax.swing.JPanel;
 
 import controller.UNOController;
+import model.Card;
 import model.CountDownTimer;
 import model.Player;
 
@@ -63,8 +64,13 @@ public class ChallengeViewer {
             int nextIndex = (currentIndex + (1 * playDirection) + playerList.size()) % playerList.size();
             Player nextPlayer = playerList.get(nextIndex);
             for (int i = 0; i < 4; i++) {
-                nextPlayer.drawCard(controller.getCardFactory().giveCard(controller.getDeck(), false,
-                        controller.checkPlayer(nextPlayer) == 0, ""));
+                Card card = controller.getCardFactory().giveCard(controller.getDeck(), false,
+                        controller.checkPlayer(nextPlayer) == 0, "");
+                if (card == null) {
+                    controller.gameDraw();
+                    return;
+                }
+                nextPlayer.drawCard(card);
             }
             controller.passNextPlayer(2);
             controller.eachRound();

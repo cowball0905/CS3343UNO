@@ -16,7 +16,7 @@ public class UNOController {
     private static UNOController instance;
     private UNOGamePanel gamePanel;
     private JFrame mainFrame;
-    private ArrayList<String> Deck;
+    private HashMap<String, Integer> Deck;
     private CardFactory cardFactory = new ConcreteCardFactory();
     private ArrayList<Card> PlayedCard = new ArrayList<>();
     private Player currentPlayer;
@@ -29,6 +29,7 @@ public class UNOController {
     private ChallengeViewer challengeViewer;
     private ResultViewer resultViewer;
     private DeckPlayCardViewer deckPlayCardViewer;
+    private boolean isDraw = false;
     private final int INITCARDSIZE = 7;
 
     private UNOController() {
@@ -79,7 +80,12 @@ public class UNOController {
                     int nextIndex = (currentIndex + (1 * playDirection) + players.size()) % players.size();
                     Player nextPlayer = players.get(nextIndex);
                     for (int i = 0; i < 4; i++) {
-                        nextPlayer.drawCard(getCardFactory().giveCard(Deck, false, nextIndex == 0 ? true : false, ""));
+                        Card card = getCardFactory().giveCard(Deck, false, nextIndex == 0 ? true : false, "");
+                        if (card == null) {
+                            gameDraw();
+                            return;
+                        }
+                        nextPlayer.drawCard(card);
                     }
                     passNextPlayer(2);
                     eachRound();
@@ -127,25 +133,23 @@ public class UNOController {
     }
 
     private void initializeGame() {
-        Deck = new ArrayList<String>(Arrays.asList(
-                "r0", "r1", "r2", "r3", "r4", "r5", "r6", "r7", "r8", "r9",
-                "r1", "r2", "r3", "r4", "r5", "r6", "r7", "r8", "r9",
-                "g0", "g1", "g2", "g3", "g4", "g5", "g6", "g7", "g8", "g9",
-                "g1", "g2", "g3", "g4", "g5", "g6", "g7", "g8", "g9",
-                "b0", "b1", "b2", "b3", "b4", "b5", "b6", "b7", "b8", "b9",
-                "b1", "b2", "b3", "b4", "b5", "b6", "b7", "b8", "b9",
-                "y0", "y1", "y2", "y3", "y4", "y5", "y6", "y7", "y8", "y9",
-                "y1", "y2", "y3", "y4", "y5", "y6", "y7", "y8", "y9",
-                "rSkip", "rReverse", "rDrawTwo",
-                "rSkip", "rReverse", "rDrawTwo",
-                "gSkip", "gReverse", "gDrawTwo",
-                "gSkip", "gReverse", "gDrawTwo",
-                "bSkip", "bReverse", "bDrawTwo",
-                "bSkip", "bReverse", "bDrawTwo",
-                "ySkip", "yReverse", "yDrawTwo",
-                "ySkip", "yReverse", "yDrawTwo",
-                "WildCard", "WildCard", "WildCard", "WildCard",
-                "WildDrawFour", "WildDrawFour", "WildDrawFour", "WildDrawFour"));
+        Deck = new HashMap<>();
+        
+        for (String color : new String[]{"r", "g", "b", "y"}) {
+            Deck.put(color + "0", 1);
+            for (int i = 1; i <= 9; i++) {
+                Deck.put(color + i, 2);
+            }
+        }
+        
+        for (String color : new String[]{"r", "g", "b", "y"}) {
+            Deck.put(color + "Skip", 2);
+            Deck.put(color + "Reverse", 2);
+            Deck.put(color + "DrawTwo", 2);
+        }
+        
+        Deck.put("WildCard", 4);
+        Deck.put("WildDrawFour", 4);
 
         // Clear played cards
         PlayedCard.clear();
@@ -160,12 +164,27 @@ public class UNOController {
         // Reset other game state variables if needed
         isAction = false;
 
-        PlayedCard.add(cardFactory.giveCard(Deck, true, true, "")); // 已打出的牌顯示
+        Card topCard = cardFactory.giveCard(Deck, true, true, "");
+        if (topCard == null) {
+            gameDraw();
+            return;
+        }
+        PlayedCard.add(topCard); // 已打出的牌顯示
 
         for (int i = 0; i < INITCARDSIZE; i++) {
-            players.get(0).drawCard(cardFactory.giveCard(Deck, false, true, "")); // 玩家的牌顯示
+            Card playerCard = cardFactory.giveCard(Deck, false, true, "");
+            if (playerCard == null) {
+                gameDraw();
+                return;
+            }
+            players.get(0).drawCard(playerCard); // 玩家的牌顯示
             for (int j = 1; j < 4; j++) {
-                players.get(j).drawCard(cardFactory.giveCard(Deck, false, false, "")); // CPU的牌隱藏
+                Card cpuCard = cardFactory.giveCard(Deck, false, false, "");
+                if (cpuCard == null) {
+                    gameDraw();
+                    return;
+                }
+                players.get(j).drawCard(cpuCard); // CPU的牌隱藏
             }
         }
         currentPlayer = players.get(0);
@@ -177,7 +196,13 @@ public class UNOController {
         if (!isAction) {
             isAction = true;
             System.out.println(currentPlayer.getName() + " draws a card from the deck.");
-            currentPlayer.drawCard(cardFactory.giveCard(Deck, false, checkCurrentPlayer() == 0 ? true : false, ""));
+            Card newCard = cardFactory.giveCard(Deck, false, checkCurrentPlayer() == 0 ? true : false, "");
+            if (newCard == null) {
+                gameDraw();
+                isAction = false;
+                return;
+            }
+            currentPlayer.drawCard(newCard);
             Card card = currentPlayer.getHand().get(currentPlayer.getHand().size() - 1);
             if (canPlayCard(card,getTopCard(1))) {
                 if (checkCurrentPlayer() == 0) {
@@ -197,25 +222,55 @@ public class UNOController {
 
     public ArrayList<Player> getSortedPlayersScore() {
         ArrayList<Player> sortedPlayers = new ArrayList<>(players);
-        int n = sortedPlayers.size();
-
-        for (int i = 0; i < n - 1; i++) {
-            for (int j = 0; j < n - i - 1; j++) {
-                int score1 = sortedPlayers.get(j).getScore();
-                int score2 = sortedPlayers.get(j + 1).getScore();
-
-                if (score1 > score2) {
-                    Player temp = sortedPlayers.get(j);
-                    sortedPlayers.set(j, sortedPlayers.get(j + 1));
-                    sortedPlayers.set(j + 1, temp);
-                }
-            }
-
+        sortedPlayers = mergeSort(sortedPlayers);
+        if (!isDraw) {
+            // Move current player to first position
             sortedPlayers.remove(currentPlayer);
             sortedPlayers.add(0, currentPlayer);
         }
-
         return sortedPlayers;
+    }
+
+    private ArrayList<Player> mergeSort(ArrayList<Player> list) {
+        if (list.size() <= 1) {
+            return list;
+        }
+        
+        int mid = list.size() / 2;
+        ArrayList<Player> left = new ArrayList<>(list.subList(0, mid));
+        ArrayList<Player> right = new ArrayList<>(list.subList(mid, list.size()));
+        
+        left = mergeSort(left);
+        right = mergeSort(right);
+        
+        return merge(left, right);
+    }
+
+    private ArrayList<Player> merge(ArrayList<Player> left, ArrayList<Player> right) {
+        ArrayList<Player> result = new ArrayList<>();
+        int i = 0, j = 0;
+        
+        while (i < left.size() && j < right.size()) {
+            if (left.get(i).getScore() <= right.get(j).getScore()) {
+                result.add(left.get(i));
+                i++;
+            } else {
+                result.add(right.get(j));
+                j++;
+            }
+        }
+        
+        while (i < left.size()) {
+            result.add(left.get(i));
+            i++;
+        }
+        
+        while (j < right.size()) {
+            result.add(right.get(j));
+            j++;
+        }
+        
+        return result;
     }
 
     public boolean isGameEnd(Card card) {
@@ -305,11 +360,17 @@ public class UNOController {
         this.eachRound();
     }
 
+    public void gameDraw() {
+        isDraw = true;
+        gamePanel.setResultMessage("Deck is Empty !!!");
+        gamePanel.setIsGameEnd(true);
+    }
+
     public CardFactory getCardFactory() {
         return this.cardFactory;
     }
 
-    public ArrayList<String> getDeck() {
+    public HashMap<String, Integer> getDeck() {
         return this.Deck;
     }
 

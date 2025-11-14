@@ -26,7 +26,9 @@ public abstract class Player implements Drawable, Playable, Shoutable, Catchable
     public int getScore() { 
         int score = 0;
         for (Card card : hand) {
-            score += card.getValue();
+            if (card != null) {  // Add null check
+                score += card.getValue();
+            }
         }
         return score; 
     }
