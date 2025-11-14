@@ -1,7 +1,12 @@
 Solution:
 
 1 add a parameter about the index to receive the top index card (For example, if i input 2, 咁我會攞到第二top嘅卡)
-2 change the part which calls this function
+2 change the part which calls this function (like challengeDrawFour)
+
+solution in method:
+challengeDrawFour in CPUPlayer, HumanPlayer
+getTopCard in UNOController
+all functions in getTopCard(1), for example, DeckCardPlayViewer
 
 Step to reproduce:
 
