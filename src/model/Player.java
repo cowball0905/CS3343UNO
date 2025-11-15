@@ -39,4 +39,3 @@ public abstract class Player implements Drawable, Playable, Shoutable, Catchable
     public abstract void catchForgotShout(Player targetPlayer);
     public abstract void challengeDrawFour(Player targetPlayer);
 }
-

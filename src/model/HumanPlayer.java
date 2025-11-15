@@ -17,11 +17,117 @@ public class HumanPlayer extends Player {
         super(name);
         this.random = new Random();
     }
-    
+    private void sortHandCards() {
+        if (hand.size() <= 1) {
+            return;
+        }
+        hand = mergeSort(hand);
+    }
+
+    private ArrayList<Card> mergeSort(ArrayList<Card> cards) {
+        if (cards.size() <= 1) {
+            return cards;
+        }
+
+        int mid = cards.size() / 2;
+        ArrayList<Card> left = new ArrayList<>(cards.subList(0, mid));
+        ArrayList<Card> right = new ArrayList<>(cards.subList(mid, cards.size()));
+
+        left = mergeSort(left);
+        right = mergeSort(right);
+
+        return merge(left, right);
+    }
+
+    private ArrayList<Card> merge(ArrayList<Card> left, ArrayList<Card> right) {
+        ArrayList<Card> result = new ArrayList<>();
+        int i = 0, j = 0;
+
+        while (i < left.size() && j < right.size()) {
+            if (compareCards(left.get(i), right.get(j)) <= 0) {
+                result.add(left.get(i));
+                i++;
+            } else {
+                result.add(right.get(j));
+                j++;
+            }
+        }
+
+        while (i < left.size()) {
+            result.add(left.get(i));
+            i++;
+        }
+
+        while (j < right.size()) {
+            result.add(right.get(j));
+            j++;
+        }
+
+        return result;
+    }
+
+    private int compareCards(Card c1, Card c2) {
+        if (c1 == null && c2 == null) return 0;
+        if (c1 == null) return 1;
+        if (c2 == null) return -1;
+
+        int color1Priority = getColorPriority(c1);
+        int color2Priority = getColorPriority(c2);
+
+        if (color1Priority != color2Priority) {
+            return Integer.compare(color1Priority, color2Priority);
+        }
+
+        return compareCardValue(c1, c2);
+    }
+
+    private int getColorPriority(Card card) {
+        if (card.getType() == Type.Wild) return 4;
+        if (card.getType() == Type.WildDrawFour) return 5;
+
+        Color color = card.getColor();
+        switch (color) {
+            case Yellow: return 0;
+            case Blue: return 1;
+            case Green: return 2;
+            case Red: return 3;
+            default: return 6;
+        }
+    }
+
+    private int compareCardValue(Card c1, Card c2) {
+        if (c1.getType() == Type.Wild || c1.getType() == Type.WildDrawFour) {
+            return 0;
+        }
+
+        if (c1.getType() == Type.Number && c2.getType() == Type.Number) {
+            return Integer.compare(c1.getValue(), c2.getValue());
+        }
+
+        if (c1.getType() == Type.Number) return -1;
+        if (c2.getType() == Type.Number) return 1;
+
+        int type1Priority = getTypePriority(c1);
+        int type2Priority = getTypePriority(c2);
+
+        return Integer.compare(type1Priority, type2Priority);
+    }
+
+    private int getTypePriority(Card card) {
+        Type type = card.getType();
+        switch (type) {
+            case Skip: return 0;
+            case Reverse: return 1;
+            case DrawTwo: return 2;
+            default: return 3;
+        }
+    }
+
     @Override
     public void drawCard(Card card) {
         this.hand.add(card);
         isShout = false;
+        sortHandCards();
     }
     
     @Override

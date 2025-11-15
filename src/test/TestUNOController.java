@@ -20,8 +20,6 @@ public class TestUNOController {
     public void setUp() {
         UNOController.resetInstance();
         controller = UNOController.getInstance();
-        controller.setPlayers();
-        controller.setViewers();
         controller.startGame();
         players = controller.getPlayerList();
         controller.setIsFreezed(true);
@@ -120,7 +118,6 @@ public class TestUNOController {
 
     @Test
     public void testStartGameSetsTopCard() {
-        controller.startGame();
 
         assertNotNull(controller.getTopCard(1));
     }
