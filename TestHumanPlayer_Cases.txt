@@ -1,0 +1,38 @@
+TestHumanPlayer.java
+
+1. testHumanPlayerGetName
+   - Input: Create player "Alice"
+   - Expected: getName() = "Alice"
+   - Status: PASS
+
+2. testHumanPlayerDrawCard
+   - Input: Draw 1 card
+   - Expected: Hand size increases
+   - Status: PASS
+
+3. testHumanPlayerPlayCard
+   - Input: Play a card
+   - Expected: Card removed from hand
+   - Status: PASS
+
+4. testHumanPlayerShoutUno_Valid
+   - Input: 1 card left, shout
+   - Expected: isShout = true
+   - Status: PASS
+
+5. testHumanPlayerShoutUno_Invalid
+   - Input: 3 cards left, shout
+   - Expected: Error message returned
+   - Status: PASS
+
+6. testHumanPlayerCatchForgotShout
+   - Input: Catch player who forgot to shout
+   - Expected: Target draws 2 cards
+   - Status: PASS
+
+7. testHumanPlayerGetScore
+   - Input: Calculate score
+   - Expected: Returns correct score
+   - Status: PASS
+
+Total: 7 tests, 7 passed, 0 failed

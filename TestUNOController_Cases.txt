@@ -1,0 +1,198 @@
+TestUNOController.java
+
+Game Initialization Tests:
+
+1. testGetInstance
+   - Input: Get controller instance
+   - Expected: Returns singleton instance
+   - Status: PASS
+
+2. testResetInstance
+   - Input: Reset and get new instance
+   - Expected: New instance created
+   - Status: PASS
+
+3. testSetPlayers
+   - Input: Initialize 4 players
+   - Expected: 4 players created (1 human, 3 CPU)
+   - Status: PASS
+
+4. testStartGameSetsCurrentPlayer
+   - Input: Start game
+   - Expected: Current player set to Player 0
+   - Status: PASS
+
+5. testStartGameFirstPlayerCurrent
+   - Input: Start game
+   - Expected: First player is human
+   - Status: PASS
+
+6. testStartGamePlayDirection
+   - Input: Start game
+   - Expected: Play direction = 1 (clockwise)
+   - Status: PASS
+
+7. testStartGameInitializesDeck
+   - Input: Start game
+   - Expected: Deck is not null, Contains 108 cards
+   - Status: PASS
+
+8. testStartGameSetsTopCard
+   - Input: Start game
+   - Expected: Top card is set on discard pile
+   - Status: PASS
+
+Player Management Tests:
+
+9. testGetPlayerList
+   - Input: Get player list
+   - Expected: Returns 4 players
+   - Status: PASS
+
+10. testGetCurrentPlayer
+    - Input: Get current player
+    - Expected: Returns current player
+    - Status: PASS
+
+11. testSetCurrentPlayer
+    - Input: Set to Player 2
+    - Expected: Current player = 2
+    - Status: PASS
+
+12. testCheckCurrentPlayer
+    - Input: Current = Player 1
+    - Expected: Returns index 1
+    - Status: PASS
+
+13. testPassNextPlayer
+    - Input: Pass from Player 0
+    - Expected: Current player = 1
+    - Status: PASS
+
+14. testPassNextPlayerWrapsAround
+    - Input: Pass from Player 3
+    - Expected: Current player = 0
+    - Status: PASS
+
+15. testPassNextPlayerWithReverse
+    - Input: Pass with direction = -1
+    - Expected: Moves backward correctly
+    - Status: PASS
+
+Game Logic Tests:
+
+16. testCanPlayCard_SameColor
+    - Input: Red 5 on Red 3
+    - Expected: true
+    - Status: PASS
+
+17. testCanPlayCard_SameNumber
+    - Input: Red 5 on Blue 5
+    - Expected: true
+    - Status: PASS
+
+18. testCanPlayCard_SameType
+    - Input: Red Skip on Blue Skip
+    - Expected: true
+    - Status: PASS
+
+19. testCanPlayCard_WildCard
+    - Input: Wild on any card
+    - Expected: true
+    - Status: PASS
+
+20. testCanPlayCard_Different
+    - Input: Red 5 on Blue 3
+    - Expected: false
+    - Status: PASS
+
+21. testPlayCard
+    - Input: Play Red 5
+    - Expected: Card added to discard pile, removed from hand
+    - Status: PASS
+
+22. testGetCardFromDeck
+    - Input: Draw card
+    - Expected: Hand size increases by 1
+    - Status: PASS
+
+23. testIsGameEnd_WithEmptyHand
+    - Input: Player has 0 cards
+    - Expected: Game ends, player wins
+    - Status: PASS
+
+24. testIsGameEnd_WithCards
+    - Input: Player has cards
+    - Expected: Game continues
+    - Status: PASS
+
+Direction and State Tests:
+
+25. testGetPlayDirection
+    - Input: Get direction
+    - Expected: Returns 1 or -1
+    - Status: PASS
+
+26. testSetPlayDirection
+    - Input: Set direction to -1
+    - Expected: Direction = -1
+    - Status: PASS
+
+27. testGetDeck
+    - Input: Get deck
+    - Expected: Returns deck list
+    - Status: PASS
+
+28. testGetDeckHasCards
+    - Input: Get deck after init
+    - Expected: Deck size > 0
+    - Status: PASS
+
+29. testGetTopCard_MostRecent
+    - Input: Get top card
+    - Expected: Returns last played card
+    - Status: PASS
+
+30. testGetTopCard_SecondRecent
+    - Input: Get card at index 2
+    - Expected: Returns second-to-last played card
+    - Status: PASS
+
+31. testGetTurnTimer
+    - Input: Get timer
+    - Expected: Timer is not null
+    - Status: PASS
+
+32. testGetIsFreezed
+    - Input: Check freeze state
+    - Expected: Returns boolean
+    - Status: PASS
+
+33. testSetIsFreezed
+    - Input: Set freeze to true
+    - Expected: Freeze state = true
+    - Status: PASS
+
+Player Cards Tests:
+
+34. testGetHumanCard
+    - Input: Get Player 0 cards
+    - Expected: Returns hand with 7 cards initially
+    - Status: PASS
+
+35. testGetCPU1Card
+    - Input: Get Player 1 cards
+    - Expected: Returns CPU1 hand with 7 cards
+    - Status: PASS
+
+36. testGetCPU2Card
+    - Input: Get Player 2 cards
+    - Expected: Returns CPU2 hand with 7 cards
+    - Status: PASS
+
+37. testGetCPU3Card
+    - Input: Get Player 3 cards
+    - Expected: Returns CPU3 hand with 7 cards
+    - Status: PASS
+
+Total: 37 tests, 37 passed, 0 failed

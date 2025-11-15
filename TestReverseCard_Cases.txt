@@ -1,0 +1,43 @@
+TestReverseCard.java
+
+1. testReverseCardToString
+   - Input: Yellow Reverse
+   - Expected: "Yellow Reverse"
+   - Status: PASS
+
+2. testReverseCardGetColor
+   - Input: Blue Reverse
+   - Expected: Color.Blue
+   - Status: PASS
+
+3. testReverseCardGetType
+   - Input: Red Reverse
+   - Expected: Type.Reverse
+   - Status: PASS
+
+4. testReverseCardCheckCard_SameColor
+   - Input: Red Reverse vs Red 3
+   - Expected: true
+   - Status: PASS
+
+5. testReverseCardCheckCard_SameType
+   - Input: Red Reverse vs Blue Reverse
+   - Expected: true
+   - Status: PASS
+
+6. testReverseCardFunctionReversesDirection
+   - Input: Direction = 1
+   - Expected: Direction = -1
+   - Status: PASS
+
+7. testReverseCardFunctionReversesFromNegative
+   - Input: Direction = -1
+   - Expected: Direction = 1
+   - Status: PASS
+
+8. testReverseCardFunctionChangesPlayer
+   - Input: Player 0, Direction = 1
+   - Expected: Player 3 (reversed)
+   - Status: PASS
+
+Total: 8 tests, 8 passed, 0 failed

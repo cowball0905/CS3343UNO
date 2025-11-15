@@ -1,0 +1,28 @@
+TestUNOGamePanel.java
+
+1. testStartGameNotNull
+   - Input: Start game
+   - Expected: Game panel initialized
+   - Status: PASS
+
+2. testUpdateDisplay
+   - Input: Update display
+   - Expected: Cards positioned correctly
+   - Status: PASS
+
+3. testUpdateCardButtons
+   - Input: Update buttons
+   - Expected: Buttons created for each card
+   - Status: PASS
+
+4. testSelectedCard
+   - Input: Click on card
+   - Expected: Card selected/played
+   - Status: PASS
+
+5. testShoutUno
+   - Input: Click UNO button
+   - Expected: UNO shouted
+   - Status: PASS
+
+Total: 5 tests, 5 passed, 0 failed

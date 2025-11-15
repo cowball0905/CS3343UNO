@@ -1,0 +1,53 @@
+TestWildCardViewer.java
+
+1. testSetTimerNotNull
+   - Input: Set timer
+   - Expected: Timer is set
+   - Status: PASS
+
+2. testSetWildCard
+   - Input: Set wild card
+   - Expected: Card is stored
+   - Status: PASS
+
+3. testRedButtonClickSetsRedColor
+   - Input: Click red button
+   - Expected: Card color = Red
+   - Status: PASS
+
+4. testBlueButtonClickSetsBlueColor
+   - Input: Click blue button
+   - Expected: Card color = Blue
+   - Status: PASS
+
+5. testYellowButtonClickSetsYellowColor
+   - Input: Click yellow button
+   - Expected: Card color = Yellow
+   - Status: PASS
+
+6. testGreenButtonClickSetsGreenColor
+   - Input: Click green button
+   - Expected: Card color = Green
+   - Status: PASS
+
+7. testRedButtonClickResetsHavingWild
+   - Input: Click red button
+   - Expected: HavingWild = false
+   - Status: PASS
+
+8. testAutoSelectColor
+   - Input: CPU auto-select
+   - Expected: Color selected automatically
+   - Status: PASS
+
+9. testCountdownTimerVisible
+   - Input: Wild card played
+   - Expected: Timer is visible
+   - Status: PASS
+
+10. testCountdownTimerHiddenAfter
+    - Input: After color selected
+    - Expected: Timer is hidden
+    - Status: PASS
+
+Total: 10 tests, 10 passed, 0 failed

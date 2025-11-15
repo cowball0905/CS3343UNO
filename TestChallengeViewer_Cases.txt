@@ -1,0 +1,38 @@
+TestChallengeViewer.java
+
+1. testSetTimerNotNull
+   - Input: Set timer
+   - Expected: Timer is set
+   - Status: PASS
+
+2. testSetChallenge
+   - Input: Set challenge state
+   - Expected: State updated
+   - Status: PASS
+
+3. testRedButtonClickAddsCards
+   - Input: Click "Yes" to challenge
+   - Expected: Challenger draws cards if challenge fails
+   - Status: PASS
+
+4. testRedButtonClickResetsChallenging
+   - Input: Click "Yes" button
+   - Expected: Challenging = false
+   - Status: PASS
+
+5. testGreenButtonClickResetsChallenging
+   - Input: Click "No" button
+   - Expected: Challenging = false, Player draws 4 cards
+   - Status: PASS
+
+6. testChallengeSuccess
+   - Input: Valid challenge
+   - Expected: Original player draws 4 cards
+   - Status: PASS
+
+7. testChallengeFail
+   - Input: Invalid challenge
+   - Expected: Challenger draws 6 cards
+   - Status: PASS
+
+Total: 7 tests, 7 passed, 0 failed

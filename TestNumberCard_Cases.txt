@@ -1,0 +1,48 @@
+TestNumberCard.java
+
+1. testNumberCardToString
+   - Input: Red 5
+   - Expected: "Red 5"
+   - Status: PASS
+
+2. testNumberCardGetColor
+   - Input: Blue 3
+   - Expected: Color.Blue
+   - Status: PASS
+
+3. testNumberCardGetType
+   - Input: Yellow 7
+   - Expected: Type.Number
+   - Status: PASS
+
+4. testNumberCardGetNumber
+   - Input: Green 9
+   - Expected: 9
+   - Status: PASS
+
+5. testNumberCardCheckCard_SameColor
+   - Input: Red 5 vs Red 3
+   - Expected: true
+   - Status: PASS
+
+6. testNumberCardCheckCard_SameNumber
+   - Input: Red 5 vs Blue 5
+   - Expected: true
+   - Status: PASS
+
+7. testNumberCardCheckCard_Different
+   - Input: Red 5 vs Blue 3
+   - Expected: false
+   - Status: PASS
+
+8. testNumberCardFunctionPassesNextPlayer
+   - Input: Red 5, Player 0
+   - Expected: Current player = 1
+   - Status: PASS
+
+9. testNumberCardFunctionWrapsAround
+   - Input: Red 5, Player 3
+   - Expected: Current player = 0
+   - Status: PASS
+
+Total: 9 tests, 9 passed, 0 failed

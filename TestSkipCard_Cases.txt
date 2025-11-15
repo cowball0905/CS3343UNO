@@ -1,0 +1,38 @@
+TestSkipCard.java
+
+1. testSkipCardToString
+   - Input: Green Skip
+   - Expected: "Green Skip"
+   - Status: PASS
+
+2. testSkipCardGetColor
+   - Input: Red Skip
+   - Expected: Color.Red
+   - Status: PASS
+
+3. testSkipCardGetType
+   - Input: Blue Skip
+   - Expected: Type.Skip
+   - Status: PASS
+
+4. testSkipCardCheckCard_SameColor
+   - Input: Red Skip vs Red 5
+   - Expected: true
+   - Status: PASS
+
+5. testSkipCardCheckCard_SameType
+   - Input: Red Skip vs Blue Skip
+   - Expected: true
+   - Status: PASS
+
+6. testSkipCardFunction
+   - Input: Skip, Player 0
+   - Expected: Current player = 2 (Player 1 skipped)
+   - Status: PASS
+
+7. testSkipCardFunctionWithReverse
+   - Input: Skip, Reverse direction
+   - Expected: Correct skip in reverse direction
+   - Status: PASS
+
+Total: 7 tests, 7 passed, 0 failed

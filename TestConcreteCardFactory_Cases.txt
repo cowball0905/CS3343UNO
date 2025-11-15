@@ -1,0 +1,53 @@
+TestConcreteCardFactory.java
+
+1. testCreateNumberCard
+   - Input: Create "r5"
+   - Expected: Returns NumberCard Red 5
+   - Status: PASS
+
+2. testCreateSkipCard
+   - Input: Create "bSkip"
+   - Expected: Returns SkipCard Blue Skip
+   - Status: PASS
+
+3. testCreateReverseCard
+   - Input: Create "yReverse"
+   - Expected: Returns ReverseCard Yellow Reverse
+   - Status: PASS
+
+4. testCreateDrawTwoCard
+   - Input: Create "gDrawTwo"
+   - Expected: Returns DrawTwoCard Green Draw Two
+   - Status: PASS
+
+5. testCreateWildCard
+   - Input: Create "WildCard"
+   - Expected: Returns WildCard
+   - Status: PASS
+
+6. testCreateWildDrawFourCard
+   - Input: Create "WildDrawFour"
+   - Expected: Returns WildDrawFourCard
+   - Status: PASS
+
+7. testCreateSpecificCard
+   - Input: Request specific card from deck
+   - Expected: Returns requested card and removes from deck
+   - Status: PASS
+
+8. testCreateRandomCard
+   - Input: Request random card
+   - Expected: Returns random card from deck
+   - Status: PASS
+
+9. testCreateCard_NullDeck
+   - Input: Deck = null
+   - Expected: Returns null
+   - Status: PASS
+
+10. testCreateCard_EmptyDeck
+    - Input: Deck is empty
+    - Expected: Handles gracefully
+    - Status: PASS
+
+Total: 10 tests, 10 passed, 0 failed

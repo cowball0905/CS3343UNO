@@ -1,0 +1,48 @@
+TestWildDrawFourCard.java
+
+1. testWildDrawFourToString
+   - Input: Wild Draw Four
+   - Expected: "Wild Draw Four"
+   - Status: PASS
+
+2. testWildDrawFourGetColor
+   - Input: Wild Draw Four
+   - Expected: null (no color)
+   - Status: PASS
+
+3. testWildDrawFourGetType
+   - Input: Wild Draw Four
+   - Expected: Type.WildDrawFour
+   - Status: PASS
+
+4. testWildDrawFourCheckCard
+   - Input: WildDrawFour vs any card
+   - Expected: true (always playable)
+   - Status: PASS
+
+5. testWildDrawFourSetColor
+   - Input: Set to Blue
+   - Expected: Color = Blue
+   - Status: PASS
+
+6. testWildDrawFourFunctionWithHuman
+   - Input: Human player
+   - Expected: WildCardViewer shown, Challenge option shown
+   - Status: PASS
+
+7. testWildDrawFourFunctionSetsColor
+   - Input: Play WildDrawFour
+   - Expected: Color changed, Next player draws 4
+   - Status: PASS
+
+8. testWildDrawFourChallenge_Success
+   - Input: Challenge, player has valid cards
+   - Expected: Challenger wins, Original player draws 4
+   - Status: PASS
+
+9. testWildDrawFourChallenge_Fail
+   - Input: Challenge, player has no valid cards
+   - Expected: Challenger loses, Draws 6 cards total
+   - Status: PASS
+
+Total: 9 tests, 9 passed, 0 failed

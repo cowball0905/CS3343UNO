@@ -1,0 +1,38 @@
+TestDrawTwoCard.java
+
+1. testDrawTwoCardToString
+   - Input: Green Draw Two
+   - Expected: "Green Draw Two"
+   - Status: PASS
+
+2. testDrawTwoCardGetColor
+   - Input: Red Draw Two
+   - Expected: Color.Red
+   - Status: PASS
+
+3. testDrawTwoCardGetType
+   - Input: Blue Draw Two
+   - Expected: Type.DrawTwo
+   - Status: PASS
+
+4. testDrawTwoCardCheckCard_SameColor
+   - Input: Red DrawTwo vs Red 5
+   - Expected: true
+   - Status: PASS
+
+5. testDrawTwoCardCheckCard_SameType
+   - Input: Red DrawTwo vs Blue DrawTwo
+   - Expected: true
+   - Status: PASS
+
+6. testDrawTwoCardFunction
+   - Input: DrawTwo, Player 0
+   - Expected: Player 1 draws 2 cards, Current player = 2
+   - Status: PASS
+
+7. testDrawTwoCardFunctionAddsCards
+   - Input: DrawTwo, Next player has 7 cards
+   - Expected: Hand size increases by 2 (total = 9)
+   - Status: PASS
+
+Total: 7 tests, 7 passed, 0 failed

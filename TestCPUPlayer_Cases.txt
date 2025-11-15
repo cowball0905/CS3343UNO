@@ -1,0 +1,33 @@
+TestCPUPlayer.java
+
+1. testCPUPlayerGetName
+   - Input: Create CPU "CPU1"
+   - Expected: getName() = "CPU1"
+   - Status: PASS
+
+2. testCPUPlayerChooseCard
+   - Input: CPU turn with playable cards
+   - Expected: Plays valid card
+   - Status: PASS
+
+3. testCPUPlayerChooseCard_NoValid
+   - Input: CPU turn with no playable cards
+   - Expected: Draws card from deck
+   - Status: PASS
+
+4. testCPUPlayerAutoShoutUno
+   - Input: CPU has 1 card
+   - Expected: Automatically shouts UNO
+   - Status: PASS
+
+5. testCPUPlayerCatchOthers
+   - Input: Another player forgot to shout UNO
+   - Expected: CPU catches them
+   - Status: PASS
+
+6. testCPUPlayerChallengeDrawFour
+   - Input: Opponent plays Wild Draw Four
+   - Expected: CPU decides to challenge or not
+   - Status: PASS
+
+Total: 6 tests, 6 passed, 0 failed
