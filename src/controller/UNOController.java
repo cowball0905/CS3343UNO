@@ -82,7 +82,7 @@ public class UNOController {
                     for (int i = 0; i < 4; i++) {
                         Card card = getCardFactory().giveCard(Deck, false, nextIndex == 0 ? true : false, "");
                         if (card == null) {
-                            gameDraw();
+                            deckEmpty();
                             return;
                         }
                         nextPlayer.drawCard(card);
@@ -166,7 +166,7 @@ public class UNOController {
 
         Card topCard = cardFactory.giveCard(Deck, true, true, "");
         if (topCard == null) {
-            gameDraw();
+            deckEmpty();
             return;
         }
         PlayedCard.add(topCard); // 已打出的牌顯示
@@ -174,14 +174,14 @@ public class UNOController {
         for (int i = 0; i < INITCARDSIZE; i++) {
             Card playerCard = cardFactory.giveCard(Deck, false, true, "");
             if (playerCard == null) {
-                gameDraw();
+                deckEmpty();
                 return;
             }
             players.get(0).drawCard(playerCard); // 玩家的牌顯示
             for (int j = 1; j < 4; j++) {
                 Card cpuCard = cardFactory.giveCard(Deck, false, false, "");
                 if (cpuCard == null) {
-                    gameDraw();
+                    deckEmpty();
                     return;
                 }
                 players.get(j).drawCard(cpuCard); // CPU的牌隱藏
@@ -199,7 +199,7 @@ public class UNOController {
                 System.out.println(currentPlayer.getName() + " draws a card from the deck.");
                 Card newCard = cardFactory.giveCard(Deck, false, checkCurrentPlayer() == 0 ? true : false, "");
                 if (newCard == null) {
-                    gameDraw();
+                    deckEmpty();
                     isAction = false;
                     return;
                 }
@@ -235,7 +235,9 @@ public class UNOController {
         }
         return sortedPlayers;
     }
-
+    /*
+     * Merge sort implementation for sorting players by score
+     */
     private ArrayList<Player> mergeSort(ArrayList<Player> list) {
         if (list.size() <= 1) {
             return list;
@@ -369,7 +371,10 @@ public class UNOController {
         this.eachRound();
     }
 
-    public void gameDraw() {
+    /*
+     * Handles the scenario when the deck is empty
+     */
+    public void deckEmpty() {
         isDraw = true;
         gamePanel.setResultMessage("Deck is Empty !!!");
         gamePanel.setIsGameEnd(true);

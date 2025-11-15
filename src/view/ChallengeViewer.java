@@ -67,7 +67,7 @@ public class ChallengeViewer {
                 Card card = controller.getCardFactory().giveCard(controller.getDeck(), false,
                         controller.checkPlayer(nextPlayer) == 0, "");
                 if (card == null) {
-                    controller.gameDraw();
+                    controller.deckEmpty();
                     return;
                 }
                 nextPlayer.drawCard(card);

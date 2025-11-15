@@ -85,7 +85,7 @@ public class CPUPlayer extends Player {
                 Card card = controller.getCardFactory().giveCard(controller.getDeck(), false,
                         (controller.getPlayerList().get(0) == targetPlayer), "");
                 if (card == null) {
-                    controller.gameDraw();
+                    controller.deckEmpty();
                     return;
                 }
                 targetPlayer.drawCard(card);
@@ -117,7 +117,7 @@ public class CPUPlayer extends Player {
                         Card drawnCard = controller.getCardFactory().giveCard(controller.getDeck(), false,
                                 controller.checkCurrentPlayer() == 0 ? true : false, "");
                         if (drawnCard == null) {
-                            controller.gameDraw();
+                            controller.deckEmpty();
                             return;
                         }
                         targetPlayer.drawCard(drawnCard);
@@ -132,7 +132,7 @@ public class CPUPlayer extends Player {
             for (int i = 0; i < 6; i++) {
                 Card drawnCard = controller.getCardFactory().giveCard(controller.getDeck(), false, false, "");
                 if (drawnCard == null) {
-                    controller.gameDraw();
+                    controller.deckEmpty();
                     return;
                 }
                 drawCard(drawnCard);
@@ -144,7 +144,7 @@ public class CPUPlayer extends Player {
             for (int i = 0; i < 4; i++) {
                 Card drawnCard = controller.getCardFactory().giveCard(controller.getDeck(), false, false, "");
                 if (drawnCard == null) {
-                    controller.gameDraw();
+                    controller.deckEmpty();
                     return;
                 }
                 drawCard(drawnCard);
@@ -169,7 +169,7 @@ public class CPUPlayer extends Player {
             System.out.println(name + " (CPU) has no valid cards to play and must draw.");
             Card drawnCard = controller.getCardFactory().giveCard(controller.getDeck(), false, false, "");
             if (drawnCard == null) {
-                controller.gameDraw();
+                controller.deckEmpty();
                 return;
             }
             this.drawCard(drawnCard);

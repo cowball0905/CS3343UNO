@@ -37,7 +37,7 @@ public class DrawTwoCard extends Card {
         for (int i = 0; i < 2; i++) {
             Card card = cardFactory.giveCard(controller.getDeck(),false, controller.checkPlayer(nextPlayer) == 0 ? true:false, "");
             if (card == null) {
-                controller.gameDraw();
+                controller.deckEmpty();
                 return;
             }
             nextPlayer.drawCard(card);

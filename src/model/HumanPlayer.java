@@ -23,6 +23,10 @@ public class HumanPlayer extends Player {
         }
         hand = mergeSort(hand);
     }
+    
+    /*
+     * Merge sort implementation for sorting cards
+     */
 
     private ArrayList<Card> mergeSort(ArrayList<Card> cards) {
         if (cards.size() <= 1) {
@@ -208,7 +212,7 @@ public class HumanPlayer extends Player {
             for(int i = 0; i < 2; i++){
                 Card card = controller.getCardFactory().giveCard(controller.getDeck(), false, false, "");
                 if (card == null) {
-                    controller.gameDraw();
+                    controller.deckEmpty();
                     return;
                 }
                 targetPlayer.drawCard(card);
@@ -235,7 +239,7 @@ public class HumanPlayer extends Player {
                 for(int i=0;i<4;i++){
                     Card drawnCard = controller.getCardFactory().giveCard(controller.getDeck(), false, false, "");
                     if (drawnCard == null) {
-                        controller.gameDraw();
+                        controller.deckEmpty();
                         return;
                     }
                     targetPlayer.drawCard(drawnCard);
@@ -250,7 +254,7 @@ public class HumanPlayer extends Player {
         for(int i=0;i<6;i++){
             Card drawnCard = controller.getCardFactory().giveCard(controller.getDeck(), false, false, "");
             if (drawnCard == null) {
-                controller.gameDraw();
+                controller.deckEmpty();
                 return;
             }
             drawCard(drawnCard);
