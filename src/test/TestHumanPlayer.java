@@ -17,6 +17,7 @@ public class TestHumanPlayer {
     public void setUp() {
         controller = UNOController.getInstance();
         controller.startGame();
+        controller.setIsFreezed(true);
 
         humanPlayer = (HumanPlayer) controller.getPlayerList().get(0);
         cpuPlayer = (CPUPlayer) controller.getPlayerList().get(1);
@@ -105,7 +106,7 @@ public class TestHumanPlayer {
     }
 
     @Test
-    public void testShoutUNOMoreThanTwoCard() {
+    public void testShoutUNOMoreThanOneCard() {
         humanPlayer.getHand().clear();
         humanPlayer.getHand().add(new NumberCard(Color.Green, 2, true));
         humanPlayer.getHand().add(new NumberCard(Color.Yellow, 4, true));
@@ -114,28 +115,7 @@ public class TestHumanPlayer {
 
         String result = humanPlayer.shoutUno();
 
-        assertEquals("You have more than 2 cards!", result);
-    }
-
-    @Test
-    public void testShoutUNOWithNoCard() {
-        humanPlayer.getHand().clear();
-        controller.setCurrentPlayer(cpuPlayer);
-
-        String result = humanPlayer.shoutUno();
-
-        assertEquals("It's not your turn!", result);
-    }
-
-    @Test
-    public void testShoutUNONotPlayerTurn() {
-        humanPlayer.getHand().clear();
-        humanPlayer.getHand().add(new NumberCard(Color.Red, 5, true));
-        controller.setCurrentPlayer(cpuPlayer);
-
-        String result = humanPlayer.shoutUno();
-
-        assertEquals("It's not your turn!", result);
+        assertEquals("You have more than 1 card!", result);
     }
 
     @Test

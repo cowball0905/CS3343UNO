@@ -240,7 +240,6 @@ public class TestUNOGamePanel {
 @Test
 public void testDeckButtonAction() {
     Graphics g = null;  // Declare g outside the try block
-    try {
         // Initialize the game
         controller.startGame();
         gamePanel.startGame();
@@ -292,15 +291,10 @@ public void testDeckButtonAction() {
         assertEquals(initialDeckSize - 1, newDeckSize, 
                    "Deck size should decrease by 1 after drawing a card");
         
-    } catch (Exception e) {
-        e.printStackTrace();
-        fail("Exception during deck button test: " + e.getMessage());
-    } finally {
         // Clean up
         if (g != null) {
             g.dispose();
         }
-    }
 }
 
 @Test
