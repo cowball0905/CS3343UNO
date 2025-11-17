@@ -69,12 +69,14 @@ public class UNOGamePanel extends JPanel {
                 System.out.println("Game has ended, cannot draw card.");
                 return;
             }
-            if(controller.getPlayerList().indexOf(controller.getCurrentPlayer()) !=0){
-                errorMessage = "It's not your turn!";
-                errorMessageTimer = System.currentTimeMillis();
-                repaint();
-                return;
-            }
+
+            //this part is to check whether is current player
+            // if(controller.getIs){
+            //     errorMessage = "It's not your turn!";
+            //     errorMessageTimer = System.currentTimeMillis();
+            //     repaint();
+            //     return;
+            // }
             controller.getCardFromDeck();
             updateDisplay();
         });
