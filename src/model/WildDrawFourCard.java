@@ -53,10 +53,8 @@ public class WildDrawFourCard extends Card {
 
     @Override
     public boolean checkCard(Card matchCard){
-		if (matchCard.color == this.color || matchCard.type == Type.WildDrawFour || matchCard.type == Type.Wild) {
-			return true;
-		}
-		return false;
+        /*previous player set the color of wild, so the wild actually has color */
+        return true;
     }
     
 	public String toString() {
