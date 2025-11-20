@@ -64,9 +64,9 @@ public class UNOController {
             @Override
             public void onTimerComplete() {
                 if (wildCardViewer.isHavingWild()) {
-                    wildCardViewer.autoSelectColor();
+                    // wildCardViewer.autoSelectColor();
                     wildCardViewer.setHavingWild(false);
-                    wildCardViewer.removeButtons();
+                    // wildCardViewer.removeButtons();
                     if (wildCardViewer.getCard().getType() == Type.WildDrawFour) {
                         wildCardViewer.callChallenge();
                     } else {

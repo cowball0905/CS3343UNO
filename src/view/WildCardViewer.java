@@ -159,27 +159,27 @@ public class WildCardViewer {
         return isHavingWild;
     }
     
-    public void autoSelectColor() {
-        wild.setColor(model.Color.Red);
-        System.out.println("Change to Red");
-        if(this.wild.getType()==Type.WildDrawFour){
-            ((Card)wild).loadImage("/asset/uno-card-images-master/Wild_Card_Draw_4_Red.jpg");
-        }else{
-            ((Card)wild).loadImage("/asset/uno-card-images-master/Wild_Card_Change_Colour_Red.jpg");
-        }
-    }
+    // public void autoSelectColor() {
+    //     wild.setColor(model.Color.Red);
+    //     System.out.println("Change to Red");
+    //     if(this.wild.getType()==Type.WildDrawFour){
+    //         ((Card)wild).loadImage("/asset/uno-card-images-master/Wild_Card_Draw_4_Red.jpg");
+    //     }else{
+    //         ((Card)wild).loadImage("/asset/uno-card-images-master/Wild_Card_Change_Colour_Red.jpg");
+    //     }
+    // }
     
-    public void removeButtons() {
-        panel.remove(redButton);
-        panel.remove(blueButton);
-        panel.remove(yellowButton);
-        panel.remove(greenButton);
-        redButton = null;
-        blueButton = null;
-        yellowButton = null;
-        greenButton = null;
-        panel.repaint();
-    }
+    // public void removeButtons() {
+    //     panel.remove(redButton);
+    //     panel.remove(blueButton);
+    //     panel.remove(yellowButton);
+    //     panel.remove(greenButton);
+    //     redButton = null;
+    //     blueButton = null;
+    //     yellowButton = null;
+    //     greenButton = null;
+    //     panel.repaint();
+    // }
 
     public void callChallenge(){
         ArrayList<Player> playerList = controller.getPlayerList();
