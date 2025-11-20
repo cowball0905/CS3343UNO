@@ -21,6 +21,10 @@ public class CPUPlayer extends Player {
 
     @Override
     public void drawCard(Card card) {
+        if (card == null) {
+            System.err.println("Warning: Attempted to draw null card for " + name);
+            return;
+        }
         this.hand.add(card);
         isShout = false;
     }
@@ -78,20 +82,20 @@ public class CPUPlayer extends Player {
 
     @Override
     public void catchForgotShout(Player targetPlayer) {
-        if (targetPlayer.getHand().size() == 1 && !targetPlayer.getIsShout()) {
-            System.out.println(name + " catches " + targetPlayer.getName() + " for forgetting to shout UNO!");
-            // Target player should draw 2 penalty cards
-            for (int i = 0; i < 2; i++) {
-                Card card = controller.getCardFactory().giveCard(controller.getDeck(), false,
-                        (controller.getPlayerList().get(0) == targetPlayer), "");
-                if (card == null) {
-                    controller.deckEmpty();
-                    return;
-                }
-                targetPlayer.drawCard(card);
-            }
-            controller.getGamePanel().updateDisplay();
-        }
+       if (targetPlayer.getHand().size() == 1 && !targetPlayer.getIsShout()) {
+           System.out.println(name + " catches " + targetPlayer.getName() + " for forgetting to shout UNO!");
+           // Target player should draw 2 penalty cards
+           for (int i = 0; i < 2; i++) {
+               Card card = controller.getCardFactory().giveCard(controller.getDeck(), false,
+                       (controller.getPlayerList().get(0) == targetPlayer), "");
+               if (card == null) {
+                   controller.deckEmpty();
+                   return;
+               }
+               targetPlayer.drawCard(card);
+           }
+           controller.getGamePanel().updateDisplay();
+       }
     }
 
     @Override

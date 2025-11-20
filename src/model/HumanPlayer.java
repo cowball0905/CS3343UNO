@@ -129,6 +129,10 @@ public class HumanPlayer extends Player {
 
     @Override
     public void drawCard(Card card) {
+        if (card == null) {
+            System.err.println("Warning: Attempted to draw null card for " + name);
+            return;
+        }
         this.hand.add(card);
         isShout = false;
         sortHandCards();

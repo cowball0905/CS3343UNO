@@ -30,7 +30,7 @@ public class UNOController {
     private ResultViewer resultViewer;
     private DeckPlayCardViewer deckPlayCardViewer;
     private boolean isDraw = false;
-    private final int INITCARDSIZE = 7;
+    private final int INITCARDSIZE = 2;
 
     private UNOController() {
         System.out.println("UNO Game window created and should be visible!");
@@ -134,20 +134,20 @@ public class UNOController {
 
     private void initializeGame() {
         Deck = new HashMap<>();
-        
-        for (String color : new String[]{"r", "g", "b", "y"}) {
+
+        for (String color : new String[] { "r", "g", "b", "y" }) {
             Deck.put(color + "0", 1);
             for (int i = 1; i <= 9; i++) {
                 Deck.put(color + i, 2);
             }
         }
-        
-        for (String color : new String[]{"r", "g", "b", "y"}) {
+
+        for (String color : new String[] { "r", "g", "b", "y" }) {
             Deck.put(color + "Skip", 2);
             Deck.put(color + "Reverse", 2);
             Deck.put(color + "DrawTwo", 2);
         }
-        
+
         Deck.put("WildCard", 4);
         Deck.put("WildDrawFour", 4);
 
@@ -206,12 +206,13 @@ public class UNOController {
                 currentPlayer.drawCard(newCard);
                 Card card = currentPlayer.getHand().get(currentPlayer.getHand().size() - 1);
                 gamePanel.updateDisplay();
-                if (canPlayCard(card,getTopCard(1))) {
+                if (canPlayCard(card, getTopCard(1))) {
                     if (checkCurrentPlayer() == 0) {
                         deckPlayCardViewer.setIsDeciding(card);
                         turnTimer.startTimer(10);
                     } else {
-                        System.out.println(currentPlayer.getName() + " got a matching card! they choose to play the card");
+                        System.out.println(
+                                currentPlayer.getName() + " got a matching card! they choose to play the card");
                         currentPlayer.playCard(card);
                     }
                 } else {
@@ -220,7 +221,7 @@ public class UNOController {
                     isAction = false;
                 }
             } else {
-            	System.err.println("currentPlayer variable is null in getCardFromDeck()");
+                System.err.println("currentPlayer variable is null in getCardFromDeck()");
             }
         }
     }
@@ -235,6 +236,7 @@ public class UNOController {
         }
         return sortedPlayers;
     }
+
     /*
      * Merge sort implementation for sorting players by score
      */
@@ -242,21 +244,21 @@ public class UNOController {
         if (list.size() <= 1) {
             return list;
         }
-        
+
         int mid = list.size() / 2;
         ArrayList<Player> left = new ArrayList<>(list.subList(0, mid));
         ArrayList<Player> right = new ArrayList<>(list.subList(mid, list.size()));
-        
+
         left = mergeSort(left);
         right = mergeSort(right);
-        
+
         return merge(left, right);
     }
 
     private ArrayList<Player> merge(ArrayList<Player> left, ArrayList<Player> right) {
         ArrayList<Player> result = new ArrayList<>();
         int i = 0, j = 0;
-        
+
         while (i < left.size() && j < right.size()) {
             if (left.get(i).getScore() <= right.get(j).getScore()) {
                 result.add(left.get(i));
@@ -266,17 +268,17 @@ public class UNOController {
                 j++;
             }
         }
-        
+
         while (i < left.size()) {
             result.add(left.get(i));
             i++;
         }
-        
+
         while (j < right.size()) {
             result.add(right.get(j));
             j++;
         }
-        
+
         return result;
     }
 
@@ -309,10 +311,10 @@ public class UNOController {
     }
 
     public void playCard(Card card) {
-        if(card == null) {
-    		System.err.println("Card variable is empty in playCard()");
-    		return;
-    	}
+        if (card == null) {
+            System.err.println("Card variable is empty in playCard()");
+            return;
+        }
         isAction = true;
         card.setRotation(0);
         PlayedCard.add(card);
@@ -407,7 +409,7 @@ public class UNOController {
         return resultViewer;
     }
 
-    public ArrayList<Card> getPlayerCard(int index){
+    public ArrayList<Card> getPlayerCard(int index) {
         return players.get(index).getHand();
     }
 
@@ -466,6 +468,21 @@ public class UNOController {
 
     public static void resetInstance() {
         if (instance != null) {
+            // Clean up player hands to remove any null cards
+            if (instance.players != null) {
+                for (Player player : instance.players) {
+                    if (player != null && player.getHand() != null) {
+                        player.getHand().removeIf(card -> card == null);
+                    }
+                }
+            }
+
+            // Stop timer if running
+            if (instance.turnTimer != null) {
+                instance.turnTimer.stopTimer();
+            }
+
+            // Set instance to null - new instance will be created with fresh state
             instance = null;
         }
     }

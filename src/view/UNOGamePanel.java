@@ -300,7 +300,9 @@ public class UNOGamePanel extends JPanel {
 
     private void drawCPUcards(Graphics2D graphic2D, List<Card> computerHand) {
         for (Card card : computerHand) {
-            drawRotatedCard(graphic2D, card);
+            if (card != null) {  // Skip null cards
+                drawRotatedCard(graphic2D, card);
+            }
         }
     }
     
@@ -413,7 +415,9 @@ public class UNOGamePanel extends JPanel {
         // === 繼續第一層：繪製其他卡牌 ===
         // Draw player's cards (底層)
         for (Card card : playerHand) {
-            drawRotatedCard(graphic2D, card);
+            if (card != null) {  // Skip null cards
+                drawRotatedCard(graphic2D, card);
+            }
         }
         
         // Draw discard pile (top card)
