@@ -468,7 +468,12 @@ public class UNOController {
 
     public static void resetInstance() {
         if (instance != null) {
-            // Clean up player hands to remove any null cards
+            // Stop timer first to prevent callbacks from accessing null state
+            if (instance.turnTimer != null) {
+                instance.turnTimer.stopTimer();
+            }
+            
+            // Clean up player hands to remove any null cards before reset
             if (instance.players != null) {
                 for (Player player : instance.players) {
                     if (player != null && player.getHand() != null) {
@@ -476,13 +481,6 @@ public class UNOController {
                     }
                 }
             }
-
-            // Stop timer if running
-            if (instance.turnTimer != null) {
-                instance.turnTimer.stopTimer();
-            }
-
-            // Set instance to null - new instance will be created with fresh state
             instance = null;
         }
     }
