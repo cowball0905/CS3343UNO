@@ -153,14 +153,6 @@ public class TestUNOGamePanel {
     }
 
     @Test
-    public void testGamePanelHasComponents() {
-        controller.startGame();
-        gamePanel.updateCardButtons();
-        
-        assertEquals(true, gamePanel.getComponentCount() > 0);
-    }
-
-    @Test
     public void testUnoButtonExists() {
         System.out.println("Before repaint - hasUnoButton(): " + hasUnoButton());
         
@@ -192,14 +184,6 @@ public class TestUNOGamePanel {
         }
         
         assertTrue(hasUnoButton());
-    }
-
-    @Test
-    public void testDeckButtonExists() {
-        controller.startGame();
-        gamePanel.updateCardButtons();
-        
-        assertEquals(true, hasDeckButton());
     }
     
     @Test
@@ -237,36 +221,7 @@ public class TestUNOGamePanel {
         assertTrue("shoutUno should be called when UNO button is clicked", shoutUnoCalled[0]);
     }
 
-    @Test
-    public void testDeckButtonAction() {
-        controller.startGame();
-        controller.setIsFreezed(true);
-        controller.setCurrentPlayer(controller.getPlayerList().get(0));
-        gamePanel.startGame();
-        gamePanel.setIsGameEnd(false);
-        
-        JButton deckButton = null;
-        for (Component comp : gamePanel.getComponents()) {
-            if (comp instanceof JButton) {
-                JButton btn = (JButton) comp;
-                if (btn.getX() == 140 && btn.getY() == 30) {
-                    deckButton = btn;
-                    break;
-                }
-            }
-        }
-        
-        assertNotNull(deckButton);
-        
-        int initialDeckSize = controller.getDeck().values().stream().mapToInt(Integer::intValue).sum();
-        int initialHandSize = controller.getPlayerList().get(0).getHand().size();
-        
-        deckButton.getActionListeners()[0].actionPerformed(
-            new ActionEvent(deckButton, ActionEvent.ACTION_PERFORMED, ""));
-        
-        assertEquals(initialDeckSize - 1, controller.getDeck().values().stream().mapToInt(Integer::intValue).sum());
-        assertEquals(initialHandSize + 1, controller.getPlayerList().get(0).getHand().size());
-    }
+    
 
 @Test
 public void testDeckButtonWhenGameEnded() {

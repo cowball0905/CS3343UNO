@@ -155,6 +155,7 @@ public class TestWildDrawFourCard {
 
     @Test
     public void testWildDrawFourWithEmptyDeck() {
+    	controller.startGame();
         controller.getDeck().clear();
         Player nextPlayer = controller.getPlayerList().get(1);
         int initialSize = nextPlayer.getHand().size();

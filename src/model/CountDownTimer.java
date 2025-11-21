@@ -39,6 +39,7 @@ public class CountDownTimer {
             public void actionPerformed(ActionEvent e) {
                 if (remainingSeconds > 0) {
                     remainingSeconds--;
+                    panel.revalidate();
                     panel.repaint();
                 } else {
                     stopTimer();

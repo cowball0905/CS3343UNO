@@ -59,14 +59,7 @@ public class TestHumanPlayer {
 
         humanPlayer.drawCard(null);
 
-        assertEquals(sizeBeforeNull + 1, humanPlayer.getHand().size());
-    }
-
-    @Test
-    public void testDrawNullCardAddsNull() {
-        humanPlayer.drawCard(null);
-
-        assertEquals(null, humanPlayer.getHand().get(humanPlayer.getHand().size() - 1));
+        assertEquals(sizeBeforeNull, humanPlayer.getHand().size());
     }
 
     @Test
@@ -264,7 +257,7 @@ public class TestHumanPlayer {
         
         assertNull(card);
         humanPlayer.drawCard(card);
-        
+
         assertEquals(handSize, humanPlayer.getHand().size());
     }
 }

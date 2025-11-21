@@ -129,7 +129,9 @@ public class HumanPlayer extends Player {
 
     @Override
     public void drawCard(Card card) {
-        this.hand.add(card);
+        if (card != null) {
+            this.hand.add(card);
+        }
         isShout = false;
         sortHandCards();
     }
