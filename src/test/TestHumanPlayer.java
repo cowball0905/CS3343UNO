@@ -15,6 +15,7 @@ public class TestHumanPlayer {
 
     @BeforeEach
     public void setUp() {
+        UNOController.resetInstance();
         controller = UNOController.getInstance();
         controller.startGame();
         controller.setIsFreezed(true);
@@ -111,7 +112,7 @@ public class TestHumanPlayer {
         humanPlayer.getHand().add(new NumberCard(Color.Green, 2, true));
         humanPlayer.getHand().add(new NumberCard(Color.Yellow, 4, true));
         humanPlayer.getHand().add(new NumberCard(Color.Yellow, 4, true));
-        controller.setCurrentPlayer(new CPUPlayer("CPU"));
+        controller.setCurrentPlayer(cpuPlayer);
 
         String result = humanPlayer.shoutUno();
 
