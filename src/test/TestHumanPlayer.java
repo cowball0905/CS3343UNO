@@ -111,7 +111,7 @@ public class TestHumanPlayer {
         humanPlayer.getHand().add(new NumberCard(Color.Green, 2, true));
         humanPlayer.getHand().add(new NumberCard(Color.Yellow, 4, true));
         humanPlayer.getHand().add(new NumberCard(Color.Yellow, 4, true));
-        controller.setCurrentPlayer(humanPlayer);
+        controller.setCurrentPlayer(new CPUPlayer("CPU"));
 
         String result = humanPlayer.shoutUno();
 
@@ -252,5 +252,18 @@ public class TestHumanPlayer {
         String result = humanPlayer.shoutUno();
 
         assertEquals("You have no playable card!", result);
+    }
+
+    @Test
+    public void testDrawCardFromEmptyDeck() {
+        controller.getDeck().clear();
+        int handSize = humanPlayer.getHand().size();
+        
+        Card card = controller.getCardFactory().giveCard(controller.getDeck(), false, true, "");
+        
+        assertNull(card);
+        humanPlayer.drawCard(card);
+        
+        assertEquals(handSize, humanPlayer.getHand().size());
     }
 }

@@ -353,18 +353,12 @@ public class UNOController {
         setViewers();
         initializeGame();
 
-        if (mainFrame != null) {
-            mainFrame.getContentPane().removeAll();
+        mainFrame.getContentPane().removeAll();
 
-            if (gamePanel == null) {
-                gamePanel = new UNOGamePanel();
-            }
-
-            mainFrame.add(gamePanel);
-            mainFrame.revalidate();
-            gamePanel.requestFocusInWindow();
-            gamePanel.startGame();
-        }
+        mainFrame.add(gamePanel);
+        mainFrame.revalidate();
+        gamePanel.requestFocusInWindow();
+        gamePanel.startGame(); 
 
         // Ensure currentPlayer is human before starting the round
         currentPlayer = players.get(0);
@@ -484,4 +478,8 @@ public class UNOController {
             instance = null;
         }
     }
+
+	public Boolean getIsDraw() {
+		return isDraw;
+	}
 }

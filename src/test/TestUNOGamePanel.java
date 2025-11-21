@@ -237,65 +237,36 @@ public class TestUNOGamePanel {
         assertTrue("shoutUno should be called when UNO button is clicked", shoutUnoCalled[0]);
     }
 
-@Test
-public void testDeckButtonAction() {
-    Graphics g = null;  // Declare g outside the try block
-        // Initialize the game
+    @Test
+    public void testDeckButtonAction() {
         controller.startGame();
+        controller.setIsFreezed(true);
+        controller.setCurrentPlayer(controller.getPlayerList().get(0));
         gamePanel.startGame();
+        gamePanel.setIsGameEnd(false);
         
-        // Create a test graphics context
-        BufferedImage img = new BufferedImage(1000, 700, BufferedImage.TYPE_INT_ARGB);
-        g = img.getGraphics();
-        
-        // Paint the panel
-        gamePanel.paint(g);
-        
-        // Print all components for debugging
-        System.out.println("All components in gamePanel:");
-        for (Component comp : gamePanel.getComponents()) {
-            System.out.println(" - " + comp.getClass().getSimpleName() + 
-                             " at " + comp.getBounds() + 
-                             " visible: " + comp.isVisible());
-        }
-        
-        // Try to find the deck button by its position
         JButton deckButton = null;
         for (Component comp : gamePanel.getComponents()) {
             if (comp instanceof JButton) {
-                JButton button = (JButton) comp;
-                // Print all buttons for debugging
-                System.out.println("Found button at: " + button.getBounds());
-                // Check if this is likely the deck button by its position
-                if (button.getX() == 140 && button.getY() == 30) {
-                    deckButton = button;
+                JButton btn = (JButton) comp;
+                if (btn.getX() == 140 && btn.getY() == 30) {
+                    deckButton = btn;
                     break;
                 }
             }
         }
         
-
+        assertNotNull(deckButton);
         
-        assertNotNull(deckButton, "Deck button should exist in the panel. Check the button's position in the panel.");
+        int initialDeckSize = controller.getDeck().values().stream().mapToInt(Integer::intValue).sum();
+        int initialHandSize = controller.getPlayerList().get(0).getHand().size();
         
-        // Get initial deck size
-        int initialDeckSize = controller.getDeck().size();
+        deckButton.getActionListeners()[0].actionPerformed(
+            new ActionEvent(deckButton, ActionEvent.ACTION_PERFORMED, ""));
         
-        // Simulate button click
-        for (ActionListener al : deckButton.getActionListeners()) {
-            al.actionPerformed(new ActionEvent(deckButton, ActionEvent.ACTION_PERFORMED, ""));
-        }
-        
-        // Verify a card was drawn
-        int newDeckSize = controller.getDeck().size();
-        assertEquals(initialDeckSize - 1, newDeckSize, 
-                   "Deck size should decrease by 1 after drawing a card");
-        
-        // Clean up
-        if (g != null) {
-            g.dispose();
-        }
-}
+        assertEquals(initialDeckSize - 1, controller.getDeck().values().stream().mapToInt(Integer::intValue).sum());
+        assertEquals(initialHandSize + 1, controller.getPlayerList().get(0).getHand().size());
+    }
 
 @Test
 public void testDeckButtonWhenGameEnded() {

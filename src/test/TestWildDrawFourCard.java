@@ -152,4 +152,18 @@ public class TestWildDrawFourCard {
         
         assertEquals(true, topCard.checkCard(playedCard));
     }
+
+    @Test
+    public void testWildDrawFourWithEmptyDeck() {
+        controller.getDeck().clear();
+        Player nextPlayer = controller.getPlayerList().get(1);
+        int initialSize = nextPlayer.getHand().size();
+        
+        WildDrawFourCard card = new WildDrawFourCard(true);
+        controller.setCurrentPlayer(controller.getPlayerList().get(0));
+        card.cardFunction(controller);
+        
+        // Hand size should not change since deck is empty and drawCard rejects null
+        assertEquals(initialSize, nextPlayer.getHand().size());
+    }
 }
