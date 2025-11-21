@@ -135,4 +135,16 @@ public class TestDrawTwoCard {
         
         assertEquals(false, topCard.checkCard(playedCard));
     }
+
+    @Test
+    public void testDrawTwoWithEmptyDeck() {
+        controller.getDeck().clear();
+        Player nextPlayer = controller.getPlayerList().get(1);
+        int initialSize = nextPlayer.getHand().size();
+        
+        DrawTwoCard card = new DrawTwoCard(Color.Red, true);
+        card.cardFunction(controller);
+        
+        assertTrue(nextPlayer.getHand().size() <= initialSize + 2);
+    }
 }

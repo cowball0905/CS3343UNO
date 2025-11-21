@@ -540,4 +540,23 @@ public class TestUNOController {
 
         assertEquals(card1, controller.getTopCard(2));
     }
+
+    @Test
+    public void testDeckEmptySetsDraw() {
+        controller.deckEmpty();
+        assertTrue(controller.getIsDraw());
+    }
+
+    @Test
+    public void testDrawFromEmptyDeck() {
+        Player player = players.get(0);
+        controller.setCurrentPlayer(player);
+        controller.getDeck().clear();
+        
+        int handSize = player.getHand().size();
+        controller.getCardFromDeck();
+        
+        assertEquals(handSize, player.getHand().size());
+        assertTrue(controller.getIsDraw());
+    }
 }

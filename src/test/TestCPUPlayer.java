@@ -196,12 +196,7 @@ public class TestCPUPlayer {
         int initialHandSize = cpuPlayer.getHand().size();
         cpuPlayer.chooseCard();
 
-        assertEquals(initialHandSize - 1, cpuPlayer.getHand().size(),
-                     "Hand size should decrease by 1 after playing a card");
-        
-        System.out.println("------------------");
-        System.out.println(cpuPlayer.getHand().get(0));
-        System.out.println("------------------");
+        assertEquals(initialHandSize - 1, cpuPlayer.getHand().size());
         
         assertTrue(
             (cpuPlayer.getHand().get(0).getColor() != Color.Red && cpuPlayer.getHand().get(0).getType() == Type.Number && ((NumberCard) cpuPlayer.getHand().get(0)).getValue() != 5),
@@ -221,5 +216,16 @@ public class TestCPUPlayer {
         Color chosenColor = cpuPlayer.chooseColor();
 
         assertEquals(Color.Red, chosenColor, "Should choose the dominant color Red");
+    }
+
+    @Test
+    public void testCPUDrawFromEmptyDeck() {
+        controller.getDeck().clear();
+        int handSize = cpuPlayer.getHand().size();
+        
+        Card card = controller.getCardFactory().giveCard(controller.getDeck(), false, false, "");
+        cpuPlayer.drawCard(card);
+        
+        assertEquals(handSize, cpuPlayer.getHand().size());
     }
 }
