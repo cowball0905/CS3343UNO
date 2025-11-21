@@ -13,7 +13,11 @@ public class ConcreteCardFactory extends CardFactory {
     @Override
     public Card createCard(HashMap<String, Integer> Deck, Boolean isTop, boolean isRevealed, String cardString) {
         String card = null;
-        
+
+        if(Deck == null || Deck.isEmpty()) {
+            return null;
+        }
+
         if (isTop) {
             ArrayList<String> numberCards = getNumberCards(Deck);
             if (numberCards.isEmpty()) {

@@ -77,6 +77,7 @@ public class UNOGamePanel extends JPanel {
             if (controller.getPlayerList().indexOf(controller.getCurrentPlayer()) != 0) {
                 errorMessage = "It's not your turn!";
                 errorMessageTimer = System.currentTimeMillis();
+                revalidate();
                 repaint();
                 return;
             }
@@ -225,6 +226,7 @@ public class UNOGamePanel extends JPanel {
         if (controller.getCurrentPlayer() != controller.getPlayerList().get(0)) {
             errorMessage = "It's not your turn!";
             errorMessageTimer = System.currentTimeMillis();
+            revalidate();
             repaint();
             return;
         }
@@ -253,6 +255,7 @@ public class UNOGamePanel extends JPanel {
         }
         updateCardButtons();
         updateDeck();
+        revalidate();
         repaint();
     }
 
@@ -262,6 +265,7 @@ public class UNOGamePanel extends JPanel {
         }
         errorMessage = controller.getPlayerList().get(0).shoutUno();
         errorMessageTimer = System.currentTimeMillis();
+        revalidate();
         repaint();
     }
 
@@ -296,6 +300,7 @@ public class UNOGamePanel extends JPanel {
     public void updateDisplay() {
         updateCardPositions();
         updateCardButtons();
+        revalidate();
         repaint();
     }
 

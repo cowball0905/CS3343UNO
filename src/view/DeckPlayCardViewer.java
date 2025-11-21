@@ -102,6 +102,7 @@ public class DeckPlayCardViewer {
         panel.remove(greenButton);
         redButton = null;
         greenButton = null;
+        panel.revalidate();
         panel.repaint();
     }
 }

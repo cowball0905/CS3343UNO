@@ -178,6 +178,7 @@ public class WildCardViewer {
         blueButton = null;
         yellowButton = null;
         greenButton = null;
+        panel.revalidate();
         panel.repaint();
     }
 
