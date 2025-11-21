@@ -11,6 +11,7 @@ import java.util.List;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JPanel;
+import javax.swing.SwingUtilities;
 import javax.swing.Timer;
 
 import controller.UNOController;
@@ -50,8 +51,30 @@ public class UNOGamePanel extends JPanel {
         UnoButton.addActionListener(e -> shoutUno());
         add(UnoButton);
 
+        catchcpu1Button = createCatchButton(1, 105, 200);
+        catchcpu2Button = createCatchButton(2, 420, 20);
+        catchcpu3Button = createCatchButton(3, 745, 200);
+        add(catchcpu1Button);
+        add(catchcpu2Button);
+        add(catchcpu3Button);
+
         // Make sure the button is behind other components
         setComponentZOrder(UnoButton, getComponentCount() - 1);
+    }
+
+    private JButton createCatchButton(int playerIndex, int x, int y) {
+        JButton catchButton = new JButton();
+        catchButton.setBounds(x, y, 250, 30);
+        catchButton.setBorderPainted(false);
+        catchButton.setContentAreaFilled(false);
+        catchButton.setFocusPainted(false);
+        catchButton.addActionListener(e -> {
+            if (isGameEnd) {
+                return;
+            }
+            controller.getPlayerList().get(0).catchForgotShout(controller.getPlayerList().get(playerIndex));
+        });
+        return catchButton;
     }
 
     public void setIsGameEnd(boolean isGameEnd) {
@@ -270,27 +293,29 @@ public class UNOGamePanel extends JPanel {
     }
 
     public void updateCardButtons() {
-        for (JButton btn : cardButtons) {
-            remove(btn);
-        }
-        cardButtons.clear();
-        List<Card> playerHand = controller.getPlayerCard(0);
+        SwingUtilities.invokeLater(() -> {
+            for (JButton btn : cardButtons) {
+                remove(btn);
+            }
+            cardButtons.clear();
+            List<Card> playerHand = controller.getPlayerCard(0);
 
-        for (int i = 0; i < playerHand.size(); i++) {
-            Card card = playerHand.get(i);
-            JButton button = createCardButton(card, i, playerHand);
-            cardButtons.add(button);
+            for (int i = 0; i < playerHand.size(); i++) {
+                Card card = playerHand.get(i);
+                JButton button = createCardButton(card, i, playerHand);
+                cardButtons.add(button);
+                add(button);
+            }
+            for (int i = 0; i < playerHand.size(); i++) {
+                JButton button = cardButtons.get(i);
+                setComponentZOrder(button, playerHand.size() - 1 - i);
+            }
+
+            JButton button = updateDeck();
             add(button);
-        }
-        for (int i = 0; i < playerHand.size(); i++) {
-            JButton button = cardButtons.get(i);
-            setComponentZOrder(button, playerHand.size() - 1 - i);
-        }
 
-        JButton button = updateDeck();
-        add(button);
-
-        revalidate();
+            revalidate();
+        });
     }
 
     public void startGame() {
@@ -298,10 +323,12 @@ public class UNOGamePanel extends JPanel {
     }
 
     public void updateDisplay() {
-        updateCardPositions();
-        updateCardButtons();
-        revalidate();
-        repaint();
+        SwingUtilities.invokeLater(() -> {
+            updateCardPositions();
+            updateCardButtons();
+            revalidate();
+            repaint();
+        });
     }
 
     private void drawCPUcards(Graphics2D graphic2D, List<Card> computerHand) {
@@ -311,7 +338,7 @@ public class UNOGamePanel extends JPanel {
     }
 
     private void drawPlayerLabel(Graphics2D graphic2D, int playerIndex, int x, int y, String playerstring,
-            List<Card> playerHand, boolean isDrawButton) {
+        List<Card> playerHand, boolean isDrawButton) {
         Player player = controller.getPlayerList().get(playerIndex);
 
         String label = playerstring + " (" + playerHand.size() + " cards)" + (player.getIsShout() ? " *UNO*" : "");
@@ -330,29 +357,29 @@ public class UNOGamePanel extends JPanel {
         }
         graphic2D.drawString(label, x, y);
 
-        if (isDrawButton) {
-            JButton catchButton = new JButton();
-            catchButton.setBounds(x, y - 20, 250, 30);
-            catchButton.setBorderPainted(false);
-            catchButton.setContentAreaFilled(false);
-            catchButton.setFocusPainted(false);
-            catchButton.addActionListener(e -> {
-                if (isGameEnd) {
-                    return;
-                }
-                controller.getPlayerList().get(0).catchForgotShout(player);
-            });
+        // if (isDrawButton) {
+        //     JButton catchButton = new JButton();
+        //     catchButton.setBounds(x, y - 20, 250, 30);
+        //     catchButton.setBorderPainted(false);
+        //     catchButton.setContentAreaFilled(false);
+        //     catchButton.setFocusPainted(false);
+        //     catchButton.addActionListener(e -> {
+        //         if (isGameEnd) {
+        //             return;
+        //         }
+        //         controller.getPlayerList().get(0).catchForgotShout(player);
+        //     });
 
-            if (playerIndex == 1) {
-                catchcpu1Button = catchButton;
-            } else if (playerIndex == 2) {
-                catchcpu2Button = catchButton;
-            } else if (playerIndex == 3) {
-                catchcpu3Button = catchButton;
-            }
+        //     if (playerIndex == 1) {
+        //         catchcpu1Button = catchButton;
+        //     } else if (playerIndex == 2) {
+        //         catchcpu2Button = catchButton;
+        //     } else if (playerIndex == 3) {
+        //         catchcpu3Button = catchButton;
+        //     }
 
-            add(catchButton);
-        }
+        //     add(catchButton);
+        // }
     }
 
     private void drawTextBox(Graphics2D graphic2D, String msg, int x, int y, int width, int height) {

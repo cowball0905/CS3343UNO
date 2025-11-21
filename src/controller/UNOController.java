@@ -381,9 +381,6 @@ public class UNOController {
     }
 
     public HashMap<String, Integer> getDeck() {
-        if (Deck == null) {
-            System.err.println("Deck not initialized. Call startGame() first.");
-        }
         return this.Deck;
     }
 
