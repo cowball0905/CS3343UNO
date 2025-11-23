@@ -30,7 +30,7 @@ public class UNOController {
     private ResultViewer resultViewer;
     private DeckPlayCardViewer deckPlayCardViewer;
     private boolean isDraw = false;
-    private final int INITCARDSIZE = 2;
+    private final int INITCARDSIZE = 7;
 
     private UNOController() {
         System.out.println("UNO Game window created and should be visible!");

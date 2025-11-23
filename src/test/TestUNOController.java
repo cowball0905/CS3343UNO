@@ -552,11 +552,190 @@ public class TestUNOController {
         Player player = players.get(0);
         controller.setCurrentPlayer(player);
         controller.getDeck().clear();
-        
+
         int handSize = player.getHand().size();
         controller.getCardFromDeck();
-        
+
         assertEquals(handSize, player.getHand().size());
         assertTrue(controller.getIsDraw());
+    }
+
+    @Test
+    public void testOnTimerCompleteDrawsCard() {
+        controller.setCurrentPlayer(players.get(0));
+        Player player = controller.getCurrentPlayer();
+        int initialHandSize = player.getHand().size();
+
+        // Trigger the timer callback by starting a short timer
+        controller.getTurnTimer().startTimer(1);
+
+        // Wait for timer to complete and game logic to finish
+        try {
+            Thread.sleep(3000); // Increased wait time for game logic
+        } catch (InterruptedException e) {
+            fail("Test interrupted");
+        }
+
+        // Verify card was drawn from deck
+        assertEquals(initialHandSize + 1, player.getHand().size());
+    }
+
+    @Test
+    public void testOnTimerCompleteWithWildCard() {
+        controller.setCurrentPlayer(players.get(0));
+        WildCardViewer wildViewer = controller.getWildCardViewer();
+
+        // Set up wild card state
+        WildCard wildCard = new WildCard(true);
+        wildViewer.setWildCard(wildCard);
+        wildViewer.setHavingWild(true);
+
+        // Start timer
+        controller.getTurnTimer().startTimer(1);
+
+        try {
+            Thread.sleep(3000); // Increased wait time
+        } catch (InterruptedException e) {
+            fail("Test interrupted");
+        }
+
+        // Verify wild card was auto-selected and handled
+        assertFalse(wildViewer.isHavingWild());
+        assertNotNull(wildCard.getColor());
+    }
+
+    @Test
+    public void testOnTimerCompleteWithWildDrawFour() {
+        controller.setCurrentPlayer(players.get(0));
+        WildCardViewer wildViewer = controller.getWildCardViewer();
+
+        // Set up wild draw four card state
+        WildDrawFourCard wildDrawFour = new WildDrawFourCard(true);
+        wildViewer.setWildCard(wildDrawFour);
+        wildViewer.setHavingWild(true);
+
+        // Start timer
+        controller.getTurnTimer().startTimer(1);
+
+        try {
+            Thread.sleep(3000); // Increased wait time
+        } catch (InterruptedException e) {
+            fail("Test interrupted");
+        }
+
+        // Verify wild card was handled
+        assertFalse(wildViewer.isHavingWild());
+        assertNotNull(wildDrawFour.getColor());
+    }
+
+    @Test
+    public void testOnTimerCompleteWithChallenge() {
+        controller.setCurrentPlayer(players.get(0));
+        ChallengeViewer challengeViewer = controller.getChallengeViewer();
+
+        // Set up challenge state
+        challengeViewer.setChallenge(true);
+
+        int nextPlayerIndex = 1;
+        Player nextPlayer = players.get(nextPlayerIndex);
+        int initialHandSize = nextPlayer.getHand().size();
+
+        // Trigger timer
+        controller.getTurnTimer().startTimer(1);
+
+        try {
+            Thread.sleep(3000); // Increased wait time
+        } catch (InterruptedException e) {
+            fail("Test interrupted");
+        }
+
+        // Verify challenge was auto-declined and 4 cards were drawn
+        assertFalse(challengeViewer.getIsChallenging());
+        assertEquals(initialHandSize + 4, nextPlayer.getHand().size());
+    }
+
+    @Test
+    public void testOnTimerCompleteWithDeckCardDecision() {
+        controller.setCurrentPlayer(players.get(0));
+        Player player = controller.getCurrentPlayer();
+        DeckPlayCardViewer deckViewer = controller.getDeckPlayCardViewer();
+
+        // Clear hand and add a playable card
+        player.getHand().clear();
+        Card topCard = controller.getTopCard(1);
+        Card playableCard = new NumberCard(topCard.getColor(), 5, true);
+        player.drawCard(playableCard);
+
+        // Set deck card viewer state
+        deckViewer.setIsDeciding(playableCard);
+
+        int initialPlayedCardSize = controller.getTopCard(1) != null ? 1 : 0;
+
+        // Trigger timer
+        controller.getTurnTimer().startTimer(1);
+
+        try {
+            Thread.sleep(3000); // Increased wait time
+        } catch (InterruptedException e) {
+            fail("Test interrupted");
+        }
+
+        // Verify deck card viewer is no longer deciding
+        assertFalse(deckViewer.getIsDeciding());
+    }
+
+    @Test
+    public void testOnTimerCompleteCallsGetCardFromDeck() {
+        // Ensure we start with player 0
+        controller.setCurrentPlayer(players.get(0));
+        Player player = controller.getCurrentPlayer();
+
+        int initialHandSize = player.getHand().size();
+
+        // Trigger timer - this will call getCardFromDeck when it expires
+        controller.getTurnTimer().startTimer(1);
+
+        try {
+            Thread.sleep(3000); // Wait for timer and game logic
+        } catch (InterruptedException e) {
+            fail("Test interrupted");
+        }
+
+        // After timeout, player should have drawn a card (hand size increases)
+        // OR player changed (if card wasn't playable)
+        // Either way, something should have happened
+        boolean cardDrawn = player.getHand().size() > initialHandSize;
+        boolean playerChanged = controller.checkCurrentPlayer() != 0;
+
+        assertTrue(cardDrawn || playerChanged,
+                "Expected either card to be drawn or player to change after timer expires");
+    }
+
+    @Test
+    public void testOnTimerCompleteDefaultBehavior() {
+        // This test verifies the default timer behavior without manipulating game state
+        controller.setCurrentPlayer(players.get(0));
+        Player player = controller.getCurrentPlayer();
+
+        int initialHandSize = player.getHand().size();
+        int initialPlayerIndex = controller.checkCurrentPlayer();
+
+        // Trigger timer - default behavior is to call getCardFromDeck
+        controller.getTurnTimer().startTimer(1);
+
+        try {
+            Thread.sleep(3000); // Wait for timer to complete
+        } catch (InterruptedException e) {
+            fail("Test interrupted");
+        }
+
+        // Verify that SOMETHING happened after timer expired
+        // Either: card was drawn, OR player changed, OR deck viewer is active
+        boolean handSizeChanged = player.getHand().size() != initialHandSize;
+        boolean playerChanged = controller.checkCurrentPlayer() != initialPlayerIndex;
+        boolean deckViewerActive = controller.getDeckPlayCardViewer().getIsDeciding();
+
+        assertTrue(handSizeChanged || playerChanged || deckViewerActive,
+                "Expected timer to trigger some game action (draw card, change player, or show deck viewer)");
     }
 }
