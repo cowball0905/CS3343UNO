@@ -23,6 +23,8 @@ public class TestUNOController {
         controller.startGame();
         players = controller.getPlayerList();
         controller.setIsFreezed(true);
+        // Stop the timer to prevent automatic game progression during tests
+        controller.getTurnTimer().stopTimer();
     }
 
     @AfterEach
@@ -607,7 +609,13 @@ public class TestUNOController {
     @Test
     public void testOnTimerCompleteWithWildDrawFour() {
         controller.setCurrentPlayer(players.get(0));
+        Player player = controller.getCurrentPlayer();
         WildCardViewer wildViewer = controller.getWildCardViewer();
+
+        // Add a card to PlayedCard so getTopCard(2) won't fail during challenge
+        Card previousCard = new NumberCard(Color.Red, 5, true);
+        player.drawCard(previousCard);
+        controller.playCard(previousCard);
 
         // Set up wild draw four card state
         WildDrawFourCard wildDrawFour = new WildDrawFourCard(true);

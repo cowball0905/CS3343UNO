@@ -358,7 +358,7 @@ public class UNOController {
         mainFrame.add(gamePanel);
         mainFrame.revalidate();
         gamePanel.requestFocusInWindow();
-        gamePanel.startGame(); 
+        gamePanel.startGame();
 
         // Ensure currentPlayer is human before starting the round
         currentPlayer = players.get(0);
@@ -463,7 +463,7 @@ public class UNOController {
             if (instance.turnTimer != null) {
                 instance.turnTimer.stopTimer();
             }
-            
+
             // Clean up player hands to remove any null cards before reset
             if (instance.players != null) {
                 for (Player player : instance.players) {
@@ -476,7 +476,7 @@ public class UNOController {
         }
     }
 
-	public Boolean getIsDraw() {
-		return isDraw;
-	}
+    public Boolean getIsDraw() {
+        return isDraw;
+    }
 }
