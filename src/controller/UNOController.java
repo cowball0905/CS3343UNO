@@ -405,19 +405,11 @@ public class UNOController {
     }
 
     public Card getTopCard(int index) {
-        if (index <= 0 || index > PlayedCard.size()) {
-            System.out.println("Warning: Invalid card index " + index + ", PlayedCard size is " + PlayedCard.size());
-            return null;
-        }
         return PlayedCard.get(PlayedCard.size() - index);
     }
 
     public Player getCurrentPlayer() {
         int index = players.indexOf(currentPlayer);
-        if (index == -1) {
-            System.err.println("currentPlayer not found in players array in getCurrentPlayer()");
-            return null;
-        }
         return players.get(players.indexOf(currentPlayer));
     }
 
