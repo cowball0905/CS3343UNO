@@ -306,9 +306,10 @@ public class UNOGamePanel extends JPanel {
                 cardButtons.add(button);
                 add(button);
             }
-            for (int i = 0; i < playerHand.size(); i++) {
+            int buttonCount = cardButtons.size();
+            for (int i = 0; i < buttonCount; i++) {
                 JButton button = cardButtons.get(i);
-                setComponentZOrder(button, playerHand.size() - 1 - i);
+                setComponentZOrder(button, buttonCount - 1 - i);
             }
 
             JButton button = updateDeck();

@@ -214,6 +214,7 @@ public class TestChallengeViewer {
     public void testRedButtonClickAddsCards() throws Exception {
         controller.startGame();
         controller.setIsFreezed(true);
+        controller.getTurnTimer().stopTimer();
         Player nextPlayer = controller.getPlayerList().get(1);
         int initialHandSize = nextPlayer.getHand().size();
 
@@ -235,6 +236,7 @@ public class TestChallengeViewer {
     public void testRedButtonClickResetsChallenging() throws Exception {
         controller.startGame();
         controller.setIsFreezed(true);
+        controller.getTurnTimer().stopTimer();
 
         challengeViewer.setChallenge(true);
         BufferedImage img = new BufferedImage(100, 100, BufferedImage.TYPE_INT_ARGB);
@@ -254,6 +256,7 @@ public class TestChallengeViewer {
     public void testGreenButtonClickResetsChallenging() throws Exception {
         controller.startGame();
         controller.setIsFreezed(true);
+        controller.getTurnTimer().stopTimer();
 
         Player currentPlayer = controller.getCurrentPlayer();
         Player nextPlayer = controller.getPlayerList().get(1);
