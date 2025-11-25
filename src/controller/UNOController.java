@@ -134,22 +134,7 @@ public class UNOController {
 
     private void initializeGame() {
         Deck = new HashMap<>();
-
-        for (String color : new String[] { "r", "g", "b", "y" }) {
-            Deck.put(color + "0", 1);
-            for (int i = 1; i <= 9; i++) {
-                Deck.put(color + i, 2);
-            }
-        }
-
-        for (String color : new String[] { "r", "g", "b", "y" }) {
-            Deck.put(color + "Skip", 2);
-            Deck.put(color + "Reverse", 2);
-            Deck.put(color + "DrawTwo", 2);
-        }
-
-        Deck.put("WildCard", 4);
-        Deck.put("WildDrawFour", 4);
+        Deck = initialDeck(Deck);
 
         // Clear played cards
         PlayedCard.clear();
@@ -224,6 +209,26 @@ public class UNOController {
                 System.err.println("currentPlayer variable is null in getCardFromDeck()");
             }
         }
+    }
+
+    private HashMap<String, Integer> initialDeck(HashMap<String, Integer> Deck) {
+        Deck.clear();
+        for (String color : new String[] { "r", "g", "b", "y" }) {
+            Deck.put(color + "0", 1);
+            for (int i = 1; i <= 9; i++) {
+                Deck.put(color + i, 2);
+            }
+        }
+
+        for (String color : new String[] { "r", "g", "b", "y" }) {
+            Deck.put(color + "Skip", 2);
+            Deck.put(color + "Reverse", 2);
+            Deck.put(color + "DrawTwo", 2);
+        }
+
+        Deck.put("WildCard", 4);
+        Deck.put("WildDrawFour", 4);
+        return Deck;
     }
 
     public ArrayList<Player> getSortedPlayersScore() {
