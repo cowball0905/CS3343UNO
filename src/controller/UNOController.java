@@ -189,16 +189,15 @@ public class UNOController {
                     return;
                 }
                 currentPlayer.drawCard(newCard);
-                Card card = currentPlayer.getHand().get(currentPlayer.getHand().size() - 1);
                 gamePanel.updateDisplay();
-                if (canPlayCard(card, getTopCard(1))) {
+                if (canPlayCard(newCard, getTopCard(1))) {
                     if (checkCurrentPlayer() == 0) {
-                        deckPlayCardViewer.setIsDeciding(card);
+                        deckPlayCardViewer.setIsDeciding(newCard);
                         turnTimer.startTimer(10);
                     } else {
                         System.out.println(
                                 currentPlayer.getName() + " got a matching card! they choose to play the card");
-                        currentPlayer.playCard(card);
+                        currentPlayer.playCard(newCard);
                     }
                 } else {
                     passNextPlayer(1);
