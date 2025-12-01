@@ -12,9 +12,13 @@ if not exist "%OUT%" (
   mkdir "%OUT%" -Force >nul 2>&1
 )
 
-echo Collecting Java source files...
+echo Collecting Java source files (excluding tests)...
 if exist sources.txt del sources.txt
-dir /b /s "%SRC%\*.java" > sources.txt
+if exist sources_all.txt del sources_all.txt
+dir /b /s "%SRC%\*.java" > sources_all.txt
+rem exclude test sources (paths containing \src\test\)
+findstr /I /V /C:"\src\test\" sources_all.txt > sources.txt
+del sources_all.txt
 
 echo Compiling sources into %OUT%...
 javac -d "%OUT%" @sources.txt
