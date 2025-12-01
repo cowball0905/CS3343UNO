@@ -1,7 +1,3 @@
-# CS3343UNO — Build & Run
-
-This repository contains a Java UNO game used for the CS3343 project.
-
 # UNO Game — CS3343UNO
 
 ## Overview
