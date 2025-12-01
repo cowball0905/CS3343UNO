@@ -9,11 +9,14 @@ set JAR=Release\CS3343-Group19-UNO.jar
 
 echo Creating output directory %OUT% if needed...
 if not exist "%OUT%" (
-  mkdir "%OUT%" -Force >nul 2>&1
+  mkdir "%OUT%" >nul 2>&1
+)
+echo Ensuring Release directory exists...
+if not exist "Release" (
+  mkdir "Release" >nul 2>&1
 )
 
 echo Collecting Java source files (excluding tests)...
-if exist sources.txt del sources.txt
 if exist sources_all.txt del sources_all.txt
 dir /b /s "%SRC%\*.java" > sources_all.txt
 rem exclude test sources (paths containing \src\test\)
