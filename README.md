@@ -11,12 +11,12 @@ Quick build (Windows)
 build.bat
 ```
 
-This compiles sources under `src/` to `bin/classes/` and creates `bin/UNOGame.jar`.
+This compiles sources under `Source/CS3343UNO/src/` and creates `Release/CS3343-Group19-UNO.jar`.
 
 Run:
 
 ```powershell
-java -jar .\bin\UNOGame.jar
+java -jar .\Release\CS3343-Group19-UNO.jar
 ```
 
 Notes

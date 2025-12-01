@@ -5,7 +5,7 @@ rem Usage: run from repository root: build.bat
 setlocal
 set SRC=Source\CS3343UNO\src
 set OUT=Source\CS3343UNO\bin\classes
-set JAR=Release\UNOGame.jar
+set JAR=Release\CS3343-Group19-UNO.jar
 
 echo Creating output directory %OUT% if needed...
 if not exist "%OUT%" (
