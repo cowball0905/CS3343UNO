@@ -1,14 +1,15 @@
 @echo off
-rem Build script for CS3343UNO
+rem Build script for CS3343UNO (root-based)
 rem Usage: run from repository root: build.bat
 
 setlocal
-set SRC=src
-set OUT=bin\classes
+set SRC=Source\CS3343UNO\src
+set OUT=Source\CS3343UNO\bin\classes
+set JAR=Release\UNOGame.jar
 
 echo Creating output directory %OUT% if needed...
 if not exist "%OUT%" (
-  mkdir "%OUT%"
+  mkdir "%OUT%" -Force >nul 2>&1
 )
 
 echo Collecting Java source files...
@@ -24,8 +25,11 @@ if %errorlevel% neq 0 (
 )
 
 echo Creating manifest and packaging JAR...
-echo Main-Class: controller.Main>manifest.txt
-jar cfm "bin\UNOGame.jar" manifest.txt -C "%OUT%" .
+(
+  echo Main-Class: controller.Main
+  echo.
+)>manifest.txt
+jar cfm "%JAR%" manifest.txt -C "%OUT%" .
 if %errorlevel% neq 0 (
   echo Jar creation failed.
   del sources.txt
@@ -36,5 +40,5 @@ if %errorlevel% neq 0 (
 del sources.txt
 del manifest.txt
 
-echo Build successful: bin\UNOGame.jar
+echo Build successful: %JAR%
 endlocal
