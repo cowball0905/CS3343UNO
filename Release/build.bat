@@ -1,11 +1,11 @@
 @echo off
-rem Build script for CS3343UNO (root-based)
-rem Usage: run from repository root: build.bat
+rem Build script for CS3343UNO
+rem Usage: run from Release directory: build.bat
 
 setlocal
-set SRC=Source\CS3343UNO\src
-set OUT=Source\CS3343UNO\bin\classes
-set JAR=Release\UNOGame.jar
+set SRC=..\Source\CS3343UNO\src
+set OUT=..\Source\CS3343UNO\bin\classes
+set JAR=UNOGame.jar
 
 echo Creating output directory %OUT% if needed...
 if not exist "%OUT%" (

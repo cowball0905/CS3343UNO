@@ -43,13 +43,14 @@ This repository contains the source and a pre-built JAR. The repository layout i
 ### Quick build (Windows)
 
 1. Ensure the JDK is installed and `javac` and `jar` are on your PATH.
-2. From the repository root run:
+2. Navigate to the `Release` directory and run:
 
 ```powershell
+cd Release
 .\build.bat
 ```
 
-This script compiles sources under `Source/CS3343UNO/src/` and writes the packaged JAR to `Release/UNOGame.jar`.
+This script compiles sources under `../Source/CS3343UNO/src/` and writes the packaged JAR to `UNOGame.jar` in the current directory.
 
 ### Run the packaged JAR
 
