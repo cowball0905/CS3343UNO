@@ -63,3 +63,4 @@ java -jar .\Release\UNOGame.jar
 - The `build.bat` excludes test sources (no JUnit dependency required).
 - If you prefer Eclipse: import `Source/CS3343UNO` as a Java project (set `src/` as source folder) and use the Runnable JAR exporter to create a jar.
 - If you want a reproducible build in CI, I can add a `pom.xml` (Maven) or `build.gradle` (Gradle).
+- If there are any enquires or problems regarding the project, please feel free to contact hlwong397-c@my.cityu.edu.hk
