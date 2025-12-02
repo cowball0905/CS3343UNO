@@ -10,6 +10,7 @@ public class ConcreteCardFactory extends CardFactory {
 
     private static final Random random = new Random();
 
+    //ignore the isTop -> so we need to add isTop to resolve the issue
     @Override
     public Card createCard(HashMap<String, Integer> Deck, Boolean isTop, boolean isRevealed, String cardString) {
         String card = null;
@@ -18,13 +19,14 @@ public class ConcreteCardFactory extends CardFactory {
             return null;
         }
 
-        if (isTop) {
-            ArrayList<String> numberCards = getNumberCards(Deck);
-            if (numberCards.isEmpty()) {
-                return null;
-            }
-            card = getRandomCard(Deck, numberCards);
-        } else if (!cardString.isEmpty() && Deck.containsKey(cardString) && Deck.get(cardString) > 0) { // create specific card
+        // if (isTop) {
+        //     ArrayList<String> numberCards = getNumberCards(Deck);
+        //     if (numberCards.isEmpty()) {
+        //         return null;
+        //     }
+        //     card = getRandomCard(Deck, numberCards);
+        // } else 
+        if (!cardString.isEmpty() && Deck.containsKey(cardString) && Deck.get(cardString) > 0) { // create specific card
             card = cardString;
             removeCardFromDeck(Deck, card);
         } else {

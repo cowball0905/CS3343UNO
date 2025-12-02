@@ -149,6 +149,7 @@ public class UNOController {
         // Reset other game state variables if needed
         isAction = false;
 
+        //ignore the isTop -> we need to add parameter
         Card topCard = cardFactory.giveCard(Deck, true, true, "");
         if (topCard == null) {
             deckEmpty();
