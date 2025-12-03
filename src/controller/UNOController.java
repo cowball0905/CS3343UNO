@@ -347,7 +347,6 @@ public class UNOController {
     }
 
     public boolean canPlayCard(Card matchCard, Card topCard) {
-        // 如果没有顶牌（游戏刚开始或PlayedCard为空），允许任何牌
         if (topCard == null || matchCard == null) {
             return true;
         }
