@@ -331,11 +331,13 @@ public class UNOController {
         PlayedCard.add(card);
         currentPlayer.playCard(card);
         gamePanel.updateDisplay();
-        if (isGameEnd(card)) {
-            return;
-        }
         card.cardFunction(this);
         isAction = false;
+        if(currentPlayer.getHand().size() == 0) {
+            System.out.println(currentPlayer.getName() + " win!");
+            gamePanel.setIsGameEnd(true);
+            turnTimer.stopTimer();
+        }
     }
 
     public void passNextPlayer(int amount) {
