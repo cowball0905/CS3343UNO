@@ -185,36 +185,33 @@ public class UNOController {
     }
 
     public void getCardFromDeck() {
-        if (!isAction) {
-            isAction = true;
-            if (currentPlayer != null) {
-                System.out.println(currentPlayer.getName() + " draws a card from the deck.");
-                Card newCard = cardFactory.giveCard(Deck, false, checkCurrentPlayer() == 0 ? true : false, "");
-                if (newCard == null) {
-                    deckEmpty();
-                    isAction = false;
-                    return;
-                }
-                currentPlayer.drawCard(newCard);
-                gamePanel.updateDisplay();
-                if (canPlayCard(newCard, getTopCard(1))) {
-                    if (checkCurrentPlayer() == 0) {
-                        deckPlayCardViewer.setIsDeciding(newCard);
-                        turnTimer.startTimer(10);
-                    } else {
-                        System.out.println(
-                                currentPlayer.getName() + " got a matching card! they choose to play the card");
-                        currentPlayer.playCard(newCard);
-                    }
+        if (currentPlayer != null) {
+            System.out.println(currentPlayer.getName() + " draws a card from the deck.");
+            Card newCard = cardFactory.giveCard(Deck, false, checkCurrentPlayer() == 0 ? true : false, "");
+            if (newCard == null) {
+                deckEmpty();
+                isAction = false;
+                return;
+            }
+            currentPlayer.drawCard(newCard);
+            gamePanel.updateDisplay();
+            if (canPlayCard(newCard, getTopCard(1))) {
+                if (checkCurrentPlayer() == 0) {
+                    deckPlayCardViewer.setIsDeciding(newCard);
+                    turnTimer.startTimer(10);
                 } else {
-                    passNextPlayer(1);
-                    eachRound();
-                    isAction = false;
+                    System.out.println(
+                            currentPlayer.getName() + " got a matching card! they choose to play the card");
+                    currentPlayer.playCard(newCard);
                 }
             } else {
-                System.err.println("currentPlayer variable is null in getCardFromDeck()");
+                passNextPlayer(1);
+                eachRound();
             }
+        } else {
+            System.err.println("currentPlayer variable is null in getCardFromDeck()");
         }
+        
     }
 
     private HashMap<String, Integer> initialDeck(HashMap<String, Integer> Deck) {
