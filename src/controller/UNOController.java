@@ -154,27 +154,34 @@ public class UNOController {
             deckEmpty();
             return;
         }
-        PlayedCard.add(topCard); // 已打出的牌顯示
+        PlayedCard.add(topCard); // display the top card
 
+        setAllPlayerCards();
+
+        currentPlayer = players.get(0);
+        System.out.println("Current Player: " + currentPlayer.getName());
+        playDirection = 1;
+    }
+
+    private void setAllPlayerCards() {
         for (int i = 0; i < INITCARDSIZE; i++) {
+            // Human player
             Card playerCard = cardFactory.giveCard(Deck, false, true, "");
             if (playerCard == null) {
                 deckEmpty();
                 return;
             }
-            players.get(0).drawCard(playerCard); // 玩家的牌顯示
+            players.get(0).drawCard(playerCard);
+            // CPU players
             for (int j = 1; j < 4; j++) {
                 Card cpuCard = cardFactory.giveCard(Deck, false, false, "");
                 if (cpuCard == null) {
                     deckEmpty();
                     return;
                 }
-                players.get(j).drawCard(cpuCard); // CPU的牌隱藏
+                players.get(j).drawCard(cpuCard);
             }
         }
-        currentPlayer = players.get(0);
-        System.out.println("Current Player: " + currentPlayer.getName());
-        playDirection = 1;
     }
 
     public void getCardFromDeck() {
