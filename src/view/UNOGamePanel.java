@@ -135,7 +135,7 @@ public class UNOGamePanel extends JPanel {
             }
         }
 
-        // CPU1 - 左側垂直排列
+        // CPU1 
         for (int i = 0; i < computer1Hand.size(); i++) {
             Card card = computer1Hand.get(i);
             if (card != null) {
@@ -153,11 +153,9 @@ public class UNOGamePanel extends JPanel {
         for (int i = 0; i < computer3Hand.size(); i++) {
             Card card = computer3Hand.get(i);
             if (card != null) {
-                card.setRotation(270); // 逆時針旋轉90度
+                card.setRotation(270); 
 
-                // X坐標：固定在右側
                 int cardX = WIDTH - 50 - card.getWidth() + 120;
-                // Y坐標：垂直居中排列
                 int cardY = (HEIGHT / 2) - (computer3Hand.size() * card_gap_y / 2) + (i * card_gap_y);
 
                 card.setPosition(cardX, cardY);
@@ -166,7 +164,7 @@ public class UNOGamePanel extends JPanel {
             }
         }
 
-        // CPU2 - 頂部水平排列（不旋轉）
+        // CPU2 
         for (int i = 0; i < computer2Hand.size(); i++) {
             Card card = computer2Hand.get(i);
             if (card != null) {
@@ -179,9 +177,7 @@ public class UNOGamePanel extends JPanel {
         }
     }
 
-    // 繪製旋轉卡牌的方法
     private void drawRotatedCard(Graphics2D graphic2D, Card card) {
-        // 檢查卡牌和圖像是否存在
         if (card == null) {
             System.err.println("Warning: Card is null, skipping draw");
             return;
@@ -195,30 +191,20 @@ public class UNOGamePanel extends JPanel {
         if (card.isRotated()) {
             AffineTransform oldTransform = graphic2D.getTransform();
 
-            // 獲取圖像的原始尺寸（旋轉前）
             int imageWidth = card.getImage().getWidth();
             int imageHeight = card.getImage().getHeight();
 
-            // 計算旋轉中心 - 使用卡牌在螢幕上應該占據的空間
             double centerX = card.getX() + card.getWidth() / 2.0;
             double centerY = card.getY() + card.getHeight() / 2.0;
 
-            // 移動到旋轉中心
-            // 平移
             graphic2D.translate(centerX, centerY);
-            // 執行旋轉
             graphic2D.rotate(Math.toRadians(card.getRotationAngle()));
-            // 移動到繪製位置（圖像左上角）
             graphic2D.translate(-imageWidth / 2.0, -imageHeight / 2.0);
 
-            // 繪製卡牌 - 使用原始圖像尺寸
             graphic2D.drawImage(card.getImage(), 0, 0, imageWidth, imageHeight, this);
 
-            // 恢復變換狀態
-            // 如果不恢復變換，第二張卡牌也會被旋轉90度！
             graphic2D.setTransform(oldTransform);
         } else {
-            // 正常繪製
             graphic2D.drawImage(card.getImage(), card.getX(), card.getY(),
                     card.getWidth(), card.getHeight(), this);
         }
@@ -386,7 +372,6 @@ public class UNOGamePanel extends JPanel {
             computer3Hand = new ArrayList<>(controller.getPlayerCard(3));
             topCard = controller.getTopCard(1);
         } catch (Exception e) {
-            // 如果获取数据时出错，使用空列表
             playerHand = new ArrayList<>();
             computer1Hand = new ArrayList<>();
             computer2Hand = new ArrayList<>();
