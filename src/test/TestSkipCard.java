@@ -50,17 +50,17 @@ public class TestSkipCard {
 	}
     
     @Test
-    void testSkipCardInitializationType() {
+    void testSkipCardType() {
         SkipCard skipCard = new SkipCard(Color.Blue, true);
         
-        assertEquals(Type.Skip, skipCard.getType(), "Card type should be Skip");
+        assertEquals(Type.Skip, skipCard.getType());
     }
     
     @Test
-    void testSkipCardInitializationColour() {
+    void testSkipCardColor() {
         SkipCard skipCard = new SkipCard(Color.Blue, true);
         
-        assertEquals(Color.Blue, skipCard.getColor(), "Card color should be Blue");
+        assertEquals(Color.Blue, skipCard.getColor());
     }
     
     @Test
