@@ -358,29 +358,6 @@ public class UNOGamePanel extends JPanel {
         }
         graphic2D.drawString(label, x, y);
 
-        // if (isDrawButton) {
-        //     JButton catchButton = new JButton();
-        //     catchButton.setBounds(x, y - 20, 250, 30);
-        //     catchButton.setBorderPainted(false);
-        //     catchButton.setContentAreaFilled(false);
-        //     catchButton.setFocusPainted(false);
-        //     catchButton.addActionListener(e -> {
-        //         if (isGameEnd) {
-        //             return;
-        //         }
-        //         controller.getPlayerList().get(0).catchForgotShout(player);
-        //     });
-
-        //     if (playerIndex == 1) {
-        //         catchcpu1Button = catchButton;
-        //     } else if (playerIndex == 2) {
-        //         catchcpu2Button = catchButton;
-        //     } else if (playerIndex == 3) {
-        //         catchcpu3Button = catchButton;
-        //     }
-
-        //     add(catchButton);
-        // }
     }
 
     private void drawTextBox(Graphics2D graphic2D, String msg, int x, int y, int width, int height) {
@@ -431,7 +408,6 @@ public class UNOGamePanel extends JPanel {
         graphic2D.setColor(new Color(255, 203, 142));
         graphic2D.fillRect(0, 0, getWidth(), getHeight());
 
-        // === 第一層：繪製所有卡牌 (底層) ===
         // Draw CPU1 cards
         drawCPUcards(graphic2D, computer1Hand);
 
@@ -441,7 +417,6 @@ public class UNOGamePanel extends JPanel {
         // Draw CPU3 cards
         drawCPUcards(graphic2D, computer3Hand);
 
-        // === 第二層：繪製所有文字標籤 (上層，不會被卡牌覆蓋) ===
         graphic2D.setFont(new Font("Arial", Font.BOLD, 18));
         graphic2D.setColor(Color.WHITE);
 
@@ -449,8 +424,7 @@ public class UNOGamePanel extends JPanel {
         drawPlayerLabel(graphic2D, 2, 420, 40, "CPU 2", computer2Hand, true); // Top
         drawPlayerLabel(graphic2D, 3, 745, 220, "CPU 3", computer3Hand, true); // Right side
 
-        // === 繼續第一層：繪製其他卡牌 ===
-        // Draw player's cards (底層)
+        // Draw player's cards 
         for (Card card : playerHand) {
             drawRotatedCard(graphic2D, card);
         }
@@ -463,8 +437,7 @@ public class UNOGamePanel extends JPanel {
                     this);
         }
 
-        // === 第二層：繼續繪製文字標籤 (上層) ===
-        // Player 標籤
+        // Player label
         drawPlayerLabel(graphic2D, 0, 420, 600, "YOU", playerHand, false);
 
         // Discard pile label
