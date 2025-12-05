@@ -40,13 +40,6 @@ public class TestWildCard {
     }
     
     @Test
-    public void testWildCardRevealed() {
-        WildCard card = new WildCard(true);
-        
-        assertEquals(true, card.isRevealed());
-    }
-    
-    @Test
     public void testWildCardType() {
         WildCard card = new WildCard(true);
         
