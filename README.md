@@ -33,14 +33,14 @@ If you find a bug, please open an issue or contact the maintainer team.
 
 ---
 
-# Build & Run
+# Build & Run (Prerequisite: Java 21)
 
 This repository contains the source code and a pre-built JAR. The repository layout is:
 
 - `Release/` — packaged JARs (contains `CS3343-Group19-UNO.jar`).
 - `Source/CS3343UNO/src/` — Java source code files.
 
-### Quick build (Windows)
+### Quick build (Windows) (Prerequisite: Java 21)
 
 1. Ensure the JDK is installed and `javac` and `jar` are on your PATH.
 2. Navigate to the `Release` directory and run:
@@ -52,7 +52,7 @@ cd Release
 
 This script compiles sources under `../Source/CS3343UNO/src/` and writes the packaged JAR to `UNOGame.jar` in the current directory.
 
-### Run the packaged JAR
+### Run the packaged JAR (Prerequisite: Java 21)
 
 ```powershell
 java -jar .\Release\UNOGame.jar
