@@ -43,6 +43,12 @@ This repository contains the source code and a pre-built JAR. The repository lay
 ### Eclipse Setup
 If you prefer Eclipse: import `Source/CS3343UNO` as a Java project (set `src/` as source folder) and use the Runnable JAR exporter to create a JAR.
 
+1. Create a new project (please do not create module info)
+2. Right click the project and select "Import"
+3. Select from file system
+4. Select "Source/CS3343UNO"
+5. Enjoy the Project!
+
 ### Alternative Setup
 You can also extract the Source Code folder from `Source/` for standalone development.
 
