@@ -182,7 +182,8 @@ public class UNOController {
             isAction = true;
             if (currentPlayer != null) {
                 System.out.println(currentPlayer.getName() + " draws a card from the deck.");
-                Card newCard = cardFactory.giveCard(Deck, false, checkCurrentPlayer() == 0 ? true : false, "");
+                Card newCard = cardFactory.giveCard(Deck, false,
+                    checkCurrentPlayer() == 0 ? true : false, "");
                 if (newCard == null) {
                     deckEmpty();
                     isAction = false;
@@ -196,7 +197,8 @@ public class UNOController {
                         turnTimer.startTimer(10);
                     } else {
                         System.out.println(
-                                currentPlayer.getName() + " got a matching card! they choose to play the card");
+                                currentPlayer.getName() +
+                                 " got a matching card! they choose to play the card");
                         currentPlayer.playCard(newCard);
                     }
                 } else {
