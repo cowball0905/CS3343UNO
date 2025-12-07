@@ -41,12 +41,11 @@ This repository contains the source code and a pre-built JAR. The repository lay
 - `Source/CS3343UNO/` — Java source code folder
 
 ### Eclipse Setup
-
-1. Create a new project (please do not create module info)
+1. Create a java project: File → New → Java Project (please do not create module info)
 2. Right click the project and select "Import"
-3. Select from file system
-4. Select "Source/CS3343UNO"
-5. Enjoy the Project!
+3. Select from General → file system
+4. Select all from `Source/CS3343UNO` and click finish
+6. Enjoy the project 
 
 ### Alternative Setup
 You can also extract the Source Code folder from `Source/` for standalone development.
