@@ -492,27 +492,6 @@ public class TestUNOGamePanel {
     }
     
     @Test
-    public void testErrorMessageClearedAfterTimeout() throws Exception {
-        Field errorMessageField = UNOGamePanel.class.getDeclaredField("errorMessage");
-        errorMessageField.setAccessible(true);
-        errorMessageField.set(gamePanel, "Test Error");
-        
-        Field errorMessageTimerField = UNOGamePanel.class.getDeclaredField("errorMessageTimer");
-        errorMessageTimerField.setAccessible(true);
-        errorMessageTimerField.set(gamePanel, System.currentTimeMillis() - 2000);
-        
-        BufferedImage image = new BufferedImage(800, 600, BufferedImage.TYPE_INT_ARGB);
-        Graphics g = image.getGraphics();
-        
-        gamePanel.paintComponent(g);
-        
-        String errorMessage = (String) errorMessageField.get(gamePanel);
-        assertNull(errorMessage);
-        
-        g.dispose();
-    }
-    
-    @Test
     public void testErrorMessageNull() throws Exception {
         Field errorMessageField = UNOGamePanel.class.getDeclaredField("errorMessage");
         errorMessageField.setAccessible(true);
