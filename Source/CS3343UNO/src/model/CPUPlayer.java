@@ -51,25 +51,17 @@ public class CPUPlayer extends Player {
                         }
                     }
                 }
-                /*
-                 * int delay = random.nextInt(2001); // Random delay around 2 sec
-                 * System.out.println(name + " (CPU) will shout UNO in " + delay +
-                 * " ms if not caught.");
-                 * Timer shoutTimer = new Timer(delay, e -> {
-                 * if (hand.size() == 1) { // Check again to make sure it hasn't been caught
-                 * shoutUno();
-                 * }
-                 * });
-                 * shoutTimer.setRepeats(false);
-                 * shoutTimer.start();
-                 */
             }
         }
     }
 
+    private boolean notShoutedWithOneCard() {
+        return !isShout && this.getHand().size() == 1;
+    }
+
     @Override
     public String shoutUno() {
-        if (!isShout && this.getHand().size() == 1) {
+        if (notShoutedWithOneCard()) {
             isShout = true;
             System.out.println(name + " (CPU) shouts UNO!");
         } else {

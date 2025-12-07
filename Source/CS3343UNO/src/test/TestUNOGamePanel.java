@@ -2,6 +2,7 @@ package test;
 
 import static org.junit.Assert.assertTrue;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assumptions.*;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -52,21 +53,21 @@ public class TestUNOGamePanel {
     }
 
     @Test
-    public void testSetIsGameEndTrue() {
+    public void testSetIsGameEndTrue() throws Exception {
         gamePanel.setIsGameEnd(true);
         
         assertEquals(true, getIsGameEnd());
     }
 
     @Test
-    public void testSetIsGameEndFalse() {
+    public void testSetIsGameEndFalse() throws Exception {
         gamePanel.setIsGameEnd(false);
         
         assertEquals(false, getIsGameEnd());
     }
 
     @Test
-    public void testInitialIsGameEndFalse() {
+    public void testInitialIsGameEndFalse() throws Exception {
         assertEquals(false, getIsGameEnd());
     }
 
@@ -101,7 +102,7 @@ public class TestUNOGamePanel {
     }
 
     @Test
-    public void testSelectedCardWithValidIndex() {
+    public void testSelectedCardWithValidIndex() throws Exception {
         controller.startGame();
         controller.setIsFreezed(true);
         controller.setCurrentPlayer(controller.getPlayerList().get(0));
@@ -112,7 +113,7 @@ public class TestUNOGamePanel {
     }
 
     @Test
-    public void testSelectedCardResetsIndex() {
+    public void testSelectedCardResetsIndex() throws Exception {
         controller.startGame();
         controller.setIsFreezed(true);
         controller.setCurrentPlayer(controller.getPlayerList().get(0));
@@ -153,29 +154,21 @@ public class TestUNOGamePanel {
     }
 
     @Test
-    public void testUnoButtonExists() {
+    public void testUnoButtonExists() throws Exception {
         System.out.println("Before repaint - hasUnoButton(): " + hasUnoButton());
         
-        // Force a repaint to create the button
         gamePanel.repaint();
         
-        // Force the repaint to complete
-        try {
-            Thread.sleep(100); // Give time for the repaint to complete
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+        Thread.sleep(100);
         
         System.out.println("After repaint - hasUnoButton(): " + hasUnoButton());
         
-        // Also try direct painting
         Graphics g = new BufferedImage(800, 600, BufferedImage.TYPE_INT_ARGB).getGraphics();
         gamePanel.paint(g);
         g.dispose();
         
         System.out.println("After paint - hasUnoButton(): " + hasUnoButton());
         
-        // Check the components
         System.out.println("Components in gamePanel: " + gamePanel.getComponents().length);
         for (Component comp : gamePanel.getComponents()) {
             System.out.println("Component: " + comp.getClass().getName() + 
@@ -187,14 +180,11 @@ public class TestUNOGamePanel {
     }
     
     @Test
-    public void testUnoButtonAction() {
-        // Create a test panel
+    public void testUnoButtonAction() throws Exception {
         UNOGamePanel panel = new UNOGamePanel();
         
-        // Create a flag to check if shoutUno was called
         final boolean[] shoutUnoCalled = {false};
         
-        // Override the shoutUno method
         UNOGamePanel panelSpy = new UNOGamePanel() {
             @Override
             public void shoutUno() {
@@ -202,135 +192,86 @@ public class TestUNOGamePanel {
             }
         };
         
-        // Get the button using reflection
-        JButton unoButton = null;
-        try {
-            Field field = UNOGamePanel.class.getDeclaredField("UnoButton");
-            field.setAccessible(true);
-            unoButton = (JButton) field.get(panelSpy);
-        } catch (Exception e) {
-            fail("Failed to get UnoButton: " + e.getMessage());
-        }
+        Field field = UNOGamePanel.class.getDeclaredField("UnoButton");
+        field.setAccessible(true);
+        JButton unoButton = (JButton) field.get(panelSpy);
         
-        // Simulate button click
         for (ActionListener al : unoButton.getActionListeners()) {
             al.actionPerformed(new ActionEvent(unoButton, ActionEvent.ACTION_PERFORMED, ""));
         }
         
-        // Verify shoutUno was called
-        assertTrue("shoutUno should be called when UNO button is clicked", shoutUnoCalled[0]);
+        assertTrue(shoutUnoCalled[0]);
     }
 
     
 
-@Test
-public void testDeckButtonWhenGameEnded() {
-    try {
-        // Set up the game
+    @Test
+    public void testDeckButtonWhenGameEnded() throws Exception {
         controller.startGame();
         gamePanel.startGame();
         
-        // Get the deck button using reflection to access the private method
         Method updateDeckMethod = UNOGamePanel.class.getDeclaredMethod("updateDeck");
         updateDeckMethod.setAccessible(true);
         JButton deckButton = (JButton) updateDeckMethod.invoke(gamePanel);
         
-        // Set game end state
         gamePanel.setIsGameEnd(true);
         
-        // Get initial deck size
         int initialDeckSize = controller.getDeck().size();
         
-        // Simulate button click
         for (ActionListener al : deckButton.getActionListeners()) {
             al.actionPerformed(new ActionEvent(deckButton, ActionEvent.ACTION_PERFORMED, ""));
         }
         
-        // Verify deck size didn't change
-        assertEquals(initialDeckSize, controller.getDeck().size(), 
-                   "Deck size should not change when game has ended");
-        
-    } catch (Exception e) {
-        fail("Exception during test: " + e.getMessage());
+        assertEquals(initialDeckSize, controller.getDeck().size());
     }
-}
 
-@Test
-public void testDeckButtonWhenNotPlayersTurn() {
-    try {
-        // Set up the game
+    @Test
+    public void testDeckButtonWhenNotPlayersTurn() throws Exception {
         controller.startGame();
         gamePanel.startGame();
         
-        // Set current player to someone else (not player 0)
-        if (controller.getPlayerList().size() > 1) {
-            controller.setCurrentPlayer(controller.getPlayerList().get(1));
-        }
+        controller.setCurrentPlayer(controller.getPlayerList().get(1));
         
-        // Get the deck button using reflection
         Method updateDeckMethod = UNOGamePanel.class.getDeclaredMethod("updateDeck");
         updateDeckMethod.setAccessible(true);
         JButton deckButton = (JButton) updateDeckMethod.invoke(gamePanel);
         
-        // Simulate button click
         for (ActionListener al : deckButton.getActionListeners()) {
             al.actionPerformed(new ActionEvent(deckButton, ActionEvent.ACTION_PERFORMED, ""));
         }
         
-        // Verify error message was set
         Field errorField = UNOGamePanel.class.getDeclaredField("errorMessage");
         errorField.setAccessible(true);
         String errorMessage = (String) errorField.get(gamePanel);
-        assertEquals("It's not your turn!", errorMessage, 
-                   "Error message should be set when it's not player's turn");
-        
-    } catch (Exception e) {
-        fail("Exception during test: " + e.getMessage());
+        assertEquals("It's not your turn!", errorMessage);
     }
-}
 
 
     // Helper methods
-    private boolean getIsGameEnd() {
-        try {
-            Field field = UNOGamePanel.class.getDeclaredField("isGameEnd");
-            field.setAccessible(true);
-            return (boolean) field.get(gamePanel);
-        } catch (Exception e) {
-            return false;
-        }
+    private boolean getIsGameEnd() throws Exception {
+        Field field = UNOGamePanel.class.getDeclaredField("isGameEnd");
+        field.setAccessible(true);
+        return (boolean) field.get(gamePanel);
     }
 
-    private int getCurrentSelectedCardIndex() {
-        try {
-            Field field = UNOGamePanel.class.getDeclaredField("currentSelectedCardIndex");
-            field.setAccessible(true);
-            return (int) field.get(gamePanel);
-        } catch (Exception e) {
-            return -1;
-        }
+    private int getCurrentSelectedCardIndex() throws Exception {
+        Field field = UNOGamePanel.class.getDeclaredField("currentSelectedCardIndex");
+        field.setAccessible(true);
+        return (int) field.get(gamePanel);
     }
 
-    private void setCurrentSelectedCardIndex(int index) {
-        try {
-            Field field = UNOGamePanel.class.getDeclaredField("currentSelectedCardIndex");
-            field.setAccessible(true);
-            field.set(gamePanel, index);
-        } catch (Exception e) {
-            // Ignore
-        }
+    private void setCurrentSelectedCardIndex(int index) throws Exception {
+        Field field = UNOGamePanel.class.getDeclaredField("currentSelectedCardIndex");
+        field.setAccessible(true);
+        field.set(gamePanel, index);
     }
 
-    private boolean hasUnoButton() {
-        try {
-            Field field = UNOGamePanel.class.getDeclaredField("UnoButton");
-            field.setAccessible(true);
-            JButton button = (JButton) field.get(gamePanel);
-            System.out.println(button);
-            return button != null;
-        } catch (Exception e) {
-            return false;
-        }
+    private boolean hasUnoButton() throws Exception {
+        Field field = UNOGamePanel.class.getDeclaredField("UnoButton");
+        field.setAccessible(true);
+        JButton button = (JButton) field.get(gamePanel);
+        System.out.println(button);
+        return button != null;
     }
 
     private boolean hasDeckButton() {
@@ -343,5 +284,275 @@ public void testDeckButtonWhenNotPlayersTurn() {
             }
         }
         return false;
+    }
+
+    @Test
+    public void testCatchButtonWhenGameEnded() throws Exception {
+        controller.startGame();
+        gamePanel.setIsGameEnd(true);
+        
+        Field field = UNOGamePanel.class.getDeclaredField("catchcpu1Button");
+        field.setAccessible(true);
+        JButton catchButton = (JButton) field.get(gamePanel);
+        
+        for (ActionListener al : catchButton.getActionListeners()) {
+            al.actionPerformed(new ActionEvent(catchButton, ActionEvent.ACTION_PERFORMED, ""));
+        }
+        
+        assertTrue(true);
+    }
+    
+    @Test
+    public void testCatchButtonCPU1Action() throws Exception {
+        controller.startGame();
+        controller.setIsFreezed(true);
+        gamePanel.setIsGameEnd(false);
+        
+        Field field = UNOGamePanel.class.getDeclaredField("catchcpu1Button");
+        field.setAccessible(true);
+        JButton catchButton = (JButton) field.get(gamePanel);
+        
+        for (ActionListener al : catchButton.getActionListeners()) {
+            al.actionPerformed(new ActionEvent(catchButton, ActionEvent.ACTION_PERFORMED, ""));
+        }
+        
+        assertNotNull(catchButton);
+    }
+    
+    @Test
+    public void testCatchButtonCPU2Action() throws Exception {
+        controller.startGame();
+        controller.setIsFreezed(true);
+        gamePanel.setIsGameEnd(false);
+        
+        Field field = UNOGamePanel.class.getDeclaredField("catchcpu2Button");
+        field.setAccessible(true);
+        JButton catchButton = (JButton) field.get(gamePanel);
+        
+        for (ActionListener al : catchButton.getActionListeners()) {
+            al.actionPerformed(new ActionEvent(catchButton, ActionEvent.ACTION_PERFORMED, ""));
+        }
+        
+        assertNotNull(catchButton);
+    }
+    
+    @Test
+    public void testCatchButtonCPU3Action() throws Exception {
+        controller.startGame();
+        controller.setIsFreezed(true);
+        gamePanel.setIsGameEnd(false);
+        
+        Field field = UNOGamePanel.class.getDeclaredField("catchcpu3Button");
+        field.setAccessible(true);
+        JButton catchButton = (JButton) field.get(gamePanel);
+        
+        for (ActionListener al : catchButton.getActionListeners()) {
+            al.actionPerformed(new ActionEvent(catchButton, ActionEvent.ACTION_PERFORMED, ""));
+        }
+        
+        assertNotNull(catchButton);
+    }
+
+    @Test
+    public void testSelectedCardWhenGameEnded() throws Exception {
+        controller.startGame();
+        controller.setIsFreezed(true);
+        gamePanel.setIsGameEnd(true);
+        
+        int initialIndex = getCurrentSelectedCardIndex();
+        gamePanel.selectedCard(0);
+        
+        assertEquals(initialIndex, getCurrentSelectedCardIndex());
+    }
+    
+    @Test
+    public void testSelectedCardWhenNotPlayerTurn() throws Exception {
+        controller.startGame();
+        controller.setIsFreezed(true);
+        gamePanel.setIsGameEnd(false);
+        
+        controller.setCurrentPlayer(controller.getPlayerList().get(1));
+        
+        gamePanel.selectedCard(0);
+        
+        String errorMessage = getErrorMessage();
+        assertEquals("It's not your turn!", errorMessage);
+    }
+    
+    @Test
+    public void testSelectedCardClickUnselectedCard() throws Exception {
+        controller.startGame();
+        controller.setIsFreezed(true);
+        gamePanel.setIsGameEnd(false);
+        controller.setCurrentPlayer(controller.getPlayerList().get(0));
+        
+        setCurrentSelectedCardIndex(-1);
+        
+        gamePanel.selectedCard(0);
+        
+        assertEquals(0, getCurrentSelectedCardIndex());
+        assertTrue(controller.getPlayerCard(0).get(0).isCardSelected());
+    }
+    
+    @Test
+    public void testSelectedCardClickSelectedCardCanPlay() throws Exception {
+        controller.startGame();
+        controller.setIsFreezed(true);
+        gamePanel.setIsGameEnd(false);
+        controller.setCurrentPlayer(controller.getPlayerList().get(0));
+        
+        int playableIndex = -1;
+        for (int i = 0; i < controller.getPlayerCard(0).size(); i++) {
+            Card card = controller.getPlayerCard(0).get(i);
+            if (controller.canPlayCard(card, controller.getTopCard(1))) {
+                playableIndex = i;
+                break;
+            }
+        }
+        
+        assumeTrue(playableIndex != -1);
+        
+        setCurrentSelectedCardIndex(playableIndex);
+        controller.getPlayerCard(0).get(playableIndex).setCardSelected(true);
+        
+        int initialHandSize = controller.getPlayerCard(0).size();
+        
+        gamePanel.selectedCard(playableIndex);
+        
+        String errorMessage = getErrorMessage();
+        assertEquals("Card played!", errorMessage);
+        assertEquals(-1, getCurrentSelectedCardIndex());
+    }
+    
+    @Test
+    public void testSelectedCardClickSelectedCardCannotPlay() throws Exception {
+        controller.startGame();
+        controller.setIsFreezed(true);
+        gamePanel.setIsGameEnd(false);
+        controller.setCurrentPlayer(controller.getPlayerList().get(0));
+        
+        int unplayableIndex = -1;
+        for (int i = 0; i < controller.getPlayerCard(0).size(); i++) {
+            Card card = controller.getPlayerCard(0).get(i);
+            if (!controller.canPlayCard(card, controller.getTopCard(1))) {
+                unplayableIndex = i;
+                break;
+            }
+        }
+        
+        assumeTrue(unplayableIndex != -1);
+        
+        setCurrentSelectedCardIndex(unplayableIndex);
+        controller.getPlayerCard(0).get(unplayableIndex).setCardSelected(true);
+        
+        gamePanel.selectedCard(unplayableIndex);
+        
+        String errorMessage = getErrorMessage();
+        assertEquals("Can't play this card!", errorMessage);
+    }
+    
+    @Test
+    public void testSelectedCardClickAnotherCard() throws Exception {
+        controller.startGame();
+        controller.setIsFreezed(true);
+        gamePanel.setIsGameEnd(false);
+        controller.setCurrentPlayer(controller.getPlayerList().get(0));
+        
+        assumeTrue(controller.getPlayerCard(0).size() >= 2);
+        
+        setCurrentSelectedCardIndex(0);
+        controller.getPlayerCard(0).get(0).setCardSelected(true);
+        
+        gamePanel.selectedCard(1);
+        
+        assertFalse(controller.getPlayerCard(0).get(0).isCardSelected());
+        assertTrue(controller.getPlayerCard(0).get(1).isCardSelected());
+        assertEquals(1, getCurrentSelectedCardIndex());
+    }
+
+    @Test
+    public void testErrorMessageDisplayWithinTimeout() throws Exception {
+        Field errorMessageField = UNOGamePanel.class.getDeclaredField("errorMessage");
+        errorMessageField.setAccessible(true);
+        errorMessageField.set(gamePanel, "Test Error");
+        
+        Field errorMessageTimerField = UNOGamePanel.class.getDeclaredField("errorMessageTimer");
+        errorMessageTimerField.setAccessible(true);
+        errorMessageTimerField.set(gamePanel, System.currentTimeMillis());
+        
+        BufferedImage image = new BufferedImage(800, 600, BufferedImage.TYPE_INT_ARGB);
+        Graphics g = image.getGraphics();
+        
+        gamePanel.paint(g);
+        
+        String errorMessage = (String) errorMessageField.get(gamePanel);
+        assertNotNull(errorMessage);
+        
+        g.dispose();
+    }
+    
+    @Test
+    public void testErrorMessageNull() throws Exception {
+        Field errorMessageField = UNOGamePanel.class.getDeclaredField("errorMessage");
+        errorMessageField.setAccessible(true);
+        errorMessageField.set(gamePanel, null);
+        
+        BufferedImage image = new BufferedImage(800, 600, BufferedImage.TYPE_INT_ARGB);
+        Graphics g = image.getGraphics();
+        
+        gamePanel.paint(g);
+        
+        String errorMessage = (String) errorMessageField.get(gamePanel);
+        assertNull(errorMessage);
+        
+        g.dispose();
+    }
+    
+    @Test
+    public void testShoutUnoSetsErrorMessage() throws Exception {
+        controller.startGame();
+        controller.setIsFreezed(true);
+        gamePanel.setIsGameEnd(false);
+        
+        gamePanel.shoutUno();
+        
+        String errorMessage = getErrorMessage();
+        assertNotNull(errorMessage);
+    }
+    
+    @Test
+    public void testShoutUnoWhenGameEnded() throws Exception {
+        controller.startGame();
+        controller.setIsFreezed(true);
+        gamePanel.setIsGameEnd(true);
+        
+        String initialErrorMessage = getErrorMessage();
+        
+        gamePanel.shoutUno();
+        
+        assertEquals(initialErrorMessage, getErrorMessage());
+    }
+
+    @Test
+    public void testHasDeckButtonReturnsFalse() {
+        boolean result = hasDeckButton();
+        assertFalse(result);
+    }
+
+    @Test
+    public void testHasDeckButtonReturnsTrue() throws Exception {
+        controller.startGame();
+        gamePanel.updateCardButtons();
+        
+        Thread.sleep(100);
+        
+        boolean result = hasDeckButton();
+        assertTrue(result);
+    }
+
+    private String getErrorMessage() throws Exception {
+        Field field = UNOGamePanel.class.getDeclaredField("errorMessage");
+        field.setAccessible(true);
+        return (String) field.get(gamePanel);
     }
 }

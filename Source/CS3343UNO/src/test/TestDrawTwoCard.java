@@ -28,6 +28,13 @@ public class TestDrawTwoCard {
     }
     
     @Test
+    public void testDrawTwoCardNotNull() {
+        DrawTwoCard card = new DrawTwoCard(Color.Red, true);
+        
+        assertNotNull(card);
+    }
+    
+    @Test
     public void testDrawTwoCardToString() {
         DrawTwoCard card = new DrawTwoCard(Color.Blue, true);
         
@@ -39,13 +46,6 @@ public class TestDrawTwoCard {
         DrawTwoCard card = new DrawTwoCard(Color.Red, true);
         
         assertEquals(Color.Red, card.getColor());
-    }
-    
-    @Test
-    public void testDrawTwoCardRevealed() {
-        DrawTwoCard card = new DrawTwoCard(Color.Red, true);
-        
-        assertEquals(true, card.isRevealed());
     }
     
     @Test

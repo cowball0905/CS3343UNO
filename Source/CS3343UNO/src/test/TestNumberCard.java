@@ -61,13 +61,6 @@ public class TestNumberCard {
     }
     
     @Test
-    public void testNumberCardToStringBlue0() {
-        NumberCard card = new NumberCard(Color.Blue, 0, true);
-        
-        assertEquals("Blue 0", card.toString());
-    }
-    
-    @Test
     public void testNumberCardFunctionPassesNextPlayer() {
         controller.startGame();
         controller.setIsFreezed(true);

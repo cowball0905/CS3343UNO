@@ -1,0 +1,12 @@
+# Compiled class files
+*.class
+
+# Compiled class files in specific packages
+src/controller/*.class
+src/model/*.class
+src/view/*.class
+
+# Compiled output directories
+/bin/
+/target/
+/classes/

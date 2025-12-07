@@ -154,55 +154,48 @@ public class HumanPlayer extends Player {
         }
     }
     
-    /*
-    @Override
-    public String shoutUno() {
-        String errorMessage = null;
-
-        // Only current player can shout UNO
-        if (this != controller.getCurrentPlayer()) {
-            errorMessage = "It's not your turn!";
-        } else if (this.getIsShout()) {
-            errorMessage = "You shouted UNO already!";
-        } else if (this.getHand().size() != 1) {
-            errorMessage = "You have more than one card!";
-        } else {
-            isShout = true;
-            System.out.println(name + " shouts UNO!");
+    private boolean hasPlayableCard() {
+        boolean hasPlayableCard = false;
+        for (Card c : this.getHand()) {
+            if (controller.canPlayCard(c, controller.getTopCard(1))) {
+                hasPlayableCard = true;
+            }
         }
-
-        return errorMessage;
+        return hasPlayableCard;
     }
-    */
+
+    private boolean notCurrentPlayerWithMoreThanOneCard() {
+        return this != controller.getCurrentPlayer() && this.getHand().size() > 1;
+    }
+
+    private boolean notCurrentPlayerWithOneCard() {
+        return this != controller.getCurrentPlayer() && this.getHand().size() == 1;
+    }
+
+    private void performShout() {
+        isShout = true;
+        System.out.println(name + " shouts UNO!");
+    }
 
     @Override
     public String shoutUno() {
-        
-        String errorMessage =  null;
-        if (this != controller.getCurrentPlayer() && this.getHand().size() > 1) {
-            errorMessage = "You have more than 1 card!";
-        } else if (this != controller.getCurrentPlayer() && this.getHand().size() == 1) {
-            isShout = true;
-            System.out.println(name + " shouts UNO!");
-        } else if (this.getIsShout()){
-            errorMessage = "You shouted UNO already!";
-        } else if (this.getHand().size() > 2) {
-            errorMessage = "You have more than 2 card!";
-        } else {
-            boolean hasPlayableCard = false;
-            for (Card c : this.getHand()){
-                if(controller.canPlayCard(c, controller.getTopCard(1))){
-                    hasPlayableCard = true;
-                }
-            }
-            if (!hasPlayableCard) {
-                errorMessage = "You have no playable card!";
-                return errorMessage;
-            }
-            isShout = true;
-            System.out.println(name + " shouts UNO!");
+        if (this.getIsShout()){
+            return "You shouted UNO already!";
         }
-        return errorMessage;
+        if (notCurrentPlayerWithMoreThanOneCard()) {
+            return "You have more than 1 card!";
+        }
+        if (notCurrentPlayerWithOneCard()) {
+            performShout();
+        }
+        if (this.getHand().size() > 2) {
+            return "You have more than 2 card!";
+        }
+        if (!hasPlayableCard()) {
+            return "You have no playable card!";
+        }
+        performShout();
+        return null;
     }
     
     

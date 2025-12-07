@@ -104,15 +104,12 @@ public class TestCPUPlayer {
 	    targetPlayer.getHand().clear();
 	    cpuPlayer.getHand().clear();
 	
-	    // 上家只有1张蓝色牌(满足挑战条件 <= 2张,且没有红色牌)
 	    for(int i=0;i<5;i++) {
 		    targetPlayer.drawCard(new NumberCard(Color.Blue, 5, true));
 	    }
 	
-	    // 设置倒数第二张牌为红色(用于挑战判断)
 	    controller.playCard(new NumberCard(Color.Red, 2, true));
 	
-	    // 上家打出 Wild Draw Four(这是被挑战的牌)
 	    controller.playCard(new WildDrawFourCard(true));
 	
 	    controller.setCurrentPlayer(cpuPlayer);
@@ -120,7 +117,6 @@ public class TestCPUPlayer {
 	    int initialCpuHandSize = cpuPlayer.getHand().size();
 	    cpuPlayer.challengeDrawFour(targetPlayer);
 	
-	    // 挑战失败:CPU抽6张牌
 	    assertEquals(initialCpuHandSize + 6, cpuPlayer.getHand().size(),
 	                 "CPU should draw exactly 6 cards when challenge fails");
 	}
@@ -132,16 +128,13 @@ public class TestCPUPlayer {
 	    targetPlayer.getHand().clear();
 	    cpuPlayer.getHand().clear();
 	
-	    // 上家有1张红色牌(满足挑战条件 >=5 张,且有匹配颜色)
 		for (int i = 0; i < 5; i++) {
 			targetPlayer.drawCard(new NumberCard(Color.Red, 5, true));
 		}
 	    
-	    // 设置倒数第二张牌为红色
 	    controller.playCard(new NumberCard(Color.Red, 2, true));
 	    controller.setIsFreezed(true);
 	
-	    // 上家打出 Wild Draw Four(这是被挑战的牌)
 	    controller.playCard(new WildDrawFourCard(true));
 	
 	    controller.setCurrentPlayer(cpuPlayer);
@@ -149,7 +142,6 @@ public class TestCPUPlayer {
 	    int initialTargetHandSize = targetPlayer.getHand().size();
 	    cpuPlayer.challengeDrawFour(targetPlayer);
 	
-	    // 挑战成功:上家抽4张牌
 	    assertEquals(initialTargetHandSize + 4, targetPlayer.getHand().size(),
 	                 "Target should draw exactly 4 cards when challenge succeeds");
 	}
@@ -161,16 +153,13 @@ public class TestCPUPlayer {
 	    targetPlayer.getHand().clear();
 	    cpuPlayer.getHand().clear();
 	
-	    // 上家有1张红色牌(满足挑战条件 >=5 张,且有匹配颜色)
 		for (int i = 0; i < 1; i++) {
 			targetPlayer.drawCard(new NumberCard(Color.Red, 5, true));
 		}
 	    
-	    // 设置倒数第二张牌为红色
 	    controller.playCard(new NumberCard(Color.Red, 2, true));
 	    controller.setIsFreezed(true);
 	
-	    // 上家打出 Wild Draw Four(这是被挑战的牌)
 	    controller.playCard(new WildDrawFourCard(true));
 	
 	    controller.setCurrentPlayer(cpuPlayer);
@@ -178,7 +167,6 @@ public class TestCPUPlayer {
 	    int initialTargetHandSize = cpuPlayer.getHand().size();
 	    cpuPlayer.challengeDrawFour(targetPlayer);
 	
-	    // 挑战成功:上家抽4张牌
 	    assertEquals(initialTargetHandSize + 4, cpuPlayer.getHand().size());
 	}
 
