@@ -45,7 +45,7 @@ This repository contains the source code and a pre-built JAR. The repository lay
 2. Right click the project and select "Import"
 3. Select from General → file system
 4. Select all from `Source/CS3343UNO` and click finish
-6. Enjoy the project 
+5. Enjoy the project 
 
 ### Alternative Setup
 You can also extract the Source Code folder from `Source/` for standalone development.
