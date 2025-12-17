@@ -1,6 +1,9 @@
 # UNO Game — CS3343UNO
 
+<img width="1001" height="673" alt="螢幕截圖 2025-12-17 16 02 59" src="https://github.com/user-attachments/assets/a077a740-0f18-44c4-9bc2-6359093f84cd" />
+
 ## Overview
+
 
 This is a Java implementation of the UNO card game. The game lets a single user play UNO (against CPU players) when they don't have friends available to play with. The game ends when a player plays all cards in their hand.
 
